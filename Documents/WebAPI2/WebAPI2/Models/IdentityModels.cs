@@ -29,6 +29,7 @@ namespace WebAPI2.Models
         {
             return new ApplicationDbContext();
         }
-        
+
+        public System.Data.Entity.DbSet<WebAPI2.Models.Player> Players { get; set; }
     }
 }
