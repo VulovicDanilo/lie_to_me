@@ -7,7 +7,7 @@ namespace WebAPI2.Models
 {
     public class Gamer
     {
-        public int UserID { get; set; }
+        public int GamerID { get; set; }
         public string Email { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public string UserName { get; set; }

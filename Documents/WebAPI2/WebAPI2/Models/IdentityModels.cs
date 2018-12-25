@@ -31,5 +31,13 @@ namespace WebAPI2.Models
         }
 
         public System.Data.Entity.DbSet<WebAPI2.Models.Player> Players { get; set; }
+
+        public System.Data.Entity.DbSet<WebAPI2.Models.Gamer> Gamers { get; set; }
+
+        public System.Data.Entity.DbSet<WebAPI2.Models.Game> Games { get; set; }
+
+        public System.Data.Entity.DbSet<WebAPI2.Models.InGameRole> InGameRoles { get; set; }
+
+        public System.Data.Entity.DbSet<WebAPI2.Models.TownRole> TownRoles { get; set; }
     }
 }

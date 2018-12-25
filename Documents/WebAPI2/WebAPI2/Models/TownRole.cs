@@ -2,9 +2,8 @@
 
 namespace WebAPI2.Models
 {
-    public class Role
+    public class TownRole
     {
-        [Key]
-        public int RoleID { get; set; }
+        public int TownRoleID { get; set; }
     }
 }
