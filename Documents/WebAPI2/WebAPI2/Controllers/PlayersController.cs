@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebAPI2.Models;
+using WebAPI2.Repositories;
 
 namespace WebAPI2.Controllers
 {
@@ -17,7 +18,8 @@ namespace WebAPI2.Controllers
         // GET: Players
         public ActionResult Index()
         {
-            return View(db.Players.ToList());
+            var repo = new Repository<Player>(new ApplicationDbContext());
+            return View(repo.List);
         }
 
         // GET: Players/Details/5
@@ -48,14 +50,9 @@ namespace WebAPI2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "PlayerID,Will,Alive,FakeName,Number")] Player player)
         {
-            if (ModelState.IsValid)
-            {
-                db.Players.Add(player);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(player);
+            var repo = new Repository<Player>(new ApplicationDbContext());
+            repo.Add(player);
+            return RedirectToAction("Index");
         }
 
         // GET: Players/Edit/5

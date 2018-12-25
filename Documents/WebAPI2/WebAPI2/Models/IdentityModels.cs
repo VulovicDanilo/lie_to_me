@@ -30,14 +30,14 @@ namespace WebAPI2.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<WebAPI2.Models.Player> Players { get; set; }
+        public System.Data.Entity.DbSet<Player> Players { get; set; }
 
-        public System.Data.Entity.DbSet<WebAPI2.Models.Gamer> Gamers { get; set; }
+        public System.Data.Entity.DbSet<Gamer> Gamers { get; set; }
 
-        public System.Data.Entity.DbSet<WebAPI2.Models.Game> Games { get; set; }
+        public System.Data.Entity.DbSet<Game> Games { get; set; }
 
-        public System.Data.Entity.DbSet<WebAPI2.Models.InGameRole> InGameRoles { get; set; }
+        public System.Data.Entity.DbSet<InGameRole> InGameRoles { get; set; }
 
-        public System.Data.Entity.DbSet<WebAPI2.Models.TownRole> TownRoles { get; set; }
+        public System.Data.Entity.DbSet<TownRole> TownRoles { get; set; }
     }
 }
