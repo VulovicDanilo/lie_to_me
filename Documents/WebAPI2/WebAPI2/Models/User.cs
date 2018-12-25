@@ -5,9 +5,9 @@ using System.Web;
 
 namespace WebAPI2.Models
 {
-    public class Gamer : IEntity
+    public class User : IEntity
     {
-        public int GamerID { get; set; }
+        public int UserID { get; set; }
         public string Email { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public string UserName { get; set; }
@@ -18,7 +18,7 @@ namespace WebAPI2.Models
         {
             get
             {
-                return GamerID;
+                return UserID;
             }
         }
     }

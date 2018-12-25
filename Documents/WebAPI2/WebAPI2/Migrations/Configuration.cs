@@ -9,8 +9,7 @@ namespace WebAPI2.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            AutomaticMigrationDataLossAllowed = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(WebAPI2.Models.ApplicationDbContext context)

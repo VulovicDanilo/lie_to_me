@@ -32,7 +32,7 @@ namespace WebAPI2.Models
 
         public System.Data.Entity.DbSet<Player> Players { get; set; }
 
-        public System.Data.Entity.DbSet<Gamer> Gamers { get; set; }
+        public System.Data.Entity.DbSet<User> Gamers { get; set; }
 
         public System.Data.Entity.DbSet<Game> Games { get; set; }
 

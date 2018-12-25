@@ -10,107 +10,107 @@ using WebAPI2.Models;
 
 namespace WebAPI2.Controllers
 {
-    public class GamersController : Controller
+    public class UsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Gamers
+        // GET: Users
         public ActionResult Index()
         {
             return View(db.Gamers.ToList());
         }
 
-        // GET: Gamers/Details/5
+        // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Gamer gamer = db.Gamers.Find(id);
-            if (gamer == null)
+            User user = db.Gamers.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(gamer);
+            return View(user);
         }
 
-        // GET: Gamers/Create
+        // GET: Users/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Gamers/Create
+        // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "GamerID,Email,UserName,Wins,Losses")] Gamer gamer)
+        public ActionResult Create([Bind(Include = "UserID,Email,UserName,Wins,Losses")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Gamers.Add(gamer);
+                db.Gamers.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(gamer);
+            return View(user);
         }
 
-        // GET: Gamers/Edit/5
+        // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Gamer gamer = db.Gamers.Find(id);
-            if (gamer == null)
+            User user = db.Gamers.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(gamer);
+            return View(user);
         }
 
-        // POST: Gamers/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "GamerID,Email,UserName,Wins,Losses")] Gamer gamer)
+        public ActionResult Edit([Bind(Include = "UserID,Email,UserName,Wins,Losses")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(gamer).State = EntityState.Modified;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(gamer);
+            return View(user);
         }
 
-        // GET: Gamers/Delete/5
+        // GET: Users/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Gamer gamer = db.Gamers.Find(id);
-            if (gamer == null)
+            User user = db.Gamers.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(gamer);
+            return View(user);
         }
 
-        // POST: Gamers/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Gamer gamer = db.Gamers.Find(id);
-            db.Gamers.Remove(gamer);
+            User user = db.Gamers.Find(id);
+            db.Gamers.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
