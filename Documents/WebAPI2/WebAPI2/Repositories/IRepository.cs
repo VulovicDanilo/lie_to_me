@@ -7,7 +7,7 @@ using WebAPI2.Models;
 
 namespace WebAPI2.Repositories
 {
-    public interface IRepository<T> where T:class,IEntity
+    public interface IRepository<T> where T:class
     {
         List<T> List { get; }
         T Find(int id);

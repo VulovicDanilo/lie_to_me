@@ -231,15 +231,17 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\InGameRole.cs" />
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\TownRole.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
+    <Compile Include="Repositories\GameRepo\GameRepository.cs" />
+    <Compile Include="Repositories\GameRepo\IGameRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

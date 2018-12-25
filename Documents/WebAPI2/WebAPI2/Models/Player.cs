@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebAPI2.Models
 {
-    public class Player:IEntity
+    public class Player
     {
         public int PlayerID { get; set; }
         public virtual User User { get; set; }
@@ -14,13 +14,5 @@ namespace WebAPI2.Models
         public bool Alive { get; set; }
         public string FakeName { get; set; }
         public int Number { get; set; }
-
-        public int ID
-        {
-            get
-            {
-                return PlayerID;
-}
-        }
     }
 }

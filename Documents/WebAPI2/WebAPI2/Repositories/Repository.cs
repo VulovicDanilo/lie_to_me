@@ -8,7 +8,7 @@ using WebAPI2.Models;
 
 namespace WebAPI2.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : class,IEntity
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected ApplicationDbContext Context { get; set; }
         protected DbSet<T> DbSet { get; set; }
@@ -55,7 +55,7 @@ namespace WebAPI2.Repositories
 
         public T Find(int id)
         {
-            return DbSet.Where(x => x.ID.Equals(id)).FirstOrDefault();
+            return DbSet.Find(id);
         }
 
         public void Update(T entity)
