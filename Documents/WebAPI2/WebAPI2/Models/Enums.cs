@@ -42,7 +42,8 @@ namespace WebAPI2.Models
     }
     public enum GameMode
     {
-        Classic
+        Classic,
+        Any
     }
 
 }

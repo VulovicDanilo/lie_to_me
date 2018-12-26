@@ -39,20 +39,6 @@ namespace WebAPI2.Repositories
             }
         }
 
-        public void Delete(T entity)
-        {
-            DbEntityEntry dbEntityEntry = Context.Entry(entity);
-            if (dbEntityEntry.State != EntityState.Deleted)
-            {
-                dbEntityEntry.State = EntityState.Deleted;
-            }
-            else
-            {
-                DbSet.Attach(entity);
-                DbSet.Remove(entity);
-            }
-        }
-
         public T Find(int id)
         {
             return DbSet.Find(id);
@@ -67,12 +53,8 @@ namespace WebAPI2.Repositories
             }
             dbEntityEntry.State = EntityState.Modified;
         }
-
-        public void Delete(int id)
+        public void Delete(T entity)
         {
-            T entity = Find(id);
-            if (entity == null)
-                return;
             DbEntityEntry dbEntityEntry = Context.Entry(entity);
             if (dbEntityEntry.State != EntityState.Deleted)
             {
@@ -83,6 +65,14 @@ namespace WebAPI2.Repositories
                 DbSet.Attach(entity);
                 DbSet.Remove(entity);
             }
+        }
+
+        public void Delete(int id)
+        {
+            T entity = Find(id);
+            if (entity == null)
+                return;
+            Delete(entity);
         }
     }
 }

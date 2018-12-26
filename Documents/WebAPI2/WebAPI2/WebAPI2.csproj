@@ -215,8 +215,8 @@
     <Compile Include="Controllers\DeadPlayersController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InGameRolesController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
-    <Compile Include="Controllers\TownRolesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -243,10 +243,9 @@
     <Compile Include="Repositories\GameRepo\IGameRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Repositories\TownRoleRepo\ITownRoleRepository.cs" />
-    <Compile Include="Repositories\TownRoleRepo\TownRoleRepository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Roles\VeteranRole.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +308,16 @@
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Players\Create.cshtml" />
+    <Content Include="Views\Players\Delete.cshtml" />
+    <Content Include="Views\Players\Details.cshtml" />
+    <Content Include="Views\Players\Edit.cshtml" />
+    <Content Include="Views\Players\Index.cshtml" />
+    <Content Include="Views\Games\Create.cshtml" />
+    <Content Include="Views\Games\Delete.cshtml" />
+    <Content Include="Views\Games\Details.cshtml" />
+    <Content Include="Views\Games\Edit.cshtml" />
+    <Content Include="Views\Games\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

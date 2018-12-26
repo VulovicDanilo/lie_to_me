@@ -13,7 +13,7 @@ namespace WebAPI2.Controllers
 {
     public class UsersController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+       private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Users
         public ActionResult Index()
@@ -53,6 +53,7 @@ namespace WebAPI2.Controllers
             {
                 unitOfWork.UserRepository.Add(user);
                 unitOfWork.Save();
+                return RedirectToAction("Index");
             }
 
             return View(user);
@@ -84,6 +85,7 @@ namespace WebAPI2.Controllers
             {
                 unitOfWork.UserRepository.Update(user);
                 unitOfWork.Save();
+                return RedirectToAction("Index");
             }
             return View(user);
         }
@@ -115,10 +117,7 @@ namespace WebAPI2.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            unitOfWork.Dispose();
             base.Dispose(disposing);
         }
     }

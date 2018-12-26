@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using WebAPI2.Models;
 using WebAPI2.Repositories.GameRepo;
-using WebAPI2.Repositories.TownRoleRepo;
 
 namespace WebAPI2.Repositories
 {
@@ -14,7 +13,6 @@ namespace WebAPI2.Repositories
         private Repository<Game> gameRepository;
         private Repository<User> userRepository;
         private Repository<Player> playerRepository;
-        private Repository<TownRole> townRoleRepository;
 
         public Repository<Game> GameRepository
         {
@@ -47,17 +45,6 @@ namespace WebAPI2.Repositories
                     playerRepository = new Repository<Player>(context);
                 }
                 return playerRepository;
-            }
-        }
-        public Repository<TownRole> TownRoleRepository
-        {
-            get
-            {
-                if (townRoleRepository == null)
-                {
-                    townRoleRepository = new TownRoleRepository(context);
-                }
-                return townRoleRepository;
             }
         }
 
