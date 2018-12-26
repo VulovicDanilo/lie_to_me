@@ -3,5 +3,8 @@
     public  class InGameRole
     {
         public int InGameRoleID { get; set; }
+        public Offence Offence { get; set; }
+        public Defence Defence { get; set; }
+        
     }
 }

@@ -39,5 +39,7 @@ namespace WebAPI2.Models
         public System.Data.Entity.DbSet<InGameRole> InGameRoles { get; set; }
 
         public System.Data.Entity.DbSet<TownRole> TownRoles { get; set; }
+
+        public System.Data.Entity.DbSet<WebAPI2.Models.DeadPlayer> DeadPlayers { get; set; }
     }
 }

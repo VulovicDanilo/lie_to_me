@@ -10,107 +10,107 @@ using WebAPI2.Models;
 
 namespace WebAPI2.Controllers
 {
-    public class InGameRolesController : Controller
+    public class DeadPlayersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: InGameRoles
+        // GET: DeadPlayers
         public ActionResult Index()
         {
-            return View(db.InGameRoles.ToList());
+            return View(db.DeadPlayers.ToList());
         }
 
-        // GET: InGameRoles/Details/5
+        // GET: DeadPlayers/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InGameRole inGameRole = db.InGameRoles.Find(id);
-            if (inGameRole == null)
+            DeadPlayer deadPlayer = db.DeadPlayers.Find(id);
+            if (deadPlayer == null)
             {
                 return HttpNotFound();
             }
-            return View(inGameRole);
+            return View(deadPlayer);
         }
 
-        // GET: InGameRoles/Create
+        // GET: DeadPlayers/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: InGameRoles/Create
+        // POST: DeadPlayers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "InGameRoleID")] InGameRole inGameRole)
+        public ActionResult Create([Bind(Include = "DeadPlayerID,DeathNote,Available")] DeadPlayer deadPlayer)
         {
             if (ModelState.IsValid)
             {
-                db.InGameRoles.Add(inGameRole);
+                db.DeadPlayers.Add(deadPlayer);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(inGameRole);
+            return View(deadPlayer);
         }
 
-        // GET: InGameRoles/Edit/5
+        // GET: DeadPlayers/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InGameRole inGameRole = db.InGameRoles.Find(id);
-            if (inGameRole == null)
+            DeadPlayer deadPlayer = db.DeadPlayers.Find(id);
+            if (deadPlayer == null)
             {
                 return HttpNotFound();
             }
-            return View(inGameRole);
+            return View(deadPlayer);
         }
 
-        // POST: InGameRoles/Edit/5
+        // POST: DeadPlayers/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "InGameRoleID")] InGameRole inGameRole)
+        public ActionResult Edit([Bind(Include = "DeadPlayerID,DeathNote,Available")] DeadPlayer deadPlayer)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(inGameRole).State = EntityState.Modified;
+                db.Entry(deadPlayer).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(inGameRole);
+            return View(deadPlayer);
         }
 
-        // GET: InGameRoles/Delete/5
+        // GET: DeadPlayers/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            InGameRole inGameRole = db.InGameRoles.Find(id);
-            if (inGameRole == null)
+            DeadPlayer deadPlayer = db.DeadPlayers.Find(id);
+            if (deadPlayer == null)
             {
                 return HttpNotFound();
             }
-            return View(inGameRole);
+            return View(deadPlayer);
         }
 
-        // POST: InGameRoles/Delete/5
+        // POST: DeadPlayers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            InGameRole inGameRole = db.InGameRoles.Find(id);
-            db.InGameRoles.Remove(inGameRole);
+            DeadPlayer deadPlayer = db.DeadPlayers.Find(id);
+            db.DeadPlayers.Remove(deadPlayer);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

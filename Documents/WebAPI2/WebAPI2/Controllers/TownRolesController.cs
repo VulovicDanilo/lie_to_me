@@ -46,7 +46,7 @@ namespace WebAPI2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TownRoleID")] TownRole townRole)
+        public ActionResult Create([Bind(Include = "TownRoleID,Name,Alignment,Description,Abilities,Goal")] TownRole townRole)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace WebAPI2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TownRoleID")] TownRole townRole)
+        public ActionResult Edit([Bind(Include = "TownRoleID,Name,Alignment,Description,Abilities,Goal")] TownRole townRole)
         {
             if (ModelState.IsValid)
             {

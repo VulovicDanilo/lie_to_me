@@ -9,7 +9,7 @@ namespace WebAPI2.Models
     {
         public int PlayerID { get; set; }
         public virtual User User { get; set; }
-        public virtual InGameRole InGameRole {get; set;}
+        public virtual TownRole TownRole {get; set;}
         public string Will { get; set; }
         public bool Alive { get; set; }
         public string FakeName { get; set; }
