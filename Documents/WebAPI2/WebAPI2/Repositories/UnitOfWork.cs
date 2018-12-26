@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using WebAPI2.Models;
 using WebAPI2.Repositories.GameRepo;
+using WebAPI2.Repositories.TownRoleRepo;
 
 namespace WebAPI2.Repositories
 {
@@ -11,16 +12,52 @@ namespace WebAPI2.Repositories
     {
         private ApplicationDbContext context = new ApplicationDbContext();
         private Repository<Game> gameRepository;
+        private Repository<User> userRepository;
+        private Repository<Player> playerRepository;
+        private Repository<TownRole> townRoleRepository;
 
         public Repository<Game> GameRepository
         {
             get
             {
-                if (gameRepository==null)
+                if (gameRepository == null)
                 {
                     gameRepository = new GameRepository(context);
                 }
                 return gameRepository;
+            }
+        }
+        public Repository<User> UserRepository
+        {
+            get
+            {
+                if (userRepository == null)
+                {
+                    userRepository = new Repository<User>(context);
+                }
+                return userRepository;
+            }
+        }
+        public Repository<Player> PlayerRepository
+        {
+            get
+            {
+                if (playerRepository == null)
+                {
+                    playerRepository = new Repository<Player>(context);
+                }
+                return playerRepository;
+            }
+        }
+        public Repository<TownRole> TownRoleRepository
+        {
+            get
+            {
+                if (townRoleRepository == null)
+                {
+                    townRoleRepository = new TownRoleRepository(context);
+                }
+                return townRoleRepository;
             }
         }
 
@@ -28,6 +65,8 @@ namespace WebAPI2.Repositories
         {
             context.SaveChanges();
         }
+
+        // Dispose pattern
 
         private bool disposed = false;
 
@@ -38,7 +77,7 @@ namespace WebAPI2.Repositories
                 if (disposing)
                 {
                     context.Dispose();
-                }             
+                }
                 disposed = true;
             }
         }

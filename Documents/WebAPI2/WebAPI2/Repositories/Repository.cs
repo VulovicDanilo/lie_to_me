@@ -67,5 +67,22 @@ namespace WebAPI2.Repositories
             }
             dbEntityEntry.State = EntityState.Modified;
         }
+
+        public void Delete(int id)
+        {
+            T entity = Find(id);
+            if (entity == null)
+                return;
+            DbEntityEntry dbEntityEntry = Context.Entry(entity);
+            if (dbEntityEntry.State != EntityState.Deleted)
+            {
+                dbEntityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                DbSet.Attach(entity);
+                DbSet.Remove(entity);
+            }
+        }
     }
 }

@@ -7,17 +7,18 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebAPI2.Models;
+using WebAPI2.Repositories;
 
 namespace WebAPI2.Controllers
 {
     public class UsersController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Users
         public ActionResult Index()
         {
-            return View(db.Gamers.ToList());
+            return View(unitOfWork.UserRepository.List);
         }
 
         // GET: Users/Details/5
@@ -27,7 +28,7 @@ namespace WebAPI2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Gamers.Find(id);
+            User user = unitOfWork.UserRepository.Find(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
@@ -50,9 +51,8 @@ namespace WebAPI2.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Gamers.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                unitOfWork.UserRepository.Add(user);
+                unitOfWork.Save();
             }
 
             return View(user);
@@ -65,7 +65,7 @@ namespace WebAPI2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Gamers.Find(id);
+            User user = unitOfWork.UserRepository.Find(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
@@ -82,9 +82,8 @@ namespace WebAPI2.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                unitOfWork.UserRepository.Update(user);
+                unitOfWork.Save();
             }
             return View(user);
         }
@@ -96,7 +95,7 @@ namespace WebAPI2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Gamers.Find(id);
+            User user = unitOfWork.UserRepository.Find(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
@@ -109,9 +108,8 @@ namespace WebAPI2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = db.Gamers.Find(id);
-            db.Gamers.Remove(user);
-            db.SaveChanges();
+            unitOfWork.UserRepository.Delete(id);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
