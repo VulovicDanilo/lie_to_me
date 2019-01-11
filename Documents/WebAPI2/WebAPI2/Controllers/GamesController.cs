@@ -7,17 +7,18 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WebAPI2.Models;
+using WebAPI2.Repositories;
 
 namespace WebAPI2.Controllers
 {
     public class GamesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private UnitOfWork unitOfWork = new UnitOfWork();
 
         // GET: Games
         public ActionResult Index()
         {
-            return View(db.Games.ToList());
+            return View(unitOfWork.GameRepository.List);
         }
 
         // GET: Games/Details/5
@@ -27,7 +28,7 @@ namespace WebAPI2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Game game = db.Games.Find(id);
+            Game game = unitOfWork.GameRepository.Find(id.Value);
             if (game == null)
             {
                 return HttpNotFound();
@@ -46,12 +47,12 @@ namespace WebAPI2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "GameID")] Game game)
+        public ActionResult Create([Bind(Include = "GameID,GameState,StartTime,EndTime,Winner,GameMode")] Game game)
         {
             if (ModelState.IsValid)
             {
-                db.Games.Add(game);
-                db.SaveChanges();
+                unitOfWork.GameRepository.Add(game);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +66,7 @@ namespace WebAPI2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Game game = db.Games.Find(id);
+            Game game = unitOfWork.GameRepository.Find(id.Value);
             if (game == null)
             {
                 return HttpNotFound();
@@ -78,12 +79,12 @@ namespace WebAPI2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "GameID")] Game game)
+        public ActionResult Edit([Bind(Include = "GameID,GameState,StartTime,EndTime,Winner,GameMode")] Game game)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(game).State = EntityState.Modified;
-                db.SaveChanges();
+                unitOfWork.GameRepository.Update(game);
+                unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             return View(game);
@@ -96,7 +97,7 @@ namespace WebAPI2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Game game = db.Games.Find(id);
+            Game game = unitOfWork.GameRepository.Find(id.Value);
             if (game == null)
             {
                 return HttpNotFound();
@@ -109,18 +110,14 @@ namespace WebAPI2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Game game = db.Games.Find(id);
-            db.Games.Remove(game);
-            db.SaveChanges();
+            unitOfWork.GameRepository.Delete(id);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
+            unitOfWork.Dispose();
             base.Dispose(disposing);
         }
     }

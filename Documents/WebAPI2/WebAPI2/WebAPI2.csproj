@@ -221,16 +221,16 @@
     <Compile Include="Controllers\DeadPlayersController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InGameRolesController.cs" />
     <Compile Include="Controllers\PlayersController.cs" />
-    <Compile Include="Controllers\TownRolesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201812252353124_init.cs" />
-    <Compile Include="Migrations\201812252353124_init.Designer.cs">
-      <DependentUpon>201812252353124_init.cs</DependentUpon>
+    <Compile Include="Migrations\201812260105034_init.cs" />
+    <Compile Include="Migrations\201812260105034_init.Designer.cs">
+      <DependentUpon>201812260105034_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -251,6 +251,7 @@
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
+    <Compile Include="Roles\VeteranRole.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -308,26 +309,24 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Players\Create.cshtml" />
-    <Content Include="Views\Players\Delete.cshtml" />
-    <Content Include="Views\Players\Details.cshtml" />
-    <Content Include="Views\Players\Edit.cshtml" />
-    <Content Include="Views\Players\Index.cshtml" />
     <Content Include="Views\Users\Create.cshtml" />
     <Content Include="Views\Users\Delete.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Players\Create.cshtml" />
+    <Content Include="Views\Players\Delete.cshtml" />
+    <Content Include="Views\Players\Details.cshtml" />
+    <Content Include="Views\Players\Edit.cshtml" />
+    <Content Include="Views\Players\Index.cshtml" />
+    <Content Include="Views\Games\Create.cshtml" />
+    <Content Include="Views\Games\Delete.cshtml" />
+    <Content Include="Views\Games\Details.cshtml" />
+    <Content Include="Views\Games\Edit.cshtml" />
+    <Content Include="Views\Games\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DeadPlayers\" />
-    <Folder Include="Views\Gamers\" />
-    <Folder Include="Views\Games1\" />
-    <Folder Include="Views\Games\" />
-    <Folder Include="Views\InGameRoles\" />
-    <Folder Include="Views\Roles\" />
-    <Folder Include="Views\TownRoles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -359,8 +358,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812252353124_init.resx">
-      <DependentUpon>201812252353124_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201812260105034_init.resx">
+      <DependentUpon>201812260105034_init.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

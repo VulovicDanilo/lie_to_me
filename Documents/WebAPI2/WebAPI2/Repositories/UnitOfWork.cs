@@ -11,16 +11,40 @@ namespace WebAPI2.Repositories
     {
         private ApplicationDbContext context = new ApplicationDbContext();
         private Repository<Game> gameRepository;
+        private Repository<User> userRepository;
+        private Repository<Player> playerRepository;
 
         public Repository<Game> GameRepository
         {
             get
             {
-                if (gameRepository==null)
+                if (gameRepository == null)
                 {
                     gameRepository = new GameRepository(context);
                 }
                 return gameRepository;
+            }
+        }
+        public Repository<User> UserRepository
+        {
+            get
+            {
+                if (userRepository == null)
+                {
+                    userRepository = new Repository<User>(context);
+                }
+                return userRepository;
+            }
+        }
+        public Repository<Player> PlayerRepository
+        {
+            get
+            {
+                if (playerRepository == null)
+                {
+                    playerRepository = new Repository<Player>(context);
+                }
+                return playerRepository;
             }
         }
 
@@ -28,6 +52,8 @@ namespace WebAPI2.Repositories
         {
             context.SaveChanges();
         }
+
+        // Dispose pattern
 
         private bool disposed = false;
 
@@ -38,7 +64,7 @@ namespace WebAPI2.Repositories
                 if (disposing)
                 {
                     context.Dispose();
-                }             
+                }
                 disposed = true;
             }
         }

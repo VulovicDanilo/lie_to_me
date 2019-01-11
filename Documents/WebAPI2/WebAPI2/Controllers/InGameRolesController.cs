@@ -10,107 +10,107 @@ using WebAPI2.Models;
 
 namespace WebAPI2.Controllers
 {
-    public class TownRolesController : Controller
+    public class InGameRolesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: TownRoles
+        // GET: InGameRoles
         public ActionResult Index()
         {
-            return View(db.TownRoles.ToList());
+            return View(db.InGameRoles.ToList());
         }
 
-        // GET: TownRoles/Details/5
+        // GET: InGameRoles/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TownRole townRole = db.TownRoles.Find(id);
-            if (townRole == null)
+            InGameRole inGameRole = db.InGameRoles.Find(id);
+            if (inGameRole == null)
             {
                 return HttpNotFound();
             }
-            return View(townRole);
+            return View(inGameRole);
         }
 
-        // GET: TownRoles/Create
+        // GET: InGameRoles/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TownRoles/Create
+        // POST: InGameRoles/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TownRoleID,Name,Alignment,Description,Abilities,Goal")] TownRole townRole)
+        public ActionResult Create([Bind(Include = "InGameRoleID,Offence,Defence")] InGameRole inGameRole)
         {
             if (ModelState.IsValid)
             {
-                db.TownRoles.Add(townRole);
+                db.InGameRoles.Add(inGameRole);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(townRole);
+            return View(inGameRole);
         }
 
-        // GET: TownRoles/Edit/5
+        // GET: InGameRoles/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TownRole townRole = db.TownRoles.Find(id);
-            if (townRole == null)
+            InGameRole inGameRole = db.InGameRoles.Find(id);
+            if (inGameRole == null)
             {
                 return HttpNotFound();
             }
-            return View(townRole);
+            return View(inGameRole);
         }
 
-        // POST: TownRoles/Edit/5
+        // POST: InGameRoles/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TownRoleID,Name,Alignment,Description,Abilities,Goal")] TownRole townRole)
+        public ActionResult Edit([Bind(Include = "InGameRoleID,Offence,Defence")] InGameRole inGameRole)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(townRole).State = EntityState.Modified;
+                db.Entry(inGameRole).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(townRole);
+            return View(inGameRole);
         }
 
-        // GET: TownRoles/Delete/5
+        // GET: InGameRoles/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TownRole townRole = db.TownRoles.Find(id);
-            if (townRole == null)
+            InGameRole inGameRole = db.InGameRoles.Find(id);
+            if (inGameRole == null)
             {
                 return HttpNotFound();
             }
-            return View(townRole);
+            return View(inGameRole);
         }
 
-        // POST: TownRoles/Delete/5
+        // POST: InGameRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            TownRole townRole = db.TownRoles.Find(id);
-            db.TownRoles.Remove(townRole);
+            InGameRole inGameRole = db.InGameRoles.Find(id);
+            db.InGameRoles.Remove(inGameRole);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

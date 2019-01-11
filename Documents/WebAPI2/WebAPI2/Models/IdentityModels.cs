@@ -32,13 +32,11 @@ namespace WebAPI2.Models
 
         public System.Data.Entity.DbSet<Player> Players { get; set; }
 
-        public System.Data.Entity.DbSet<User> Gamers { get; set; }
+        public System.Data.Entity.DbSet<User> Users { get; set; }
 
         public System.Data.Entity.DbSet<Game> Games { get; set; }
 
         public System.Data.Entity.DbSet<InGameRole> InGameRoles { get; set; }
-
-        public System.Data.Entity.DbSet<TownRole> TownRoles { get; set; }
 
         public System.Data.Entity.DbSet<WebAPI2.Models.DeadPlayer> DeadPlayers { get; set; }
     }
