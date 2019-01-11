@@ -28,7 +28,7 @@ namespace WebAPI2.Repositories.GameRepo
         {
             get
             {
-                return Context.Players.Where(x => !x.Alive).ToList();
+                return Context.Players.Where(x => x.Alive == false).ToList();
             }
         }
     }
