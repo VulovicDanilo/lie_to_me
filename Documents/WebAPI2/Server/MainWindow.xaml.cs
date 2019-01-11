@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +29,7 @@ namespace Server
         {
             InitializeComponent();
             cimey = new Cimey() { Name = "Dacha Pogacha", Age = 22, Avg = 9.17 };
+            rbtn_Day.IsChecked = true;
         }
 
         private void Btn_send_Click(object sender, RoutedEventArgs e)
@@ -78,11 +81,14 @@ namespace Server
 
                 var routingKey = "2";
 
-                string send_string = "";
+                string sendString = "";
 
-                send_string = JsonConvert.SerializeObject(cimey);
-                
-                var body = Encoding.UTF8.GetBytes(send_string);
+                cimey = new Cimey() { Name = tbxName.Text, Age = int.Parse(tbxAge.Text), Avg = double.Parse(tbxAvg.Text) };
+                sendString = JsonConvert.SerializeObject(cimey);
+
+                labJson.Content = sendString;
+
+                var body = Encoding.UTF8.GetBytes(sendString);
                 channel.BasicPublish(exchange: "topic_logs",
                                      routingKey: routingKey,
                                      basicProperties: null,

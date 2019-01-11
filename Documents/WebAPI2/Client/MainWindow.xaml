@@ -5,22 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="Client Window" Height="569.508" Width="1041.967" Closing="Window_Closing">
+        Title="Client Window" Height="443.508" Width="792.967" Closing="Window_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="151*"/>
-            <ColumnDefinition Width="47*"/>
-            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="logs" HorizontalAlignment="Left" Height="344" Margin="10,51,0,0" VerticalAlignment="Top" Width="772">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
+        <ListView x:Name="logs" HorizontalAlignment="Left" Height="352" Margin="10,51,10,0" VerticalAlignment="Top" Width="555">
         </ListView>
         <Label x:Name="label" Content="Message Log" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="141" FontSize="16" Height="31"/>
-        <TextBox x:Name="txtRoute" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="82,119,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnRoute" Content="Button" Grid.Column="1" HorizontalAlignment="Left" Margin="95,178,0,0" VerticalAlignment="Top" Width="75" Click="BtnRoute_Click"/>
+        <ComboBox x:Name="cbx" HorizontalAlignment="Right" Margin="0,19,10,0" VerticalAlignment="Top" SelectionChanged="Cbx_SelectionChanged" RenderTransformOrigin="9.554,0.364"/>
+        <Button x:Name="btnClean" Content="Clear log" HorizontalAlignment="Left" Margin="594,198,0,0" VerticalAlignment="Top" Width="164" Height="42" FontSize="14" Click="BtnClean_Click"/>
     </Grid>
 </Window>

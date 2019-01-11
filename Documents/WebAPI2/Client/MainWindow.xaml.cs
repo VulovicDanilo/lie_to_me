@@ -2,6 +2,7 @@
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,15 +28,17 @@ namespace Client
         private IConnection connection;
         private IModel channel;
         private EventingBasicConsumer consumer = null;
+        private string routingKey;
+        private string queue;
         public MainWindow()
         {
             InitializeComponent();
-            InitListener("0");
-        }
-
-        private void Btn_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Works");
+            queue = InitConnection();
+            cbx.Items.Add("Channel 0");
+            cbx.Items.Add("Channel 1");
+            cbx.Items.Add("Channel 2");
+            cbx.SelectedIndex = 0;
+            InitListener(cbx.SelectedIndex.ToString(), queue);
         }
 
         private void Consumer_Received(object sender, BasicDeliverEventArgs args)
@@ -43,42 +46,40 @@ namespace Client
             var body = args.Body;
             var message = Encoding.UTF8.GetString(body);
             var routingKey = args.RoutingKey;
-            messages.Add(DateTime.Now.ToShortTimeString() + " -> " + message);
             Dispatcher.Invoke(() =>
             {
-                logs.Items.Clear();
-                foreach(var m in messages)
-                {
-                    logs.Items.Add(m);
-                }
+                string newMessage = DateTime.Now.ToLongTimeString() + ": " + message;
+                messages.Add(newMessage);
+                logs.Items.Add(newMessage);
             });
+
         }
 
-        private void InitListener(String route)
+        private string InitConnection()
         {
             connectionFactory = new ConnectionFactory() { HostName = "localhost" };
             connection = connectionFactory.CreateConnection();
             channel = connection.CreateModel();
             channel.ExchangeDeclare(exchange: "topic_logs", type: "topic");
-            var queueName = channel.QueueDeclare().QueueName;
+            return channel.QueueDeclare().QueueName;
+        }
 
+        private void InitListener(String route, string queueName)
+        {
+            if (routingKey != null)
+            {
+                channel.QueueUnbind(queueName, "topic_logs", routingKey, null);
+            }
+            routingKey = route;
 
             channel.QueueBind(queue: queueName,
                               exchange: "topic_logs",
-                              routingKey: route);
+                              routingKey: routingKey);
 
 
             consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) => Consumer_Received(model, ea);
-            //{
-            //    var body = ea.Body;
-            //    var message = Encoding.UTF8.GetString(body);
-            //    var routingKey = ea.RoutingKey;
-            //    messages.Add(DateTime.Now.ToShortTimeString() + " -> " + message);
-            //    logs.Items.Add(message);
-            //    logs.Items.Refresh();
 
-            //};
             channel.BasicConsume(queue: queueName,
                                  autoAck: true,
                                  consumer: consumer);
@@ -95,8 +96,25 @@ namespace Client
 
         private void BtnRoute_Click(object sender, RoutedEventArgs e)
         {
+            InitListener(cbx.SelectedIndex.ToString(), queue);
+        }
 
-            InitListener(txtRoute.Text);
+        private void Cbx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string next_channel = cbx.SelectedIndex.ToString();
+            Dispatcher.Invoke(() =>
+            {
+                if (next_channel != routingKey && routingKey != null)
+                {
+                    logs.Items.Add("***Changing from Channel " + routingKey + " to Channel " + next_channel + "***");
+                }
+            });
+            InitListener(next_channel, queue);
+        }
+
+        private void BtnClean_Click(object sender, RoutedEventArgs e)
+        {
+            logs.Items.Clear();
         }
     }
 }
