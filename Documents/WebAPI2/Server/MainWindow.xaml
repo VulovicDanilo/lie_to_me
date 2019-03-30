@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Server"
         mc:Ignorable="d"
-        Title="Server Window" Height="348.197" Width="475.787">
+        Title="Server Window" Height="348.197" Width="465.787">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="89*"/>
+            <ColumnDefinition Width="28*"/>
+        </Grid.ColumnDefinitions>
         <Button x:Name="btn_send" Content="Send game phase info" HorizontalAlignment="Left" Margin="10,219,0,0" VerticalAlignment="Top" Width="137" Height="33" Click="Btn_send_Click"/>
         <RadioButton x:Name="rbtn_Defence" Content="Defence" HorizontalAlignment="Left" Margin="10,128,0,0" VerticalAlignment="Top" Height="18" Width="99"/>
         <RadioButton x:Name="rbnt_Night" Content="Night" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top" Height="18" Width="99"/>
@@ -16,17 +20,17 @@
         <RadioButton x:Name="rbtn_Judgement" Content="Judgement" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="rbtn_Day" Content="Day" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Height="18" Width="99"/>
         <TextBox x:Name="tbx_Information" HorizontalAlignment="Left" Height="23" Margin="10,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btnSendCimey" Content="Send Serialized Object" HorizontalAlignment="Left" Margin="232,219,0,0" VerticalAlignment="Top" Width="137" Click="BtnSendCimey_Click" Height="33"/>
+        <Button x:Name="btnSendCimey" Content="Send Serialized Object" HorizontalAlignment="Left" Margin="232,219,0,0" VerticalAlignment="Top" Width="137" Click="BtnSendCimey_Click" Height="33" Grid.ColumnSpan="2"/>
         <Label Content="Channel 1" HorizontalAlignment="Left" Margin="13,5,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
         <Label Content="Channel 2" HorizontalAlignment="Left" Margin="261,5,0,0" VerticalAlignment="Top" FontSize="14" FontWeight="Bold"/>
-        <TextBox x:Name="tbxName" HorizontalAlignment="Left" Margin="316,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Dacha Pogacha" Width="105"/>
+        <TextBox x:Name="tbxName" HorizontalAlignment="Left" Margin="316,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Dacha Pogacha" Width="105" Grid.ColumnSpan="2"/>
         <Label Content="Name(type string)
                " HorizontalAlignment="Left" Margin="188,53,0,0" VerticalAlignment="Top" Width="110"/>
         <Label Content="Age(type int)" HorizontalAlignment="Left" Margin="201,86,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbxAge" HorizontalAlignment="Left" Height="23" Margin="316,89,0,0" TextWrapping="Wrap" Text="22" VerticalAlignment="Top" Width="105"/>
+        <TextBox x:Name="tbxAge" HorizontalAlignment="Left" Height="23" Margin="316,89,0,0" TextWrapping="Wrap" Text="22" VerticalAlignment="Top" Width="105" Grid.ColumnSpan="2"/>
         <Label Content="Average(type double)" HorizontalAlignment="Left" Margin="188,122,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tbxAvg" HorizontalAlignment="Left" Height="23" Margin="317,123,0,0" TextWrapping="Wrap" Text="9.17" VerticalAlignment="Top" Width="104"/>
-        <Label x:Name="labJson" HorizontalAlignment="Left" Height="38" Margin="174,171,0,0" VerticalAlignment="Top" Width="263"/>
+        <TextBox x:Name="tbxAvg" HorizontalAlignment="Left" Height="23" Margin="317,123,0,0" TextWrapping="Wrap" Text="0.78" VerticalAlignment="Top" Width="104" Grid.ColumnSpan="2"/>
+        <Label x:Name="labJson" HorizontalAlignment="Left" Height="38" Margin="174,171,0,0" VerticalAlignment="Top" Width="263" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>

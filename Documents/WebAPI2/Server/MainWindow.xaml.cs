@@ -24,11 +24,11 @@ namespace Server
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Cimey cimey;
+        private Person person;
         public MainWindow()
         {
             InitializeComponent();
-            cimey = new Cimey() { Name = "Dacha Pogacha", Age = 22, Avg = 9.17 };
+            person = new Person() { Name = "Dacha Pogacha", Age = 22, Avg = 0.78 };
             rbtn_Day.IsChecked = true;
         }
 
@@ -57,6 +57,8 @@ namespace Server
                                 send_string += (control as RadioButton).Content.ToString() + " ";
                                 if (rb.Name == "rbtn_Inform")
                                     send_string += tbx_Information.Text + " ";
+                                else
+                                    send_string += " phase started!";
                             }
                         }
                     }
@@ -83,8 +85,8 @@ namespace Server
 
                 string sendString = "";
 
-                cimey = new Cimey() { Name = tbxName.Text, Age = int.Parse(tbxAge.Text), Avg = double.Parse(tbxAvg.Text) };
-                sendString = JsonConvert.SerializeObject(cimey);
+                person = new Person() { Name = tbxName.Text, Age = int.Parse(tbxAge.Text), Avg = double.Parse(tbxAvg.Text) };
+                sendString = JsonConvert.SerializeObject(person);
 
                 labJson.Content = sendString;
 

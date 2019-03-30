@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class Cimey
+    class Person
     {
         public string Name { get; set; }
         public int Age { get; set; }
