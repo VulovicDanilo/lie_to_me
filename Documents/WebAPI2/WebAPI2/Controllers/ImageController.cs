@@ -21,52 +21,50 @@ namespace WebAPI2.Controllers
             Dictionary<string, object> dict = new Dictionary<string, object>();
             try
             {
-
                 var httpRequest = HttpContext.Current.Request;
 
-                foreach (string file in httpRequest.Files)
-                {
-                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
 
-                    var postedFile = httpRequest.Files[file];
-                    if (postedFile != null && postedFile.ContentLength > 0)
+                var postedFile = httpRequest.Files[0];
+                if (postedFile != null && postedFile.ContentLength > 0)
+                {
+
+                    int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
+
+                    IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                    var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                    var extension = ext.ToLower();
+                    if (!AllowedFileExtensions.Contains(extension))
                     {
 
-                        int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB  
+                        var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
 
-                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
-                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
-                        var extension = ext.ToLower();
-                        if (!AllowedFileExtensions.Contains(extension))
-                        {
-
-                            var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
-
-                            dict.Add("error", message);
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
-                        }
-                        else if (postedFile.ContentLength > MaxContentLength)
-                        {
-
-                            var message = string.Format("Please Upload a file up to 1 mb.");
-
-                            dict.Add("error", message);
-                            return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
-                        }
-                        else
-                        {
-                            var filePath = HttpContext.Current.Server.MapPath("~/UserImages/" + postedFile.FileName);
-                            postedFile.SaveAs(filePath);
-
-                        }
+                        dict.Add("error", message);
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
                     }
+                    else if (postedFile.ContentLength > MaxContentLength)
+                    {
 
-                    var message1 = string.Format("Image Updated Successfully.");
-                    return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
+                        var message = string.Format("Please Upload a file up to 1 mb.");
+
+                        dict.Add("error", message);
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
+                    }
+                    else
+                    {
+                        var filePath = HttpContext.Current.Server.MapPath("~/UserImages/" + DateTime.Now.ToString("yyyyMMddhhmmssfffffff") + ext);
+                        postedFile.SaveAs(filePath);
+
+                    }
                 }
-                var res = string.Format("Please Upload a image.");
-                dict.Add("error", res);
-                return Request.CreateResponse(HttpStatusCode.NotFound, dict);
+                else
+                {
+                    var res = string.Format("Please Upload a image.");
+                    dict.Add("error", res);
+                    return Request.CreateResponse(HttpStatusCode.NotFound, dict);
+                }
+                var messageSuccess = string.Format(postedFile.FileName);
+                return Request.CreateResponse(HttpStatusCode.OK, messageSuccess);
             }
             catch (Exception e)
             {
@@ -76,30 +74,35 @@ namespace WebAPI2.Controllers
             }
         }
         [HttpGet]
-        [Route("Test")]
-        public HttpResponseMessage Test(string hi)
-        {
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
-        [HttpGet]
         [Route("api/GetImage")]
-        public IHttpActionResult GetImage(string path)
+        public IHttpActionResult GetImage(int? id)
         {
-            // TODO COMBINE PATH
-            var response = new HttpResponseMessage();
-            if (File.Exists(path))
+            if (id.HasValue)
             {
-                response.StatusCode = HttpStatusCode.NotFound;
+                // TODO COMBINE PATH
+                var response = new HttpResponseMessage();
+
+                // TODO FETCH ImageName from User
+                string imageName = "imeSlike.jpg";
+                string path = HttpContext.Current.Server.MapPath("~/UserImages/" + id + "/" + imageName);
+                if (File.Exists(path))
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    return ResponseMessage(response);
+                }
+                FileStream stream = File.OpenRead(path);
+                response.StatusCode = HttpStatusCode.OK;
+                response.Content = new StreamContent(stream);
+
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(path));
+                response.Content.Headers.ContentLength = stream.Length;
+
                 return ResponseMessage(response);
             }
-            FileStream stream = File.OpenRead(path);
-            response.StatusCode = HttpStatusCode.OK;
-            response.Content = new StreamContent(stream);
-
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
-            response.Content.Headers.ContentLength = stream.Length;
-
-            return ResponseMessage(response);
+            else
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "id is not specified"));
+            }
         }
         // GET api/<controller>
         public IEnumerable<string> Get()

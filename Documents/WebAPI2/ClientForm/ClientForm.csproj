@@ -115,5 +115,11 @@
   <ItemGroup>
     <Resource Include="logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj">
+      <Project>{33d9fdf9-3978-401b-8fe9-82d233a6e89b}</Project>
+      <Name>DataLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

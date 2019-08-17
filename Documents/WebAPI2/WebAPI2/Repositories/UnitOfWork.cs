@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebAPI2.Models;
-using WebAPI2.Repositories.GameRepo;
 
 namespace WebAPI2.Repositories
 {
@@ -20,7 +19,7 @@ namespace WebAPI2.Repositories
             {
                 if (gameRepository == null)
                 {
-                    gameRepository = new GameRepository(context);
+                    gameRepository = new Repository<Game>(context);
                 }
                 return gameRepository;
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,11 @@ namespace ClientForm
 
         private void LblRegister_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            User user = new User();
 
+            RegisterWindow regWindow = new RegisterWindow();
+
+            regWindow.ShowDialog();
         }
     }
 }

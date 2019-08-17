@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI2", "WebAPI2\WebAPI2.csproj", "{773D87F6-3748-4C92-B83C-1CACB2280B6E}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientRQ", "Client\ClientRQ.csproj", "{E51DF52E-2C31-4DE2-A4AF-F05A7C947487}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientForm", "ClientForm\ClientForm.csproj", "{8BFE0010-3D67-4E87-9028-DE48F8D3CE30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{33D9FDF9-3978-401B-8FE9-82D233A6E89B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{8BFE0010-3D67-4E87-9028-DE48F8D3CE30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8BFE0010-3D67-4E87-9028-DE48F8D3CE30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8BFE0010-3D67-4E87-9028-DE48F8D3CE30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33D9FDF9-3978-401B-8FE9-82D233A6E89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33D9FDF9-3978-401B-8FE9-82D233A6E89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33D9FDF9-3978-401B-8FE9-82D233A6E89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33D9FDF9-3978-401B-8FE9-82D233A6E89B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

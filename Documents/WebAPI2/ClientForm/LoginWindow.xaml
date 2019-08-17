@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForm"
         mc:Ignorable="d"
-        Title="Lie To Me" Height="380" Width="326.879" ResizeMode="NoResize">
-    <Grid Margin="0,0,4,0" Height="337" VerticalAlignment="Top">
+        Title="Lie To Me" Height="370" Width="326.879" ResizeMode="NoResize">
+    <Grid Margin="0,0,4,-30" Height="371" VerticalAlignment="Top">
         <Label x:Name="lblUsername" Content="username" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,229,0,0"/>
         <Label x:Name="lblPassword" Content="password" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,260,0,0"/>
         <TextBox x:Name="txtUsername" HorizontalAlignment="Left" Height="23" Margin="81,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="208"/>
         <PasswordBox x:Name="passwordBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="208" Height="23" Margin="81,263,0,0"/>
         <Button x:Name="btnLogin" Content="login" HorizontalAlignment="Left" Margin="227,302,0,0" VerticalAlignment="Top" Width="62" Height="23"/>
         <Image x:Name="logo_png" Margin="16,10,28,0" Source="logo.png" Stretch="Fill" Height="219" VerticalAlignment="Top" RenderTransformOrigin="0.516,0.502"/>
-        <Label x:Name="lblRegister" Content="register here" Foreground="#0080ff" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="127,301,0,0" MouseLeftButtonUp="LblRegister_MouseLeftButtonUp" Cursor="Hand"/>
+        <Label x:Name="lblRegister" Content="register" Foreground="#0080ff" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="155,299,108,46" MouseLeftButtonUp="LblRegister_MouseLeftButtonUp" Cursor="Hand" Width="54"/>
 
     </Grid>
 </Window>
