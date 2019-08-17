@@ -35,9 +35,5 @@ namespace WebAPI2.Models
         public System.Data.Entity.DbSet<User> Users { get; set; }
 
         public System.Data.Entity.DbSet<Game> Games { get; set; }
-
-        public System.Data.Entity.DbSet<InGameRole> InGameRoles { get; set; }
-
-        public System.Data.Entity.DbSet<WebAPI2.Models.DeadPlayer> DeadPlayers { get; set; }
     }
 }
