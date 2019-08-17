@@ -16,5 +16,8 @@ namespace WebAPI2.Models
         public string UserName { get; set; }
         public string ImagePath { get; set; }
 
+        [NotMapped]
+        public string Password { get; set; }
+
     }
 }
