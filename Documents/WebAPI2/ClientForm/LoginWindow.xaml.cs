@@ -23,5 +23,10 @@ namespace ClientForm
         {
             InitializeComponent();
         }
+
+        private void LblRegister_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
