@@ -12,8 +12,9 @@ namespace WebAPI2.Models
         [Key]
         public int Id { get; set; }
         public string Email { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
         public string UserName { get; set; }
+        public string ImagePath { get; set; }
 
     }
 }

@@ -46,4 +46,27 @@ namespace WebAPI2.Models
         Any
     }
 
+    public enum RoleName
+    {
+        //Town roles
+        BodyGuard=0,
+        Doctor,
+        Investigator,
+        Lookout,
+        Mayor,
+        Medium,
+        Sheriff,
+        Veteran,
+        Vigilante,
+        //Mafia roles
+        Godfather,
+        Mafioso,
+        Framer,
+        //Neutral roles
+        SerialKiller,
+        Jester
+
+    }
+
+
 }

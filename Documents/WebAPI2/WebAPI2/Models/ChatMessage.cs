@@ -9,6 +9,12 @@ namespace WebAPI2.Models
     {
         public string Content { get; set; }
         public DateTime Time { get; set; }
-        public Player Id { get; set; }
+        public string Name { get; set; }
+
+        public ChatMessage(string content, string name)
+        {
+            Content = content;
+            Name = name;
+        }
     }
 }

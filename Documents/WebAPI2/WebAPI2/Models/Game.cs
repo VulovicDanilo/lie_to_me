@@ -16,10 +16,13 @@ namespace WebAPI2.Models
         public Alignment Alignment { get; set; }
 
 
-        // NOT MAPPED 
 
+        #region NotMapped
         [NotMapped]
         public GameContext GameContext { get; set; }
+
+
+        #endregion
 
         public Game()
         {

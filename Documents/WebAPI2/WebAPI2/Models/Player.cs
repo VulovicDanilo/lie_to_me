@@ -13,6 +13,7 @@ namespace WebAPI2.Models
         public int Id { get; set; }
         public virtual User User { get; set; }
         public virtual Game Game { get; set; }
+        public RoleName RoleName { get; set; }
 
         #region NotMapped
         [NotMapped]
@@ -24,9 +25,11 @@ namespace WebAPI2.Models
         [NotMapped]
         public string LastWill { get; set; }
         [NotMapped]
-        public bool Alive { get; set; }
+        public bool Alive { get; set; } = true;
         [NotMapped]
         public bool Winner { get; set; } = false;
+        [NotMapped]
+        public Role Role { get; set; }
 
         #endregion
 
@@ -42,6 +45,12 @@ namespace WebAPI2.Models
             : base()
         {
             User = user;
+        }
+
+        public void SetRole(Role role)
+        {
+            Role = role;
+            RoleName = role.RoleName;
         }
     }
 }
