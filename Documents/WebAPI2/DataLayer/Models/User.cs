@@ -19,5 +19,10 @@ namespace DataLayer.Models
         [NotMapped]
         public string Password { get; set; }
 
+        public User()
+        {
+
+        }
+
     }
 }

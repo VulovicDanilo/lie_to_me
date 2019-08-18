@@ -1,10 +1,10 @@
-﻿using System;
+﻿using DataLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebAPI2.Models;
 
-namespace WebAPI2.Repositories
+namespace DataLayer.Repositories
 {
     public class UnitOfWork : IDisposable
     {

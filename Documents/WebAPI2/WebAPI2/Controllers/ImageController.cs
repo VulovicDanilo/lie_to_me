@@ -52,16 +52,16 @@ namespace WebAPI2.Controllers
                     }
                     else
                     {
-                        var filePath = HttpContext.Current.Server.MapPath("~/UserImages/" + DateTime.Now.ToString("yyyyMMddhhmmssfffffff") + ext);
+                        var filePath = HttpContext.Current.Server.MapPath("~/UserImages/" + postedFile.FileName);
                         postedFile.SaveAs(filePath);
 
                     }
                 }
                 else
                 {
-                    var res = string.Format("Please Upload a image.");
-                    dict.Add("error", res);
-                    return Request.CreateResponse(HttpStatusCode.NotFound, dict);
+                    var res = string.Format("Falling back to default image");
+                    dict.Add("info", res);
+                    return Request.CreateResponse(HttpStatusCode.OK, dict);
                 }
                 var messageSuccess = string.Format(postedFile.FileName);
                 return Request.CreateResponse(HttpStatusCode.OK, messageSuccess);

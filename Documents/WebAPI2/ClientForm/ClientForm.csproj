@@ -116,6 +116,10 @@
     <Resource Include="logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj">
+      <Project>{C82B2C13-C46E-4BFB-A47A-5AADC613A325}</Project>
+      <Name>BusinessLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">
       <Project>{33d9fdf9-3978-401b-8fe9-82d233a6e89b}</Project>
       <Name>DataLayer</Name>

@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using BusinessLayer;
+using DataLayer.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -59,7 +60,7 @@ namespace ClientForm
             }
         }
 
-        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        private async void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
             if (tbxEmail.Text.Length > 0 &&
                 Regex.IsMatch(tbxEmail.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
@@ -68,52 +69,13 @@ namespace ClientForm
                 {
                     if (pbxPass.Password.Length > 6)
                     {
-                        // Add user
-                        if (ImageName != String.Empty && new FileInfo(ImageName).Exists)
-                        {
-                            #region UploadImage
-                            HttpClient client = new HttpClient();
-                            client.BaseAddress = new Uri("http://localhost:56864/");
-
-                            string filename = ImageName;
-                            var fileStream = File.Open(filename, FileMode.Open);
-                            var fileInfo = new FileInfo(filename);
-
-                            var content = new MultipartFormDataContent();
-                            var streamContent = new StreamContent(fileStream);
-                            streamContent.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(fileInfo.FullName));
-                            content.Add(streamContent, "file", fileInfo.Name);
-
-
-
-                            Task upload = client.PostAsync("api/Image/Store", content).ContinueWith(task =>
-                            {
-                                var response = task.Result;
-
-                                if (response.IsSuccessStatusCode)
-                                {
-                                    this.Dispatcher.Invoke(async () =>
-                                    {
-                                        string json = await response.Content.ReadAsStringAsync();
-                                        string[] data = json.Split('\"');
-                                        ImageName = data[3];
-                                    });
-                                }
-                            });
-                            #endregion
-                            MessageBox.Show("Success\nEmail: " + tbxEmail.Text + "\n" +
-                                        "Username: " + tbxUsername.Text + "\n" +
-                                        "Pass: mrk, nema. \n" +
-                                        "Image name: " + ImageName);
-                        }
+                        UserService service = new UserService();
+                        bool added = await service.AddUserAsync(tbxEmail.Text, tbxUsername.Text, pbxPass.Password, ImageName);
+                        if (added == true)
+                            this.Close();
                         else
-                        {
-                            // fall back to default avatar
-                            MessageBox.Show("Success\nEmail: " + tbxEmail.Text + "\n" +
-                                "Username: " + tbxUsername.Text + "\n" +
-                                "Pass: mrk, nema. \n" +
-                                "Image name: " + ImageName);
-                        }
+                            lblRegisterInfo.Content = "Couldnt create user";
+
                     }
                     else
                     {
