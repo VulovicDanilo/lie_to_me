@@ -58,6 +58,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\EnumExtension.cs" />
+    <Compile Include="Migrations\201908190031530_mig.cs" />
+    <Compile Include="Migrations\201908190031530_mig.Designer.cs">
+      <DependentUpon>201908190031530_mig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -87,10 +91,16 @@
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
+    <Compile Include="Repositories\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201908190031530_mig.resx">
+      <DependentUpon>201908190031530_mig.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

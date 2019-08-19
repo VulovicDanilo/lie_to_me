@@ -11,12 +11,12 @@ using System.Web.Http;
 
 namespace WebAPI2.Controllers
 {
-    [RoutePrefix("api/Image")]
+    [RoutePrefix("api/images")]
     public class ImageController : ApiController
     {
         [HttpPost]
-        [Route("Store")]
-        public async Task<HttpResponseMessage> StoreImage()
+        [Route("store")]
+        public HttpResponseMessage StoreImage()
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
             try
@@ -74,61 +74,38 @@ namespace WebAPI2.Controllers
             }
         }
         [HttpGet]
-        [Route("api/GetImage")]
-        public IHttpActionResult GetImage(int? id)
+        [Route("get")]
+        public HttpResponseMessage GetImage([FromUri]string imageName)
         {
-            if (id.HasValue)
+            if (imageName != String.Empty)
             {
-                // TODO COMBINE PATH
                 var response = new HttpResponseMessage();
 
                 // TODO FETCH ImageName from User
-                string imageName = "imeSlike.jpg";
-                string path = HttpContext.Current.Server.MapPath("~/UserImages/" + id + "/" + imageName);
-                if (File.Exists(path))
+                string path = HttpContext.Current.Server.MapPath("~/UserImages/" + imageName);
+                if (!File.Exists(path))
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
-                    return ResponseMessage(response);
+                    return response;
                 }
+                FileInfo fileInfo = new FileInfo(path);
                 FileStream stream = File.OpenRead(path);
-                response.StatusCode = HttpStatusCode.OK;
-                response.Content = new StreamContent(stream);
 
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(path));
-                response.Content.Headers.ContentLength = stream.Length;
+                var imageContent = new MultipartFormDataContent();
+                var streamContent = new StreamContent(stream);
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(fileInfo.FullName));
+                imageContent.Add(streamContent, "file", fileInfo.Name);
 
-                return ResponseMessage(response);
+                response.Content = imageContent;
+
+                return response;
+
             }
             else
             {
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "id is not specified"));
+                string message = "Image path isn't provided";
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, message);
             }
-        }
-        // GET api/<controller>
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<controller>/5
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
         }
     }
 }

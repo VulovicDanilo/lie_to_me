@@ -5,20 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForm"
         mc:Ignorable="d"
-        Title="Register Window" Height="325" Width="460">
-    <Grid Margin="0,0,-8,0">
+        Title="Register Window" Height="254.552" Width="465.636" ResizeMode="NoResize">
+    <Grid Margin="10,0,4,0" Height="219" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnUpload" Content="upload avatar" HorizontalAlignment="Left" Margin="295,160,0,0" VerticalAlignment="Top" Width="90" Height="34" Click="BtnUpload_Click"/>
-        <Image x:Name="imgPlane" HorizontalAlignment="Left" Height="90" Margin="295,40,0,0" VerticalAlignment="Top" Width="90"/>
-        <TextBox x:Name="tbxEmail" HorizontalAlignment="Left" Height="23" Margin="94,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
-        <Label x:Name="lblEmail" Content="email" HorizontalAlignment="Left" Margin="44,40,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
-        <TextBox x:Name="tbxUsername" HorizontalAlignment="Left" Height="23" Margin="94,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
-        <Label x:Name="lblUsername" Content="username" HorizontalAlignment="Left" Margin="21,80,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
-        <Label x:Name="lblPassword" Content="password" HorizontalAlignment="Left" Margin="21,120,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
-        <PasswordBox x:Name="pbxPass" HorizontalAlignment="Left" Margin="94,120,0,0" VerticalAlignment="Top" Width="171" Height="23"/>
-        <Button x:Name="btnRegister" Content="register" HorizontalAlignment="Left" Margin="137,210,0,0" VerticalAlignment="Top" Width="75" Click="BtnRegister_Click"/>
-        <Label x:Name="lblRegisterInfo" Content="" HorizontalAlignment="Left" Margin="94,160,0,0" VerticalAlignment="Top" Foreground="Red" Width="171" HorizontalContentAlignment="Center"/>
+        <Button x:Name="btnUpload" Content="upload avatar" HorizontalAlignment="Left" Margin="175,170,0,0" VerticalAlignment="Top" Width="90" Height="20" Click="BtnUpload_Click"/>
+        <Image x:Name="imgPlane" HorizontalAlignment="Left" Height="140" Margin="295,50,0,0" VerticalAlignment="Top" Width="140"/>
+        <TextBox x:Name="tbxEmail" HorizontalAlignment="Left" Height="23" Margin="94,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
+        <Label x:Name="lblEmail" Content="email" HorizontalAlignment="Left" Margin="44,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
+        <TextBox x:Name="tbxUsername" HorizontalAlignment="Left" Height="23" Margin="94,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
+        <Label x:Name="lblUsername" Content="username" HorizontalAlignment="Left" Margin="21,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
+        <Label x:Name="lblPassword" Content="password" HorizontalAlignment="Left" Margin="21,130,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
+        <PasswordBox x:Name="pbxPass" HorizontalAlignment="Left" Margin="94,130,0,0" VerticalAlignment="Top" Width="171" Height="23"/>
+        <Button x:Name="btnRegister" Content="register" HorizontalAlignment="Left" Margin="94,170,0,0" VerticalAlignment="Top" Width="75" Click="BtnRegister_Click"/>
+        <Label x:Name="lblRegisterInfo" Content="" HorizontalAlignment="Left" Margin="94,19,0,0" VerticalAlignment="Top" Foreground="Red" Width="171" HorizontalContentAlignment="Center"/>
+        <Border x:Name="brdAvatarImage" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="140" Margin="295,50,0,0" VerticalAlignment="Top" Width="140">
+            <Label x:Name="lblAvatarImage" Content="avatar image" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
     </Grid>
 </Window>

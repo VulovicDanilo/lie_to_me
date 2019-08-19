@@ -1,8 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -22,16 +20,33 @@ namespace WebAPI2.Controllers
                 unit.UserRepository.Add(user);
                 unit.Save();
 
-
-                string id = user.Id.ToString();
-
-                var response = Request.CreateResponse(HttpStatusCode.OK, id);
-                return response;
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                string message = "Hello";
+                string message = ex.Message;
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, message);
+            }
+        }
+        [HttpPost]
+        [Route("login")]
+        public HttpResponseMessage LoginUser([FromBody] string username, [FromBody] string password)
+        {
+            User user = unit.UserRepository.Find(username);
+            if (user != null)
+            {
+                if (user.Password == password)
+                {
+                    return Request.CreateResponse(HttpStatusCode.OK, user);
+                }
+                else
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "password is incorrect");
+                }
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "username is incorrect");
             }
         }
     }

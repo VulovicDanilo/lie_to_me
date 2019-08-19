@@ -53,14 +53,15 @@ namespace ClientForm
                     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                     bitmapImage.StreamSource = stream;
                     bitmapImage.EndInit();
-                    bitmapImage.Freeze(); // just in case you want to load the image in another thread
+                    // just in case you want to load the image in another thread
+                    bitmapImage.Freeze(); 
                     imgPlane.Source = bitmapImage;
                     imgPlane.Stretch = Stretch.Fill;
                 }
             }
         }
 
-        private async void BtnRegister_Click(object sender, RoutedEventArgs e)
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
         {
             if (tbxEmail.Text.Length > 0 &&
                 Regex.IsMatch(tbxEmail.Text, @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z", RegexOptions.IgnoreCase))
@@ -70,7 +71,7 @@ namespace ClientForm
                     if (pbxPass.Password.Length > 6)
                     {
                         UserService service = new UserService();
-                        bool added = await service.AddUserAsync(tbxEmail.Text, tbxUsername.Text, pbxPass.Password, ImageName);
+                        bool added = service.AddUser(tbxEmail.Text, tbxUsername.Text, pbxPass.Password, ImageName);
                         if (added == true)
                             this.Close();
                         else

@@ -11,17 +11,15 @@ namespace DataLayer.Models
     {
         [Key]
         public int Id { get; set; }
+        [StringLength(256)]
+        [Index(IsUnique = true)]
         public string Email { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public string Password { get; set; }
         public string UserName { get; set; }
         public string ImagePath { get; set; }
 
-        [NotMapped]
-        public string Password { get; set; }
-
         public User()
         {
-
         }
 
     }
