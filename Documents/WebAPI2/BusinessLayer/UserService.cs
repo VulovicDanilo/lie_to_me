@@ -17,7 +17,8 @@ namespace BusinessLayer
     {
         private readonly string BaseAddress = "http://localhost:56864/";
         private readonly string AddUserPath = "/api/users/add";
-        public async Task<bool> AddUserAsync(string email, string username, string password, string imagePath)
+        private readonly string UserLoginPath = "/api/users/login";
+        public bool AddUser(string email, string username, string password, string imagePath)
         {
             bool userCreated = false;
 
@@ -46,31 +47,47 @@ namespace BusinessLayer
             };
             var content = new FormUrlEncodedContent(values);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-            
 
-            HttpResponseMessage msg = await client.PostAsync(AddUserPath, content);
+
+            HttpResponseMessage msg = client.PostAsync(AddUserPath, content).Result;
 
             if (msg.StatusCode == HttpStatusCode.OK)
             {
                 userCreated = true;
             }
 
-            
-            
-
             var imageContent = new MultipartFormDataContent();
             var streamContent = new StreamContent(fileStream);
             streamContent.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(fileInfo.FullName));
             imageContent.Add(streamContent, "file", user.ImagePath);
 
-            HttpResponseMessage response = await client.PostAsync("api/Image/Store", imageContent);
-
-            string json = await response.Content.ReadAsStringAsync();
-
-
-            
+            HttpResponseMessage response = client.PostAsync("api/images/store", imageContent).Result;
+                        
 
             return userCreated;
+        }
+
+        public User Login(string username, string password)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(BaseAddress);
+            var values = new Dictionary<string, string>()
+            {
+                {"Username", username},
+                {"Password", password},
+            };
+            var content = new FormUrlEncodedContent(values);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+            var response = client.PostAsync(UserLoginPath, content).Result;
+
+            User user = null;
+            string json = response.Content.ReadAsStringAsync().Result;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                user = JsonConvert.DeserializeObject<User>(json);
+            }
+            return user;
         }
     }
 }

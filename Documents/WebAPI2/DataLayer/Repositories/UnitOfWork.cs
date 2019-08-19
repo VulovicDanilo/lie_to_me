@@ -10,7 +10,7 @@ namespace DataLayer.Repositories
     {
         private ApplicationDbContext context = new ApplicationDbContext();
         private Repository<Game> gameRepository;
-        private Repository<User> userRepository;
+        private UserRepository userRepository;
         private Repository<Player> playerRepository;
 
         public Repository<Game> GameRepository
@@ -24,13 +24,13 @@ namespace DataLayer.Repositories
                 return gameRepository;
             }
         }
-        public Repository<User> UserRepository
+        public UserRepository UserRepository
         {
             get
             {
                 if (userRepository == null)
                 {
-                    userRepository = new Repository<User>(context);
+                    userRepository = new UserRepository(context);
                 }
                 return userRepository;
             }
