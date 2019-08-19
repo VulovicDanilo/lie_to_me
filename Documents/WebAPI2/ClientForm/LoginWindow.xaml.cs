@@ -70,5 +70,14 @@ namespace ClientForm
         {
             this.Show();
         }
+
+        private void BtnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            User user = new User();
+
+            RegisterWindow regWindow = new RegisterWindow();
+
+            regWindow.ShowDialog();
+        }
     }
 }

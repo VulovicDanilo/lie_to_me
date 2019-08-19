@@ -10,7 +10,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="btnUpload" Content="upload avatar" HorizontalAlignment="Left" Margin="175,170,0,0" VerticalAlignment="Top" Width="90" Height="20" Click="BtnUpload_Click"/>
+        <Button x:Name="btnUpload" Content="upload avatar" HorizontalAlignment="Left" Margin="94,170,0,0" VerticalAlignment="Top" Width="90" Height="20" Click="BtnUpload_Click"/>
         <Image x:Name="imgPlane" HorizontalAlignment="Left" Height="140" Margin="295,50,0,0" VerticalAlignment="Top" Width="140"/>
         <TextBox x:Name="tbxEmail" HorizontalAlignment="Left" Height="23" Margin="94,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="171"/>
         <Label x:Name="lblEmail" Content="email" HorizontalAlignment="Left" Margin="44,50,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
@@ -18,10 +18,10 @@
         <Label x:Name="lblUsername" Content="username" HorizontalAlignment="Left" Margin="21,90,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
         <Label x:Name="lblPassword" Content="password" HorizontalAlignment="Left" Margin="21,130,0,0" VerticalAlignment="Top" RenderTransformOrigin="2.132,2.192"/>
         <PasswordBox x:Name="pbxPass" HorizontalAlignment="Left" Margin="94,130,0,0" VerticalAlignment="Top" Width="171" Height="23"/>
-        <Button x:Name="btnRegister" Content="register" HorizontalAlignment="Left" Margin="94,170,0,0" VerticalAlignment="Top" Width="75" Click="BtnRegister_Click"/>
+        <Button x:Name="btnRegister" Content="register" HorizontalAlignment="Left" Margin="190,170,0,0" VerticalAlignment="Top" Width="75" Click="BtnRegister_Click"/>
         <Label x:Name="lblRegisterInfo" Content="" HorizontalAlignment="Left" Margin="94,19,0,0" VerticalAlignment="Top" Foreground="Red" Width="171" HorizontalContentAlignment="Center"/>
         <Border x:Name="brdAvatarImage" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="140" Margin="295,50,0,0" VerticalAlignment="Top" Width="140">
-            <Label x:Name="lblAvatarImage" Content="avatar image" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label x:Name="lblAvatarImage" Content="avatar image" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="28,-35,32,147"/>
         </Border>
     </Grid>
 </Window>

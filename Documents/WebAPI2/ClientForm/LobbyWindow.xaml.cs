@@ -16,16 +16,15 @@ using System.Windows.Shapes;
 namespace ClientForm
 {
     /// <summary>
-    /// Interaction logic for WelcomeWindow.xaml
+    /// Interaction logic for LobbyWindow.xaml
     /// </summary>
-    public partial class WelcomeWindow : Window
+    public partial class LobbyWindow : Window
     {
         public User User { get; set; }
-        public WelcomeWindow(User user)
+        public LobbyWindow(User user)
         {
             InitializeComponent();
             User = user;
-            lblTest.Content += User.UserName;
         }
     }
 }

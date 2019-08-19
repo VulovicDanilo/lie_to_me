@@ -33,8 +33,7 @@ namespace BusinessLayer
             };
 
             string filename = imagePath;
-            var fileStream = File.Open(filename, FileMode.Open);
-            var fileInfo = new FileInfo(filename);
+            FileInfo fileInfo = new FileInfo(filename);
 
             user.ImagePath = email + fileInfo.Extension;
 
@@ -56,13 +55,8 @@ namespace BusinessLayer
                 userCreated = true;
             }
 
-            var imageContent = new MultipartFormDataContent();
-            var streamContent = new StreamContent(fileStream);
-            streamContent.Headers.ContentType = new MediaTypeHeaderValue(MimeMapping.GetMimeMapping(fileInfo.FullName));
-            imageContent.Add(streamContent, "file", user.ImagePath);
-
-            HttpResponseMessage response = client.PostAsync("api/images/store", imageContent).Result;
-                        
+            ImageService imageService = new ImageService();
+            imageService.StoreImage(fileInfo, user.ImagePath);
 
             return userCreated;
         }
