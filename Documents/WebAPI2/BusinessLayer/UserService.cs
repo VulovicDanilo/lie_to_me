@@ -73,15 +73,20 @@ namespace BusinessLayer
             client.BaseAddress = new Uri(BaseAddress);
             var values = new Dictionary<string, string>()
             {
-                {"username", username},
-                {"password", password},
+                {"Username", username},
+                {"Password", password},
             };
             var content = new FormUrlEncodedContent(values);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             var response = client.PostAsync(UserLoginPath, content).Result;
-            string json = response.Content.ReadAsStringAsync().Result;
-            User user = JsonConvert.DeserializeObject<User>(json);
 
+            User user = null;
+            string json = response.Content.ReadAsStringAsync().Result;
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                user = JsonConvert.DeserializeObject<User>(json);
+            }
             return user;
         }
     }

@@ -13,6 +13,7 @@ namespace DataLayer.Models
         public int Id { get; set; }
         [StringLength(256)]
         [Index(IsUnique = true)]
+        [Required(AllowEmptyStrings = true)]
         public string Email { get; set; }
         public string Password { get; set; }
         public string UserName { get; set; }

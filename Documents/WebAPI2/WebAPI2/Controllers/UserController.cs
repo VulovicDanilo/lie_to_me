@@ -1,9 +1,11 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.DTOs;
+using DataLayer.Models;
 using DataLayer.Repositories;
 using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebAPI2.Helpers;
 
 namespace WebAPI2.Controllers
 {
@@ -17,6 +19,7 @@ namespace WebAPI2.Controllers
         {
             try
             {
+                user.Password = SecurePasswordHasher.Hash(user.Password);
                 unit.UserRepository.Add(user);
                 unit.Save();
 
@@ -30,12 +33,12 @@ namespace WebAPI2.Controllers
         }
         [HttpPost]
         [Route("login")]
-        public HttpResponseMessage LoginUser([FromBody] string username, [FromBody] string password)
+        public HttpResponseMessage LoginUser([FromBody] LoginModel loginModel)
         {
-            User user = unit.UserRepository.Find(username);
+            User user = unit.UserRepository.Find(loginModel.Username);
             if (user != null)
             {
-                if (user.Password == password)
+                if (SecurePasswordHasher.Verify(loginModel.Password, user.Password))
                 {
                     return Request.CreateResponse(HttpStatusCode.OK, user);
                 }
