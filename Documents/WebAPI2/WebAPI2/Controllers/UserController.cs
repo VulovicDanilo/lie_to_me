@@ -52,5 +52,10 @@ namespace WebAPI2.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "username is incorrect");
             }
         }
+        protected override void Dispose(bool disposing)
+        {
+            unit.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }

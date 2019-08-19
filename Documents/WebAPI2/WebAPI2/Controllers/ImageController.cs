@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.Repositories;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace WebAPI2.Controllers
     [RoutePrefix("api/images")]
     public class ImageController : ApiController
     {
+        private UnitOfWork unit = new UnitOfWork();
         [HttpPost]
         [Route("store")]
         public HttpResponseMessage StoreImage()
@@ -106,6 +108,11 @@ namespace WebAPI2.Controllers
                 string message = "Image path isn't provided";
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, message);
             }
+        }
+        protected override void Dispose(bool disposing)
+        {
+            unit.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

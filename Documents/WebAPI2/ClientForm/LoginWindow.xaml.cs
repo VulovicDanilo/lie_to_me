@@ -46,7 +46,7 @@ namespace ClientForm
                     if (loggedUser != null)
                     {
                         this.Hide();
-                        WelcomeWindow welcome = new WelcomeWindow(loggedUser);
+                        LobbyWindow welcome = new LobbyWindow(loggedUser);
                         welcome.Closed += new EventHandler(this.Reveal);
                         welcome.ShowDialog();
                     }
