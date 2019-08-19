@@ -46,9 +46,12 @@ namespace ClientForm
                     if (loggedUser != null)
                     {
                         this.Hide();
+                        this.tbxUsername.Clear();
+                        this.pbxPassword.Clear();
                         LobbyWindow welcome = new LobbyWindow(loggedUser);
                         welcome.Closed += new EventHandler(this.Reveal);
                         welcome.ShowDialog();
+                        
                     }
                     else
                     {
