@@ -27,6 +27,21 @@ namespace WebAPI2.Controllers
                 return null;
             }
         }
+        [Route("lobby")]
+        [HttpGet]
+        public List<Game> GetInLobbyGames()
+        {
+            try
+            {
+                return unitOfWork.GameRepository.List
+                    .Where(x => x.GameContext.GameState == GameState.Lobby).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         [Route("add")]
         [HttpPost]
         public HttpResponseMessage AddGame([FromBody] Game game)

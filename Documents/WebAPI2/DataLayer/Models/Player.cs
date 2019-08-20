@@ -14,9 +14,6 @@ namespace DataLayer.Models
         [ForeignKey("User")]
         public int User_Id { get; set; }
         public virtual User User { get; set; }
-        [ForeignKey("Game")]
-        public int Game_Id { get; set; }
-        public virtual Game Game { get; set; }
         public RoleName? RoleName { get; set; }
 
         #region NotMapped

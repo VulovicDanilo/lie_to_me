@@ -47,71 +47,12 @@ namespace ClientForm
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
         {
-            if (listGames.SelectedIndex != -1)
-            {
-                Game selected = listGames.SelectedItem as Game;
-                if (!selected.Full)
-                {
-                    PlayerService playerService = new PlayerService();
-                    Player player = playerService.AddPlayer(null, User, selected);
-
-                    selected.GameContext.AddPlayer(player);
-
-                    // JOINING
-                    this.Hide();
-                    lblInfo.Content = "";
-                    GameWindow gameWindow = new GameWindow(selected, player);
-                    gameWindow.Closed += new EventHandler(this.Reveal);
-                    gameWindow.ShowDialog();
-                }
-                else
-                {
-                    lblInfo.Content = "room already full";
-                    RefreshPanel();
-                    listGames.UnselectAll();
-                }
-            }
+            
         }
 
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
-            Game game = new Game()
-            {
-                GameContext = new GameContext()
-                {
-                    Players = new List<Player>(),
-                    GameMode = GameMode.Classic,
-                    GameState = GameState.Lobby,
-                    Winners = new List<Player>(),
-                },
-                Winner = Alignment.NotDecided,
-                StartTime = null,
-                EndTime = null,
-            };
-
-            GameService service = new GameService();
-            game = service.AddGame(game.StartTime, game.EndTime, game.Winner);
-
-            if (game != null)
-            {
-                PlayerService playerService = new PlayerService();
-                Player player = playerService.AddPlayer(null, User, game);
-
-                game.Owner = player;
-
-
-                // CREATING
-
-                this.Hide();
-                lblInfo.Content = "";
-                GameWindow gameWindow = new GameWindow(game, player);
-                gameWindow.Closed += new EventHandler(this.Reveal);
-                gameWindow.ShowDialog();
-            }
-            else
-            {
-                lblInfo.Content = "unable to create a room";
-            }
+            
 
         }
 

@@ -16,6 +16,7 @@ namespace DataLayer.Models
         [Column(name: "EndTime")]
         public DateTime? EndTime { get; set; }
         public Alignment? Winner { get; set; } 
+        public List<Player> Players { get; set; }
 
 
 
@@ -31,6 +32,7 @@ namespace DataLayer.Models
         public Game()
         {
             GameContext = new GameContext();
+            Players = new List<Player>();
         }
 
         public Game(GameContext context)
@@ -45,13 +47,13 @@ namespace DataLayer.Models
         {
             get
             {
-                return GameContext.Players.Count == GameContext.MAX_PLAYERS;
+                return Players.Count == GameContext.MAX_PLAYERS;
             }
         }
         public override string ToString()
         {
             return "Game mode: " + GameContext.GameMode + " | Players: "
-                + GameContext.Players.Count() + "/" + GameContext.MAX_PLAYERS;
+                + Players.Count() + "/" + GameContext.MAX_PLAYERS;
         }
     }
 }

@@ -68,7 +68,6 @@ namespace BusinessLayer
                 {"Id", player.Id.ToString() },
                 {"RoleName", player.RoleName.ToString()},
                 {"User_Id", player.User_Id.ToString() },
-                {"Game_Id", player.Game_Id.ToString() }
             };
             var content = new FormUrlEncodedContent(values);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
