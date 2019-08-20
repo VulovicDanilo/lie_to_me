@@ -11,15 +11,19 @@ namespace DataLayer.Models
     {
         [Key]
         public int Id { get; set; }
-        public DateTime startTime { get; set; }
-        public DateTime endTime { get; set; }
-        public Alignment Alignment { get; set; } // should be nullable -- in the beggining no winning alignment. Also we should change name to 'Win'
+        [Column(name: "StartTime")]
+        public DateTime? StartTime { get; set; }
+        [Column(name: "EndTime")]
+        public DateTime? EndTime { get; set; }
+        public Alignment? Winner { get; set; } 
 
 
 
         #region NotMapped
         [NotMapped]
         public GameContext GameContext { get; set; }
+        [NotMapped]
+        public Player Owner { get; set; }
 
 
         #endregion
@@ -27,8 +31,6 @@ namespace DataLayer.Models
         public Game()
         {
             GameContext = new GameContext();
-            startTime = new DateTime();
-            endTime = new DateTime();
         }
 
         public Game(GameContext context)
@@ -38,6 +40,18 @@ namespace DataLayer.Models
             {
                 GameContext = context;
             }
+        }
+        public bool Full
+        {
+            get
+            {
+                return GameContext.Players.Count == GameContext.MAX_PLAYERS;
+            }
+        }
+        public override string ToString()
+        {
+            return "Game mode: " + GameContext.GameMode + " | Players: "
+                + GameContext.Players.Count() + "/" + GameContext.MAX_PLAYERS;
         }
     }
 }

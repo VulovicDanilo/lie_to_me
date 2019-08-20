@@ -48,9 +48,9 @@ namespace ClientForm
                         this.Hide();
                         this.tbxUsername.Clear();
                         this.pbxPassword.Clear();
-                        LobbyWindow welcome = new LobbyWindow(loggedUser);
-                        welcome.Closed += new EventHandler(this.Reveal);
-                        welcome.ShowDialog();
+                        LobbyWindow lobbyWindow = new LobbyWindow(loggedUser);
+                        lobbyWindow.Closed += new EventHandler(this.Reveal);
+                        lobbyWindow.ShowDialog();
                         
                     }
                     else

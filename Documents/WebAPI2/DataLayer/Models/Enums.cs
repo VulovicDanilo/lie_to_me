@@ -36,6 +36,7 @@ namespace DataLayer.Models
     }
     public enum Alignment
     {
+        NotDecided = 0,
         Town,
         Mafia,
         Neutral

@@ -34,19 +34,15 @@ namespace WebAPI2.Controllers
         }
         [Route("update")]
         [HttpPut]
-        public HttpResponseMessage UpdatePlayer([FromBody] Player update)
+        public HttpResponseMessage UpdatePlayer([FromBody] Player player)
         {
             try
             {
-                Player player = unit.PlayerRepository.Find(update.Id);
-                if (player != null)
+                if (player.Id != 0)
                 {
-                    player.RoleName = update.RoleName;
-                    player.User_Id = update.User_Id;
-                    player.Game_Id = update.Game_Id;
                     unit.PlayerRepository.Update(player);
                     unit.Save();
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    return Request.CreateResponse(HttpStatusCode.OK, player);
                 }
                 else
                 {

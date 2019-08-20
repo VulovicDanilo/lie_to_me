@@ -10,17 +10,19 @@ using System.Web.Http;
 namespace WebAPI2.Controllers
 {
     [RoutePrefix("api/games")]
-    public class GamesController : ApiController
+    public class GameController : ApiController
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
 
+        [Route("all")]
         [HttpGet]
         public List<Game> GetGames()
         {
             try
             {
-                return  unitOfWork.GameRepository.List;
-            } catch(Exception e)
+                return unitOfWork.GameRepository.List;
+            }
+            catch (Exception ex)
             {
                 return null;
             }
@@ -34,7 +36,8 @@ namespace WebAPI2.Controllers
                 unitOfWork.GameRepository.Add(game);
                 unitOfWork.Save();
                 return Request.CreateResponse(HttpStatusCode.OK, game);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return Request.CreateErrorResponse
                     (HttpStatusCode.InternalServerError, ex.Message);
@@ -47,13 +50,13 @@ namespace WebAPI2.Controllers
         {
             try
             {
-                /* Should't game repository resolve Update? -- in player service it's done manually */
                 unitOfWork.GameRepository.Update(game);
                 unitOfWork.Save();
                 return Request.CreateResponse(HttpStatusCode.OK, game);
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to update player");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to update player. Message: " + ex.Message);
             }
         }
 
@@ -66,9 +69,10 @@ namespace WebAPI2.Controllers
                 unitOfWork.GameRepository.Delete(game);
                 unitOfWork.Save();
                 return Request.CreateResponse(HttpStatusCode.OK, "Game deleted");
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to delete game");
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to delete game. Message: " + ex.Message);
             }
         }
         protected override void Dispose(bool disposing)
@@ -76,6 +80,5 @@ namespace WebAPI2.Controllers
             unitOfWork.Dispose();
             base.Dispose(disposing);
         }
-
     }
 }

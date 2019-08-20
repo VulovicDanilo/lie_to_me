@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace BusinessLayer
         private readonly string AddPlayerPath = "/api/players/add";
         private readonly string DeletePlayerPath = "/api/players/delete";
         private readonly string UpdatePlayerPath = "/api/players/update";
-        public bool AddPlayer(RoleName role, User user, Game game)
+        public Player AddPlayer(RoleName? role, User user, Game game)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BaseAddress);
@@ -34,7 +35,8 @@ namespace BusinessLayer
 
             HttpResponseMessage msg = client.PostAsync(AddPlayerPath, content).Result;
 
-            return msg.StatusCode == HttpStatusCode.OK ? true : false;
+            Player player = JsonConvert.DeserializeObject<Player>(msg.Content.ReadAsStringAsync().Result);
+            return player;
         }
         public bool DeletePlayer(Player player)
         {
