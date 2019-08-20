@@ -13,7 +13,7 @@ namespace DataLayer.Models
         public int Id { get; set; }
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
-        public Alignment Alignment { get; set; }
+        public Alignment Alignment { get; set; } // should be nullable -- in the beggining no winning alignment. Also we should change name to 'Win'
 
 
 
