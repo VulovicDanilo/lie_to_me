@@ -5,14 +5,12 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Investigator :Role
+    public class SerialKillerStrategy : RoleStrategy
     {
-        public Investigator()
-            :base(RoleName.Investigator, Alignment.Town, 4)
+        public SerialKillerStrategy() : base(RoleName.SerialKiller, Alignment.Neutral, 5)
         {
 
         }
-
         public override void ExecuteAction(GameContext gameContext)
         {
             throw new NotImplementedException();

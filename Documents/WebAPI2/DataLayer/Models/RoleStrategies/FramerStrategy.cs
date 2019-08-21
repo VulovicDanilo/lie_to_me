@@ -5,12 +5,14 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class SerialKiller : Role
+    public class FramerStrategy : RoleStrategy
     {
-        public SerialKiller() : base(RoleName.SerialKiller, Alignment.Neutral, 5)
+        public FramerStrategy()
+            : base(RoleName.Framer, Alignment.Mafia, 2)
         {
-
+            
         }
+
         public override void ExecuteAction(GameContext gameContext)
         {
             throw new NotImplementedException();

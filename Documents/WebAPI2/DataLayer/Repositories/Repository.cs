@@ -38,7 +38,6 @@ namespace DataLayer.Repositories
                 DbSet.Add(entity);
             }
         }
-        //id int? user id is string
         public T Find(int id)
         {
             return DbSet.Find(id);

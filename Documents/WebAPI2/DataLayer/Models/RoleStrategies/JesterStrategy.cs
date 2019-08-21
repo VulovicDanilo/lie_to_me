@@ -5,12 +5,14 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Sheriff : Role
+    public class JesterStrategy : RoleStrategy
     {
-        public Sheriff() : base(RoleName.Sheriff, Alignment.Town, 4)
+        public JesterStrategy()
+            : base(RoleName.Jester, Alignment.Neutral, 10)
         {
 
         }
+
         public override void ExecuteAction(GameContext gameContext)
         {
             throw new NotImplementedException();

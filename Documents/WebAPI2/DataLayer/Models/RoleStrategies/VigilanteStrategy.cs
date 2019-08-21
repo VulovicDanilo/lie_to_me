@@ -5,12 +5,10 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Framer : Role
+    public class VigilanteStrategy : RoleStrategy
     {
-        public Framer()
-            : base(RoleName.Framer, Alignment.Mafia, 2)
+        public VigilanteStrategy() : base(RoleName.Vigilante, Alignment.Town, 5)
         {
-            
         }
 
         public override void ExecuteAction(GameContext gameContext)

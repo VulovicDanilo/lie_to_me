@@ -5,9 +5,9 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Medium : Role
+    public class MediumStrategy : RoleStrategy
     {
-        public Medium() : base(RoleName.Medium, Alignment.Town, 10)
+        public MediumStrategy() : base(RoleName.Medium, Alignment.Town, 10)
         {
 
         }

@@ -30,7 +30,7 @@ namespace DataLayer.Models
         [NotMapped]
         public bool Winner { get; set; } = false;
         [NotMapped]
-        public Role Role { get; set; }
+        public RoleStrategy Role { get; set; }
 
         #endregion
 
@@ -48,7 +48,7 @@ namespace DataLayer.Models
             User = user;
         }
 
-        public void SetRole(Role role)
+        public void SetRole(RoleStrategy role)
         {
             Role = role;
             RoleName = role.RoleName;

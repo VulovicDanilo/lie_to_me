@@ -5,17 +5,18 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Godfather : Role
+    public class BodyguardStrategy : RoleStrategy
     {
-        public Godfather()
-            : base(RoleName.Godfather, Alignment.Mafia, 5)
+        public BodyguardStrategy() : base(RoleName.BodyGuard, Alignment.Town, 3)
         {
-
+            
         }
 
         public override void ExecuteAction(GameContext gameContext)
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

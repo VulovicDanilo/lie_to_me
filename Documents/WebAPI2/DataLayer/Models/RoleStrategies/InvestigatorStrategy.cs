@@ -5,10 +5,10 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Mafioso : Role
+    public class InvestigatorStrategy :RoleStrategy
     {
-        public Mafioso()
-            : base(RoleName.Mafioso, Alignment.Mafia, 5)
+        public InvestigatorStrategy()
+            :base(RoleName.Investigator, Alignment.Town, 4)
         {
 
         }

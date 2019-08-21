@@ -5,14 +5,12 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Mayor : Role
+    public class VeteranStrategy : RoleStrategy
     {
-        public Mayor()
-            : base(RoleName.Mayor, Alignment.Town, 10)
+        public VeteranStrategy() : base(RoleName.Veteran, Alignment.Town, 1)
         {
 
         }
-
         public override void ExecuteAction(GameContext gameContext)
         {
             throw new NotImplementedException();

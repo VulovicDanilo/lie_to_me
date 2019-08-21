@@ -5,9 +5,9 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Lookout : Role
+    public class LookoutStrategy : RoleStrategy
     {
-        public Lookout()
+        public LookoutStrategy()
             : base(RoleName.Lookout, Alignment.Town, 6)
         {
 

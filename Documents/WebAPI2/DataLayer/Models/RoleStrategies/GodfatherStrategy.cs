@@ -5,10 +5,10 @@ using System.Web;
 
 namespace DataLayer.Models.Roles
 {
-    public class Doctor : Role
+    public class GodfatherStrategy : RoleStrategy
     {
-        public Doctor()
-            : base(RoleName.Doctor, Alignment.Town, 3)
+        public GodfatherStrategy()
+            : base(RoleName.Godfather, Alignment.Mafia, 5)
         {
 
         }
