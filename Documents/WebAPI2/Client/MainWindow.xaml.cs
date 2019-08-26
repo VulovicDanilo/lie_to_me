@@ -64,7 +64,7 @@ namespace Client
             return channel.QueueDeclare().QueueName;
         }
 
-        private void InitListener(String route, string queueName)
+        private void InitListener(string route, string queueName)
         {
             if (routingKey != null)
             {
