@@ -69,5 +69,12 @@ namespace DataLayer.Models
 
     }
 
+    public enum MessageQueueChannel
+    {
+        ChatMessageDead = 0,
+        ChatMessageAlive = 1,
+        ContextBroadcast = 99,
+    }
+
 
 }

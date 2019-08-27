@@ -2,10 +2,10 @@
 using DataLayer.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebAPI2.GameStuff;
 
 namespace WebAPI2.Controllers
 {
@@ -22,7 +22,7 @@ namespace WebAPI2.Controllers
             {
                 return unitOfWork.GameRepository.List;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -33,8 +33,7 @@ namespace WebAPI2.Controllers
         {
             try
             {
-                return unitOfWork.GameRepository.List
-                    .Where(x => x.GameContext.GameState == GameState.Lobby).ToList();
+                throw new NotImplementedException();
 
             }
             catch (Exception ex)
@@ -50,7 +49,11 @@ namespace WebAPI2.Controllers
             {
                 unitOfWork.GameRepository.Add(game);
                 unitOfWork.Save();
-                return Request.CreateResponse(HttpStatusCode.OK, game);
+
+                var context = GameDictionary.Add(game);
+
+
+                return Request.CreateResponse(HttpStatusCode.OK, game.Id);
             }
             catch (Exception ex)
             {
@@ -83,6 +86,8 @@ namespace WebAPI2.Controllers
             {
                 unitOfWork.GameRepository.Delete(game);
                 unitOfWork.Save();
+
+                GameDictionary.Remove(game.Id);
                 return Request.CreateResponse(HttpStatusCode.OK, "Game deleted");
             }
             catch (Exception ex)

@@ -17,43 +17,23 @@ namespace DataLayer.Models
         public DateTime? EndTime { get; set; }
         public Alignment? Winner { get; set; } 
         public List<Player> Players { get; set; }
-
-
-
-        #region NotMapped
-        [NotMapped]
-        public GameContext GameContext { get; set; }
-        [NotMapped]
         public Player Owner { get; set; }
+        public GameMode GameMode { get; set; }
 
 
-        #endregion
+        [NotMapped]
+        public readonly int MAX_PLAYERS = 10;
+        [NotMapped]
+        public GameState GameState { get; set; }
+        [NotMapped]
+        public List<Player> Winners { get; set; }
 
-        public Game()
+
+        public Game() { }
+        public Game(Player owner)
         {
-            GameContext = new GameContext();
             Players = new List<Player>();
-        }
-
-        public Game(GameContext context)
-            :base()
-        {
-            if (context != null)
-            {
-                GameContext = context;
-            }
-        }
-        public bool Full
-        {
-            get
-            {
-                return Players.Count == GameContext.MAX_PLAYERS;
-            }
-        }
-        public override string ToString()
-        {
-            return "Game mode: " + GameContext.GameMode + " | Players: "
-                + Players.Count() + "/" + GameContext.MAX_PLAYERS;
+            Owner = owner;
         }
     }
 }

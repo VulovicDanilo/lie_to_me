@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using DataLayer.Models;
 using DataLayer.Repositories;
+using WebAPI2.GameStuff;
 
 namespace WebAPI2.Controllers
 {
@@ -22,8 +23,18 @@ namespace WebAPI2.Controllers
         {
             try
             {
-                unit.PlayerRepository.Add(player);
+                var game = unit.GameRepository.Find(player.GameId);
+                if (game.Players.Count == 0)
+                {
+                    game.Owner = player;
+                }
+                game.Players.Add(player);
                 unit.Save();
+
+                var context = GameDictionary.Get(player.GameId);
+
+                QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, context);
+
                 return Request.CreateResponse(HttpStatusCode.OK, player);
             }
             catch (Exception ex)
@@ -57,12 +68,15 @@ namespace WebAPI2.Controllers
         }
         [Route("delete")]
         [HttpDelete]
-        public HttpResponseMessage DeletePlayer([FromUri] Player id)
+        public HttpResponseMessage DeletePlayer([FromBody] Player player)
         {
             try
             {
-                unit.PlayerRepository.Delete(id);
-                unit.Save();
+                int gameId = player.GameId;
+                unit.PlayerRepository.Delete(player.Id);
+
+                GameDictionary.RemovePlayer(player.GameId, player.Id);
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)

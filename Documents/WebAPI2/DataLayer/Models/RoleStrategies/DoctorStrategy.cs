@@ -13,7 +13,7 @@ namespace DataLayer.Models.Roles
 
         }
 
-        public override void ExecuteAction(GameContext gameContext)
+        public override void ExecuteAction(Game game)
         {
             throw new NotImplementedException();
         }

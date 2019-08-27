@@ -17,7 +17,7 @@ namespace BusinessLayer
         private readonly string AddPlayerPath = "/api/players/add";
         private readonly string DeletePlayerPath = "/api/players/delete";
         private readonly string UpdatePlayerPath = "/api/players/update";
-        public Player AddPlayer(RoleName? role, User user, Game game)
+        public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BaseAddress);
@@ -27,7 +27,7 @@ namespace BusinessLayer
             {
                 {"RoleName", role.ToString()},
                 {"User_Id", user.Id.ToString()},
-                {"Game_Id", game.Id.ToString() }
+                {"GameId", gameId.ToString() }
             };
             var content = new FormUrlEncodedContent(values);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
@@ -46,13 +46,14 @@ namespace BusinessLayer
 
             var values = new Dictionary<string, string>()
             {
-                {"id", player.Id.ToString()},
+                {"Id", player.Id.ToString()},
+                {"GameId", player.GameId.ToString() }
             };
             var content = new FormUrlEncodedContent(values);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
 
-            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + "?id="+player.Id.ToString()).Result;
+            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + content).Result;
 
             return msg.StatusCode == HttpStatusCode.OK ? true : false;
 

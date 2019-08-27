@@ -38,7 +38,7 @@ namespace BusinessLayer
             return games;
         }
 
-        public Game AddGame(DateTime? startTime, DateTime? endTime, Alignment? winner = Alignment.NotDecided)
+        public int AddGame(DateTime? startTime, DateTime? endTime, Alignment? winner = Alignment.NotDecided)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BaseAddress);
@@ -54,9 +54,13 @@ namespace BusinessLayer
 
             var msg = client.PostAsync(AddGamePath, content).Result;
 
-            Game gotBack = JsonConvert.DeserializeObject<Game>(msg.Content.ReadAsStringAsync().Result);
+            //Game gotBack = JsonConvert.DeserializeObject<Game>(msg.Content.ReadAsStringAsync().Result);
 
-            return gotBack;
+            //return gotBack;
+
+            string text = msg.Content.ReadAsStringAsync().Result;
+
+            return int.Parse(text);
         }
 
     }

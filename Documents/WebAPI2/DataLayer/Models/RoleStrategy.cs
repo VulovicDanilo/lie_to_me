@@ -9,7 +9,7 @@ namespace DataLayer.Models
     {
         public RoleName RoleName { get; private set; }
         public Alignment Alignment { get; private set; }
-        public abstract void ExecuteAction(GameContext gameContext);
+        public abstract void ExecuteAction(Game game);
         public Player SelectedPlayer { get; set; }
         public int Priority { get; private set; }
 

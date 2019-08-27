@@ -30,7 +30,9 @@ namespace DataLayer.Models
         [NotMapped]
         public bool Winner { get; set; } = false;
         [NotMapped]
-        public RoleStrategy Role { get; set; }
+        public RoleStrategy Role { get; set; } 
+        [NotMapped]
+        public int GameId { get; set; }
 
         #endregion
 
