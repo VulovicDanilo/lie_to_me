@@ -120,7 +120,7 @@ namespace ClientForm
             Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 var date = DateTime.Now;
-                Messages.Add("Context updated: " + date.Hour + ":" + date.Minute + ":" + date.Second);
+                Messages.Add("Context updated: " + date.ToString("HH:mm:ss"));
 
                 if (context == null)
                 {

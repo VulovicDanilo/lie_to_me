@@ -39,7 +39,7 @@ namespace WebAPI2.GameStuff
             using (var channel = connection.CreateModel())
             {
                 channel.ExchangeDeclare(exchange: exchangeName,
-                                        type: "fanout");
+                                        type: "topic");
 
 
 
