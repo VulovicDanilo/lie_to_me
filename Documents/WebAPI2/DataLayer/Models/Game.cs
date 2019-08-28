@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RabbitMQ.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,13 +28,20 @@ namespace DataLayer.Models
         public GameState GameState { get; set; }
         [NotMapped]
         public List<Player> Winners { get; set; }
+        [NotMapped]
+        public IModel Channel { get; set; }
 
 
-        public Game() { }
-        public Game(Player owner)
+        public Game()
         {
             Players = new List<Player>();
+            Owner = null;
+        }
+        public Game(Player owner)
+            :base()
+        {
             Owner = owner;
         }
+
     }
 }

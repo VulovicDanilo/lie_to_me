@@ -35,8 +35,15 @@ namespace BusinessLayer
 
             HttpResponseMessage msg = client.PostAsync(AddPlayerPath, content).Result;
 
-            Player player = JsonConvert.DeserializeObject<Player>(msg.Content.ReadAsStringAsync().Result);
-            return player;
+            if (msg.StatusCode == HttpStatusCode.OK)
+            {
+                Player player = JsonConvert.DeserializeObject<Player>(msg.Content.ReadAsStringAsync().Result);
+                return player;
+            }
+            else
+            {
+                return null;
+            }
         }
         public bool DeletePlayer(Player player)
         {
@@ -58,7 +65,27 @@ namespace BusinessLayer
             return msg.StatusCode == HttpStatusCode.OK ? true : false;
 
         }
-        public bool Update(Player player)
+        public bool DeletePlayer(int playerId, int gameId)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(BaseAddress);
+
+
+            var values = new Dictionary<string, string>()
+            {
+                {"Id", playerId.ToString()},
+                {"GameId", gameId.ToString() }
+            };
+            var content = new FormUrlEncodedContent(values);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+
+            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + content).Result;
+
+            return msg.StatusCode == HttpStatusCode.OK ? true : false;
+
+        }
+        public bool UpdatePlayer(Player player, int gameId)
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BaseAddress);
@@ -68,7 +95,8 @@ namespace BusinessLayer
             {
                 {"Id", player.Id.ToString() },
                 {"RoleName", player.RoleName.ToString()},
-                {"User_Id", player.User_Id.ToString() },
+                {"GameId", gameId.ToString() },
+                {"Alive", player.Alive.ToString() }
             };
             var content = new FormUrlEncodedContent(values);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");

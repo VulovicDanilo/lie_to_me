@@ -24,16 +24,22 @@ namespace WebAPI2.Controllers
             try
             {
                 var game = unit.GameRepository.Find(player.GameId);
+                var user = unit.UserRepository.Find(player.User_Id);
+                player.User = user;
                 if (game.Players.Count == 0)
                 {
                     game.Owner = player;
                 }
+                if (game.Players.Count == game.MAX_PLAYERS)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.Conflict, "Capacity reached");
+                }
                 game.Players.Add(player);
                 unit.Save();
 
-                var context = GameDictionary.Get(player.GameId);
+                GameDictionary.AddPlayer(game);
 
-                QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, context);
+                QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
 
                 return Request.CreateResponse(HttpStatusCode.OK, player);
             }
@@ -53,7 +59,13 @@ namespace WebAPI2.Controllers
                 {
                     unit.PlayerRepository.Update(player);
                     unit.Save();
-                    return Request.CreateResponse(HttpStatusCode.OK, player);
+
+                    GameDictionary.UpdatePlayer(player.GameId, player);
+
+                    var game = GameDictionary.Get(player.GameId);
+
+                    QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
                 {
@@ -74,9 +86,12 @@ namespace WebAPI2.Controllers
             {
                 int gameId = player.GameId;
                 unit.PlayerRepository.Delete(player.Id);
+                unit.Save();
 
                 GameDictionary.RemovePlayer(player.GameId, player.Id);
+                var game = GameDictionary.Get(player.GameId);
 
+                QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)

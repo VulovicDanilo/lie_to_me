@@ -15,13 +15,22 @@ namespace DataLayer.DTOs
         public List<InGamePlayer> Players { get; set; }
         public List<DeadPlayer> DeadPlayers { get; set; }
         public List<InGamePlayer> Winners { get; set; }
+        public int OwnerId { get; set; }
         public int GameId { get; set; }
+
+        public ClientContext()
+        {
+            Players = new List<InGamePlayer>();
+            DeadPlayers = new List<DeadPlayer>();
+            Winners = new List<InGamePlayer>();
+        }
 
         public ClientContext(Game game)
         {
             GameState = game.GameState;
             GameMode = game.GameMode;
             GameId = game.Id;
+            OwnerId = game.Owner.Id;
 
             Winners = new List<InGamePlayer>();
             Players = new List<InGamePlayer>();

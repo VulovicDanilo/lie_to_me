@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -16,9 +17,11 @@ namespace BusinessLayer
         private readonly string BaseAddress = "http://localhost:56864/";
         private readonly string GetGamesPath = "api/games/all";
         private readonly string AddGamePath = "api/games/add";
+        private readonly string DeleteGamePath = "api/games/delete";
+        private readonly string RequestContext = "api/games/context";
 
 
-        public List<Game> GetGames()
+        public List<GameListingDTO> GetGames()
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BaseAddress);
@@ -26,11 +29,11 @@ namespace BusinessLayer
             
             var msg = client.GetAsync(GetGamesPath).Result; // deserialize this
 
-            List<Game> games = new List<Game>();
+            List<GameListingDTO> games = new List<GameListingDTO>();
 
             string json = msg.Content.ReadAsStringAsync().Result;
 
-            List<Game> list = (List<Game>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<Game>));
+            List<GameListingDTO> list = (List<GameListingDTO>)Newtonsoft.Json.JsonConvert.DeserializeObject(json, typeof(List<GameListingDTO>));
 
             if (list != null)
                 games = list;
@@ -63,5 +66,42 @@ namespace BusinessLayer
             return int.Parse(text);
         }
 
+        public bool RequestContextBroadcast(string queueName)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(BaseAddress);
+
+
+            var values = new Dictionary<string, string>()
+            {
+                {"queueName", queueName},
+            };
+            var content = new FormUrlEncodedContent(values);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+
+            HttpResponseMessage msg = client.DeleteAsync(DeleteGamePath + "?queueName="+queueName).Result;
+
+            return msg.StatusCode == HttpStatusCode.OK ? true : false;
+        }
+
+        public bool DeleteGame(int gameId)
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(BaseAddress);
+
+
+            var values = new Dictionary<string, string>()
+            {
+                {"Id", gameId.ToString()},
+            };
+            var content = new FormUrlEncodedContent(values);
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+
+            HttpResponseMessage msg = client.DeleteAsync(DeleteGamePath + content).Result;
+
+            return msg.StatusCode == HttpStatusCode.OK ? true : false;
+        }
     }
 }

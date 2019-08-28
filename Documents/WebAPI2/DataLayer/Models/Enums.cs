@@ -74,6 +74,7 @@ namespace DataLayer.Models
         ChatMessageDead = 0,
         ChatMessageAlive = 1,
         ContextBroadcast = 99,
+        LobbyInfo = 100,
     }
 
 

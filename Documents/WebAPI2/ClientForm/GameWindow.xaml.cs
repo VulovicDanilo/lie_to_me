@@ -1,4 +1,5 @@
-﻿using DataLayer.DTOs;
+﻿using BusinessLayer;
+using DataLayer.DTOs;
 using DataLayer.Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -36,21 +37,47 @@ namespace ClientForm
         public GameWindow(Player player, string queueName)
         {
             InitializeComponent();
+            this.Title = player.User.UserName + "s game";
             QueueName = queueName;
             Player = player;
             lbxInfo.ItemsSource = Messages;
-            this.Closing += CloseConnections;
-            InitContextListener();
+            this.Closing += CloseStuff;
+            InitContextListener(((int)MessageQueueChannel.ContextBroadcast).ToString());
+
+            this.btnStart.Visibility = Visibility.Hidden;
+
+            this.Hide();
+            GameService gameService = new GameService();
+            gameService.RequestContextBroadcast(queueName);
         }
 
-        private void CloseConnections(object sender, CancelEventArgs args)
+        private void CloseStuff(object sender, CancelEventArgs args)
         {
             if (channel.IsOpen)
                 channel.Close();
             if (connection.IsOpen)
                 connection.Close();
-            // TODO
-            // HANDLE PLAYER DELETION IF LOBBY WAS IN LOBBY
+
+            if (context != null)
+            {
+                if (context.GameState == GameState.Lobby)
+                {
+                    PlayerService playerService = new PlayerService();
+                    playerService.DeletePlayer(Player);
+                    if (context.Players.Count == 1)
+                    {
+                        GameService gameService = new GameService();
+                        gameService.DeleteGame(context.GameId);
+                    }
+                }
+                else
+                {
+                    // kill player
+                    Player.Alive = false;
+                    PlayerService playerService = new PlayerService();
+                    playerService.UpdatePlayer(Player, context.GameId);
+                }
+            }
         }
 
         private string InitConnection()
@@ -62,17 +89,17 @@ namespace ClientForm
             return channel.QueueDeclare().QueueName;
         }
 
-        private void InitContextListener(string routingKey = "0")
+        private void InitContextListener(string channelKey)
         {
             string queue = InitConnection();
-            if (routingKey != null)
+            if (channel != null)
             {
-                channel.QueueUnbind(QueueName, "topic_logs", routingKey, null);
+                channel.QueueUnbind(QueueName, "topic_logs", channelKey, null);
             }
 
             channel.QueueBind(queue: queue,
                               exchange: QueueName,
-                              routingKey: routingKey);
+                              routingKey: channelKey);
 
 
             ContextConsumer = new EventingBasicConsumer(channel);
@@ -94,8 +121,29 @@ namespace ClientForm
             {
                 var date = DateTime.Now;
                 Messages.Add("Context updated: " + date.Hour + ":" + date.Minute + ":" + date.Second);
-                
+
+                if (context == null)
+                {
+                    context = newContext;
+                    Refresh();
+                    this.Show();
+                }
+                else
+                {
+                    // COMPARE THE DIFF AND PRINT THE DIFF TO lbxInfo
+
+                }
             });
+        }
+
+        private void Refresh()
+        {
+            lbxInfo.Items.Refresh();
+            lblPlayerCount.Content = "Player Count: " + context.Players.Count;
+        }
+        private void BtnStart_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

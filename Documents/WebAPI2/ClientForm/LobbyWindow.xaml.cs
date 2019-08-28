@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using BusinessLayer;
 using System.Threading;
+using DataLayer.DTOs;
 
 namespace ClientForm
 {
@@ -23,16 +24,13 @@ namespace ClientForm
     public partial class LobbyWindow : Window
     {
         public User User { get; set; }
-        public List<Game> Games { get; set; }
+        public List<GameListingDTO> Games { get; set; }
         public LobbyWindow(User user)
         {
             InitializeComponent();
             User = user;
+            this.Title += " - " + User.UserName;
             GameService service = new GameService();
-
-            Games = service.GetGames();
-
-
             RefreshPanel();
         }
 
@@ -40,8 +38,8 @@ namespace ClientForm
         {
             GameService service = new GameService();
             Games = service.GetGames();
-            
-            listGames.ItemsSource = Games;
+
+            listGames.Items.Refresh();
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
@@ -51,19 +49,24 @@ namespace ClientForm
                 int index = listGames.SelectedIndex;
                 int gameId = Games.ElementAt(index).Id;
 
-                // SEND JOIN REQUEST
-
                 PlayerService playerService = new PlayerService();
                 Player player = playerService.AddPlayer(null, User, gameId);
+                if (player != null)
+                {
+                    string queueName = gameId.ToString();
 
-                string queueName = gameId.ToString();
 
-                
-                this.Hide();
-                this.lblInfo.Content = "";
-                GameWindow gameWindow = new GameWindow(player, queueName);
-                gameWindow.Closed += new EventHandler(this.Reveal);
-                gameWindow.ShowDialog();
+                    this.Hide();
+                    this.lblInfo.Content = "";
+                    GameWindow gameWindow = new GameWindow(player, queueName);
+                    gameWindow.Closed += new EventHandler(this.Reveal);
+                    gameWindow.ShowDialog();
+                }
+                else
+                {
+                    lblInfo.Content = "couldnt join, room might be full.";
+                    RefreshPanel();
+                }
             }
         }
 
@@ -81,22 +84,18 @@ namespace ClientForm
             if (player != null)
             {
                 string queueName = gameId.ToString();
-
-                lblInfo.Content = "Queuename: " + queueName + " Player: " + player.Id + ". Joining soon...";
-                Thread.Sleep(5000);
-
+                
                 this.Hide();
                 this.lblInfo.Content = "";
                 GameWindow gameWindow = new GameWindow(player, queueName);
                 gameWindow.Closed += new EventHandler(this.Reveal);
                 gameWindow.ShowDialog();
-
             }
-
         }
 
         private void Reveal(object sender, EventArgs e)
         {
+            RefreshPanel();
             this.Show();
         }
 

@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.DTOs;
+using DataLayer.Models;
 using DataLayer.Repositories;
 using System;
 using System.Collections.Generic;
@@ -16,25 +17,21 @@ namespace WebAPI2.Controllers
 
         [Route("all")]
         [HttpGet]
-        public List<Game> GetGames()
+        public List<GameListingDTO> GetGames()
         {
             try
             {
-                return unitOfWork.GameRepository.List;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-        [Route("lobby")]
-        [HttpGet]
-        public List<Game> GetInLobbyGames()
-        {
-            try
-            {
-                throw new NotImplementedException();
-
+                var games = unitOfWork.GameRepository.List;
+                var dtos = new List<GameListingDTO>();
+                foreach(var game in games)
+                {
+                    var fullGame = GameDictionary.Get(game.Id);
+                    if (fullGame != null)
+                    {
+                        dtos.Add(GameListingDTO.ToDTO(fullGame));
+                    }
+                }
+                return dtos;
             }
             catch (Exception ex)
             {
@@ -75,6 +72,24 @@ namespace WebAPI2.Controllers
             catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to update player. Message: " + ex.Message);
+            }
+        }
+        [Route("context")]
+        [HttpGet]
+        public HttpResponseMessage RequestContext([FromUri] string queueName)
+        {
+            try
+            {
+                var context = GameDictionary.Get(int.Parse(queueName));
+
+                QueueService.BroadcastContext(queueName.ToString(), MessageQueueChannel.ContextBroadcast, context);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse
+                    (HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 
