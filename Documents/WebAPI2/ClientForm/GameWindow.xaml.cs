@@ -29,26 +29,25 @@ namespace ClientForm
         private List<string> Messages { get; set; } = new List<string>();
         private ClientContext context { get; set; }
         private Player Player { get; set; }
+        private string ExchangeName { get; set; }
         private string QueueName { get; set; }
         private ConnectionFactory connectionFactory;
         private IConnection connection;
         private IModel channel;
         private EventingBasicConsumer ContextConsumer = null;
-        public GameWindow(Player player, string queueName)
+        private int counter = 0;
+        public GameWindow(Player player, string exchangeName)
         {
             InitializeComponent();
-            this.Title = player.User.UserName + "s game";
-            QueueName = queueName;
+            ExchangeName = exchangeName;
             Player = player;
             lbxInfo.ItemsSource = Messages;
             this.Closing += CloseStuff;
             InitContextListener(((int)MessageQueueChannel.ContextBroadcast).ToString());
 
-            this.btnStart.Visibility = Visibility.Hidden;
-
-            this.Hide();
+            this.Visibility = Visibility.Collapsed;
             GameService gameService = new GameService();
-            gameService.RequestContextBroadcast(queueName);
+            gameService.RequestContextBroadcast(exchangeName);
         }
 
         private void CloseStuff(object sender, CancelEventArgs args)
@@ -85,27 +84,27 @@ namespace ClientForm
             connectionFactory = new ConnectionFactory() { HostName = "localhost" };
             connection = connectionFactory.CreateConnection();
             channel = connection.CreateModel();
-            channel.ExchangeDeclare(exchange: "topic_logs", type: "topic");
+            channel.ExchangeDeclare(exchange: ExchangeName, type: "topic");
             return channel.QueueDeclare().QueueName;
         }
 
         private void InitContextListener(string channelKey)
         {
-            string queue = InitConnection();
+            QueueName = InitConnection();
             if (channel != null)
             {
-                channel.QueueUnbind(QueueName, "topic_logs", channelKey, null);
+                channel.QueueUnbind(QueueName, ExchangeName, channelKey, null);
             }
 
-            channel.QueueBind(queue: queue,
-                              exchange: QueueName,
+            channel.QueueBind(queue: QueueName,
+                              exchange: ExchangeName,
                               routingKey: channelKey);
 
 
             ContextConsumer = new EventingBasicConsumer(channel);
             ContextConsumer.Received += (model, ea) => ContextChange(model, ea);
 
-            channel.BasicConsume(queue: queue,
+            channel.BasicConsume(queue: QueueName,
                                  autoAck: true,
                                  consumer: ContextConsumer);
 
@@ -113,11 +112,12 @@ namespace ClientForm
 
         private void ContextChange(object model, BasicDeliverEventArgs args)
         {
+            counter++;
             var body = args.Body;
             var message = Encoding.UTF8.GetString(body);
             var routingKey = args.RoutingKey;
             ClientContext newContext = JsonConvert.DeserializeObject<ClientContext>(message);
-            Dispatcher.Invoke(() =>
+            Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 var date = DateTime.Now;
                 Messages.Add("Context updated: " + date.Hour + ":" + date.Minute + ":" + date.Second);
@@ -126,14 +126,17 @@ namespace ClientForm
                 {
                     context = newContext;
                     Refresh();
-                    this.Show();
+                    this.Visibility = Visibility.Visible;
+                    this.Title = context.OwnerName + "'s game";
                 }
                 else
                 {
+                    // TODO AF
                     // COMPARE THE DIFF AND PRINT THE DIFF TO lbxInfo
-
+                    context = newContext; // for now
+                    Refresh();
                 }
-            });
+            }));
         }
 
         private void Refresh()
@@ -145,5 +148,6 @@ namespace ClientForm
         {
 
         }
+
     }
 }

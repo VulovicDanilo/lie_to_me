@@ -74,10 +74,6 @@ namespace WebAPI2.GameStuff
             {
                 game.Players.Remove(player);
             }
-            if (game.Players.Count == 0)
-            {
-                Remove(gameId);
-            }
         }
 
         public static void UpdatePlayer(int gameId, Player player)

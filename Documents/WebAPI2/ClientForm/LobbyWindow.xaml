@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForm"
         mc:Ignorable="d"
-        Title="Lobby Overview" Height="400" Width="600">
+        Title="lobby overview" Height="400" Width="600">
     <Grid>
-        <Button x:Name="btnJoin" Content="Join game" HorizontalAlignment="Left" Margin="277,33,0,0" VerticalAlignment="Top" Width="75" Click="BtnJoin_Click"/>
-        <Button x:Name="btnCreate" Content="Create game" HorizontalAlignment="Left" Margin="277,58,0,0" VerticalAlignment="Top" Width="75" Click="BtnCreate_Click"/>
-        <Label Content="Games" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="btnJoin" Content="join game" HorizontalAlignment="Left" Margin="277,33,0,0" VerticalAlignment="Top" Width="75" Click="BtnJoin_Click"/>
+        <Button x:Name="btnCreate" Content="create game" HorizontalAlignment="Left" Margin="277,58,0,0" VerticalAlignment="Top" Width="75" Click="BtnCreate_Click"/>
+        <Label Content="games" HorizontalAlignment="Left" Margin="10,7,0,0" VerticalAlignment="Top"/>
         <ListBox x:Name="listGames" HorizontalAlignment="Left" Height="326" Margin="10,33,0,0" VerticalAlignment="Top" Width="262"/>
         <Label x:Name="lblInfo" Content="" HorizontalAlignment="Left" Margin="277,333,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.447,0.519" Width="305" Foreground="Red"/>
-        <Button x:Name="btnRefresh" Content="Refresh" HorizontalAlignment="Left" Margin="277,308,0,0" VerticalAlignment="Top" Width="75" Click="BtnRefresh_Click"/>
+        <Button x:Name="btnRefresh" Content="refresh" HorizontalAlignment="Left" Margin="277,308,0,0" VerticalAlignment="Top" Width="75" Click="BtnRefresh_Click"/>
     </Grid>
 </Window>

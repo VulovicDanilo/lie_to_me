@@ -50,17 +50,8 @@ namespace BusinessLayer
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(BaseAddress);
 
-
-            var values = new Dictionary<string, string>()
-            {
-                {"Id", player.Id.ToString()},
-                {"GameId", player.GameId.ToString() }
-            };
-            var content = new FormUrlEncodedContent(values);
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-
-            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + content).Result;
+            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + "id=" + player.Id.ToString()
+                + "&gameId=" + player.GameId.ToString()).Result;
 
             return msg.StatusCode == HttpStatusCode.OK ? true : false;
 

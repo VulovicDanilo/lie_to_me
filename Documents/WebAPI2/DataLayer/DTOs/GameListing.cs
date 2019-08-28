@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DTOs
 {
-    public class GameListingDTO
+    public class GameListing
     {
         public int Id { get; set; }
         public string Owner { get; set; }
@@ -15,9 +15,9 @@ namespace DataLayer.DTOs
         public string PlayersCount { get; set; }
         public string MaxPlayers { get; set; }
 
-        public static GameListingDTO ToDTO(Game game)
+        public static GameListing ToDTO(Game game)
         {
-            var dto = new GameListingDTO()
+            var dto = new GameListing()
             {
                 Id = game.Id,
                 Owner = game.Owner.User.UserName,

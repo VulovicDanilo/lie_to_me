@@ -39,7 +39,7 @@ namespace WebAPI2.Controllers
 
                 GameDictionary.AddPlayer(game);
 
-                QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
+                // QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
 
                 return Request.CreateResponse(HttpStatusCode.OK, player);
             }
@@ -80,16 +80,15 @@ namespace WebAPI2.Controllers
         }
         [Route("delete")]
         [HttpDelete]
-        public HttpResponseMessage DeletePlayer([FromBody] Player player)
+        public HttpResponseMessage DeletePlayer([FromUri] int id, [FromUri] int gameId)
         {
             try
             {
-                int gameId = player.GameId;
-                unit.PlayerRepository.Delete(player.Id);
+                unit.PlayerRepository.Delete(id);
                 unit.Save();
 
-                GameDictionary.RemovePlayer(player.GameId, player.Id);
-                var game = GameDictionary.Get(player.GameId);
+                GameDictionary.RemovePlayer(gameId, id);
+                var game = GameDictionary.Get(gameId);
 
                 QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
                 return Request.CreateResponse(HttpStatusCode.OK);

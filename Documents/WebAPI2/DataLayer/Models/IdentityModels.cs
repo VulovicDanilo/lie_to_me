@@ -32,7 +32,9 @@ namespace DataLayer.Models
 
         public System.Data.Entity.DbSet<Player> Players { get; set; }
 
+#pragma warning disable CS0114 // Member hides inherited member; missing override keyword
         public System.Data.Entity.DbSet<User> Users { get; set; }
+#pragma warning restore CS0114 // Member hides inherited member; missing override keyword
 
         public System.Data.Entity.DbSet<Game> Games { get; set; }
     }

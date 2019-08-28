@@ -64,10 +64,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\DeadPlayer.cs" />
-    <Compile Include="DTOs\GameListingDTO.cs" />
+    <Compile Include="DTOs\GameListing.cs" />
     <Compile Include="DTOs\InGamePlayer.cs" />
     <Compile Include="DTOs\LoginModel.cs" />
     <Compile Include="DTOs\ClientContext.cs" />
+    <Compile Include="DTOs\SetGameOwner.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />

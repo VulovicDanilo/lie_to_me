@@ -17,23 +17,23 @@ namespace WebAPI2.Controllers
 
         [Route("all")]
         [HttpGet]
-        public List<GameListingDTO> GetGames()
+        public List<GameListing> GetGames()
         {
             try
             {
                 var games = unitOfWork.GameRepository.List;
-                var dtos = new List<GameListingDTO>();
+                var dtos = new List<GameListing>();
                 foreach(var game in games)
                 {
                     var fullGame = GameDictionary.Get(game.Id);
                     if (fullGame != null)
                     {
-                        dtos.Add(GameListingDTO.ToDTO(fullGame));
+                        dtos.Add(GameListing.ToDTO(fullGame));
                     }
                 }
                 return dtos;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -48,7 +48,6 @@ namespace WebAPI2.Controllers
                 unitOfWork.Save();
 
                 var context = GameDictionary.Add(game);
-
 
                 return Request.CreateResponse(HttpStatusCode.OK, game.Id);
             }
@@ -74,9 +73,28 @@ namespace WebAPI2.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to update player. Message: " + ex.Message);
             }
         }
+        [Route("owner")]
+        [HttpPut]
+        public HttpResponseMessage UpdateOwner([FromBody] SetGameOwner obj)
+        {
+            try
+            {
+                var game = unitOfWork.GameRepository.Find(obj.gameId);
+                var player = unitOfWork.PlayerRepository.Find(obj.playerId);
+                game.Owner = player;
+                unitOfWork.GameRepository.Update(game);
+                unitOfWork.Save();
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to update player. Message: " + ex.Message);
+            }
+        }
         [Route("context")]
         [HttpGet]
-        public HttpResponseMessage RequestContext([FromUri] string queueName)
+        public HttpResponseMessage RequestContextBroadcast([FromUri] string queueName)
         {
             try
             {
@@ -95,10 +113,17 @@ namespace WebAPI2.Controllers
 
         [Route("delete")]
         [HttpDelete]
-        public HttpResponseMessage DeleteGame([FromUri] Game game)
+        public HttpResponseMessage DeleteGame([FromUri] Game toDel)
         {
             try
             {
+                var game = unitOfWork.GameRepository.Find(toDel.Id);
+                foreach(var player in game.Players)
+                {
+                    unitOfWork.PlayerRepository.Delete(player.Id);
+                }
+                unitOfWork.PlayerRepository.Delete(game.Owner_Id.Value);
+                unitOfWork.Save();
                 unitOfWork.GameRepository.Delete(game);
                 unitOfWork.Save();
 

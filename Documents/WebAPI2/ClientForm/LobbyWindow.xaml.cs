@@ -24,13 +24,12 @@ namespace ClientForm
     public partial class LobbyWindow : Window
     {
         public User User { get; set; }
-        public List<GameListingDTO> Games { get; set; }
+        public List<GameListing> Games { get; set; }
         public LobbyWindow(User user)
         {
             InitializeComponent();
             User = user;
             this.Title += " - " + User.UserName;
-            GameService service = new GameService();
             RefreshPanel();
         }
 
@@ -38,7 +37,7 @@ namespace ClientForm
         {
             GameService service = new GameService();
             Games = service.GetGames();
-
+            listGames.ItemsSource = Games;
             listGames.Items.Refresh();
         }
 
@@ -78,18 +77,27 @@ namespace ClientForm
             DateTime? end = DateTime.Now;
             int gameId = service.AddGame(start, end);
 
-            PlayerService playerService = new PlayerService();
-            Player player = playerService.AddPlayer(null, User, gameId);
-
-            if (player != null)
+            if (gameId > 0)
             {
-                string queueName = gameId.ToString();
-                
-                this.Hide();
-                this.lblInfo.Content = "";
-                GameWindow gameWindow = new GameWindow(player, queueName);
-                gameWindow.Closed += new EventHandler(this.Reveal);
-                gameWindow.ShowDialog();
+                PlayerService playerService = new PlayerService();
+                Player player = playerService.AddPlayer(null, User, gameId);
+
+                service.SetGameOwner(gameId, player);
+
+                if (player != null)
+                {
+                    string queueName = gameId.ToString();
+
+                    this.Hide();
+                    this.lblInfo.Content = "";
+                    GameWindow gameWindow = new GameWindow(player, queueName);
+                    gameWindow.Closed += new EventHandler(this.Reveal);
+                    gameWindow.ShowDialog();
+                }
+            }
+            else
+            {
+                lblInfo.Content = "cannot create new game...";
             }
         }
 
