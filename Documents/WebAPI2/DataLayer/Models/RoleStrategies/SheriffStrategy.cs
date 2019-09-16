@@ -15,7 +15,5 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
-
-        public new static SheriffStrategy CreateRoleStrategy() { return new SheriffStrategy(); }
     }
 }

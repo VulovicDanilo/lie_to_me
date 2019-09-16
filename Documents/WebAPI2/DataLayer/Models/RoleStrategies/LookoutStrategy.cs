@@ -17,7 +17,5 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
-
-        public new static LookoutStrategy CreateRoleStrategy() { return new LookoutStrategy(); }
     }
 }

@@ -15,7 +15,5 @@ namespace DataLayer.Models.Roles
         {
             
         }
-
-        public new static MediumStrategy CreateRoleStrategy() { return new MediumStrategy(); }
     }
 }

@@ -17,7 +17,5 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
-
-        public new static MafiosoStrategy CreateRoleStrategy() { return new MafiosoStrategy(); }
     }
 }

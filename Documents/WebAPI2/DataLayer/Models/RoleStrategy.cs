@@ -19,7 +19,5 @@ namespace DataLayer.Models
             Alignment = alignment;
             Priority = priority;
         }
-
-        public new static RoleStrategy CreateRoleStrategy() { return null; }
     }
 }
