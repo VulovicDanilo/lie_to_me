@@ -71,7 +71,7 @@ namespace BusinessLayer
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
 
-            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + content).Result;
+            HttpResponseMessage msg = client.DeleteAsync(DeletePlayerPath + "?id=" + playerId.ToString() + "&gameId=" + gameId.ToString()).Result;
 
             return msg.StatusCode == HttpStatusCode.OK ? true : false;
 

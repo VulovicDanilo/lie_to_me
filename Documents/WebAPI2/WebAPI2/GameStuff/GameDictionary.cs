@@ -86,5 +86,12 @@ namespace WebAPI2.GameStuff
                 toUpdate.RoleName = player.RoleName;
             }
         }
+
+
+        public static void SetOwner(Game game)
+        {
+            var toUpdate = Get(game.Id);
+            toUpdate.Owner = game.Owner;
+        }
     }
 }

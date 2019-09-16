@@ -12,8 +12,9 @@ namespace WebAPI2.GameStuff
 {
     public static class QueueService
     {
-        public static void BroadcastContext(string exchangeName, MessageQueueChannel routingKey, Game game)
+        public static void BroadcastContext(string exchangeName, Game game)
         {
+            MessageQueueChannel routingKey = MessageQueueChannel.ContextBroadcast;
             ClientContext context = ClientContext.ToContext(game);
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
@@ -21,8 +22,6 @@ namespace WebAPI2.GameStuff
             {
                 channel.ExchangeDeclare(exchange: exchangeName,
                                         type: "topic");
-
-
 
                 string sendString = JsonConvert.SerializeObject(context);
                 var body = Encoding.UTF8.GetBytes(sendString);
@@ -32,8 +31,9 @@ namespace WebAPI2.GameStuff
                                      body: body);
             }
         }
-        public static void BroadcastLobbyInfo(string exchangeName, MessageQueueChannel routingKey, string info)
+        public static void BroadcastLobbyInfo(string exchangeName, string info)
         {
+            MessageQueueChannel routingKey = MessageQueueChannel.LobbyInfo;
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())

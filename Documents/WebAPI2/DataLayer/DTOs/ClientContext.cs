@@ -16,7 +16,6 @@ namespace DataLayer.DTOs
         public List<DeadPlayer> DeadPlayers { get; set; }
         public List<InGamePlayer> Winners { get; set; }
         public int OwnerId { get; set; }
-        public string OwnerName { get; set; }
         public int GameId { get; set; }
 
         public ClientContext()
@@ -32,7 +31,6 @@ namespace DataLayer.DTOs
             GameMode = game.GameMode;
             GameId = game.Id;
             OwnerId = game.Owner.Id;
-            OwnerName = game.Owner.User.UserName;
 
             Winners = new List<InGamePlayer>();
             Players = new List<InGamePlayer>();

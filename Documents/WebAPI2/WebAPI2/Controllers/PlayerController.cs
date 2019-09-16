@@ -40,6 +40,7 @@ namespace WebAPI2.Controllers
                 GameDictionary.AddPlayer(game);
 
                 // QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
+                QueueService.BroadcastLobbyInfo(game.Id.ToString(), "new player has joined the lobby");
 
                 return Request.CreateResponse(HttpStatusCode.OK, player);
             }
@@ -64,7 +65,7 @@ namespace WebAPI2.Controllers
 
                     var game = GameDictionary.Get(player.GameId);
 
-                    QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
+                    QueueService.BroadcastContext(game.Id.ToString(), game);
                     return Request.CreateResponse(HttpStatusCode.OK);
                 }
                 else
@@ -84,13 +85,19 @@ namespace WebAPI2.Controllers
         {
             try
             {
-                unit.PlayerRepository.Delete(id);
+                var game = unit.GameRepository.Find(gameId);
+                var toDel = game.Players.Where(x => x.Id == id).SingleOrDefault();
+                if (toDel != null)
+                {
+                    game.Players.Remove(toDel);
+                }
                 unit.Save();
 
                 GameDictionary.RemovePlayer(gameId, id);
-                var game = GameDictionary.Get(gameId);
+                var fullGame = GameDictionary.Get(gameId);
 
-                QueueService.BroadcastContext(game.Id.ToString(), MessageQueueChannel.ContextBroadcast, game);
+                QueueService.BroadcastContext(game.Id.ToString(), fullGame);
+                QueueService.BroadcastLobbyInfo(gameId.ToString(), "player has left the lobby");
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
