@@ -17,5 +17,7 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
+
+        public new static JesterStrategy CreateRoleStrategy() { return new JesterStrategy(); }
     }
 }

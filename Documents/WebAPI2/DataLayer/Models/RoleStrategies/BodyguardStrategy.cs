@@ -17,6 +17,7 @@ namespace DataLayer.Models.Roles
             throw new NotImplementedException();
         }
 
+        public new static BodyguardStrategy CreateRoleStrategy() { return new BodyguardStrategy(); }
 
     }
 }

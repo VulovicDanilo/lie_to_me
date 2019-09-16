@@ -15,5 +15,7 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
+
+        public new static VigilanteStrategy CreateRoleStrategy() { return new VigilanteStrategy(); }
     }
 }

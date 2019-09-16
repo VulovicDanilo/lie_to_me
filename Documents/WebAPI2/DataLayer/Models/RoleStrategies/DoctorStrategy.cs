@@ -17,5 +17,7 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
+
+        public new static DoctorStrategy CreateRoleStrategy() { return new DoctorStrategy(); }
     }
 }
