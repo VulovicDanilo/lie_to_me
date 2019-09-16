@@ -81,8 +81,6 @@ namespace DataLayer.Models
                     return new FramerStrategy();
                 case 1:
                     return new MafiosoStrategy();
-                case 2:
-                    return new GodfatherStrategy();
                 default:
                     throw new Exception("Index out of range");
             }
@@ -114,9 +112,13 @@ namespace DataLayer.Models
         }
         public static IList<RoleStrategy> GetMafiaPool(int poolSize)
         {
-            List<RoleStrategy> pool = new List<RoleStrategy>(poolSize);
+            List<RoleStrategy> pool = new List<RoleStrategy>(poolSize)
+            {
+                new GodfatherStrategy()
+            };
+
             var rnd = new Random();
-            for (int i = 0; i < poolSize; i++)
+            for (int i = 0; i < poolSize - 1; i++)
             {
                 int idx = rnd.Next(0, poolSize);
                 pool.Add(Game.GetMafiaRoleFromNumber(idx));
