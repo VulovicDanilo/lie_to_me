@@ -35,7 +35,7 @@ namespace ClientForm
         private IConnection connection;
         private IModel channel;
         private EventingBasicConsumer ContextConsumer = null;
-        private int counter = 0;
+        private EventingBasicConsumer LobbyInfoConsumer = null;
         public GameWindow(Player player, string exchangeName)
         {
             InitializeComponent();
@@ -43,7 +43,7 @@ namespace ClientForm
             Player = player;
             lbxInfo.ItemsSource = Messages;
             this.Closing += CloseStuff;
-            InitContextListener(((int)MessageQueueChannel.ContextBroadcast).ToString());
+            InitContextListener();
 
             this.Visibility = Visibility.Collapsed;
             GameService gameService = new GameService();
@@ -62,7 +62,7 @@ namespace ClientForm
                 if (context.GameState == GameState.Lobby)
                 {
                     PlayerService playerService = new PlayerService();
-                    playerService.DeletePlayer(Player);
+                    playerService.DeletePlayer(Player.Id, context.GameId);
                     if (context.Players.Count == 1)
                     {
                         GameService gameService = new GameService();
@@ -88,31 +88,53 @@ namespace ClientForm
             return channel.QueueDeclare().QueueName;
         }
 
-        private void InitContextListener(string channelKey)
+        private void InitContextListener()
         {
+            string contextKey = ((int)MessageQueueChannel.ContextBroadcast).ToString();
+            string lobbyInfoKey = ((int)MessageQueueChannel.LobbyInfo).ToString();
             QueueName = InitConnection();
             if (channel != null)
             {
-                channel.QueueUnbind(QueueName, ExchangeName, channelKey, null);
+                channel.QueueUnbind(QueueName, ExchangeName, contextKey, null);
+                channel.QueueUnbind(QueueName, ExchangeName, lobbyInfoKey, null);
             }
 
-            channel.QueueBind(queue: QueueName,
-                              exchange: ExchangeName,
-                              routingKey: channelKey);
-
+            channel.QueueBind(queue: QueueName, 
+                exchange: ExchangeName, 
+                routingKey: contextKey);
+            channel.QueueBind(queue: QueueName, 
+                exchange: ExchangeName, 
+                routingKey: lobbyInfoKey);
 
             ContextConsumer = new EventingBasicConsumer(channel);
             ContextConsumer.Received += (model, ea) => ContextChange(model, ea);
+            LobbyInfoConsumer = new EventingBasicConsumer(channel);
+            LobbyInfoConsumer.Received += (model, ea) => LobbyInfoArrived(model, ea);
+
+            channel.BasicConsume(queue: QueueName, 
+                autoAck: true,
+                consumer: ContextConsumer);
 
             channel.BasicConsume(queue: QueueName,
-                                 autoAck: true,
-                                 consumer: ContextConsumer);
+                autoAck: true,
+                consumer: LobbyInfoConsumer);
 
+        }
+
+        private void LobbyInfoArrived(object model, BasicDeliverEventArgs args)
+        {
+            // TODO
+            var body = args.Body;
+            var message = Encoding.UTF8.GetString(body);
+            Dispatcher.BeginInvoke(new Action(delegate ()
+            {
+                var date = DateTime.Now;
+                Messages.Add(date.ToString("HH:mm:ss") + ": " + message);
+            }));
         }
 
         private void ContextChange(object model, BasicDeliverEventArgs args)
         {
-            counter++;
             var body = args.Body;
             var message = Encoding.UTF8.GetString(body);
             var routingKey = args.RoutingKey;
@@ -120,14 +142,12 @@ namespace ClientForm
             Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 var date = DateTime.Now;
-                Messages.Add("Context updated: " + date.ToString("HH:mm:ss"));
-
+                Messages.Add(date.ToString("HH:mm:ss") + ": context updated");
                 if (context == null)
                 {
                     context = newContext;
                     Refresh();
                     this.Visibility = Visibility.Visible;
-                    this.Title = context.OwnerName + "'s game";
                 }
                 else
                 {
@@ -136,13 +156,21 @@ namespace ClientForm
                     context = newContext; // for now
                     Refresh();
                 }
+                if (context.OwnerId == this.Player.Id)
+                {
+                    this.btnStart.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    this.btnStart.Visibility = Visibility.Collapsed;
+                }
             }));
         }
 
         private void Refresh()
         {
             lbxInfo.Items.Refresh();
-            lblPlayerCount.Content = "Player Count: " + context.Players.Count;
+            lblPlayerCount.Content = "player count: " + context.Players.Count;
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {

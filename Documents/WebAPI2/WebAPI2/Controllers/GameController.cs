@@ -28,7 +28,10 @@ namespace WebAPI2.Controllers
                     var fullGame = GameDictionary.Get(game.Id);
                     if (fullGame != null)
                     {
-                        dtos.Add(GameListing.ToDTO(fullGame));
+                        int playerId = fullGame.Owner.Id;
+                        var player = unitOfWork.PlayerRepository.Find(playerId);
+  
+                        dtos.Add(GameListing.ToDTO(fullGame, player.User.UserName));
                     }
                 }
                 return dtos;
@@ -85,6 +88,8 @@ namespace WebAPI2.Controllers
                 unitOfWork.GameRepository.Update(game);
                 unitOfWork.Save();
 
+                GameDictionary.SetOwner(game);
+
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -98,9 +103,9 @@ namespace WebAPI2.Controllers
         {
             try
             {
-                var context = GameDictionary.Get(int.Parse(queueName));
+                var game = GameDictionary.Get(int.Parse(queueName));
 
-                QueueService.BroadcastContext(queueName.ToString(), MessageQueueChannel.ContextBroadcast, context);
+                QueueService.BroadcastContext(queueName.ToString(), game);
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }

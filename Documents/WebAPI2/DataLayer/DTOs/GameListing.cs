@@ -15,12 +15,12 @@ namespace DataLayer.DTOs
         public string PlayersCount { get; set; }
         public string MaxPlayers { get; set; }
 
-        public static GameListing ToDTO(Game game)
+        public static GameListing ToDTO(Game game, string username)
         {
             var dto = new GameListing()
             {
                 Id = game.Id,
-                Owner = game.Owner.User.UserName,
+                Owner = username,
                 GameMode = game.GameMode.ToString(),
                 PlayersCount = game.Players.Count.ToString(),
                 MaxPlayers = game.MAX_PLAYERS.ToString(),
