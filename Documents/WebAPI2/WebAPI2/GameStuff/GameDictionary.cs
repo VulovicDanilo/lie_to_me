@@ -52,13 +52,16 @@ namespace WebAPI2.GameStuff
                     game.Players.Add(player);
                 }
             }
-            game.Owner = newGame.Owner;
+            if (game.Players.Count == 1)
+            {
+                game.Owner = newGame.Owner;
+            }
             return true;
         }
 
         public static void Remove(int id)
         {
-            Games.TryRemove(id, out _);
+            Games[id] = null;
         }
 
         public static void AddPlayer(int gameId, Player player)

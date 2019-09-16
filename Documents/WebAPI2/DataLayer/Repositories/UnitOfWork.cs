@@ -9,7 +9,7 @@ namespace DataLayer.Repositories
     public class UnitOfWork : IDisposable
     {
         private ApplicationDbContext context = new ApplicationDbContext();
-        private Repository<Game> gameRepository;
+        private GameRepository gameRepository;
         private UserRepository userRepository;
         private Repository<Player> playerRepository;
 
@@ -19,7 +19,7 @@ namespace DataLayer.Repositories
             {
                 if (gameRepository == null)
                 {
-                    gameRepository = new Repository<Game>(context);
+                    gameRepository = new GameRepository(context);
                 }
                 return gameRepository;
             }

@@ -18,7 +18,7 @@ namespace DataLayer.Repositories
             DbSet = context.Set<T>();
         }
 
-        public List<T> List
+        public virtual List<T> List
         {
             get
             {

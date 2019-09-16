@@ -17,9 +17,9 @@ namespace DataLayer.Models
         [Column(name: "EndTime")]
         public DateTime? EndTime { get; set; }
         public Alignment? Winner { get; set; } 
-        public List<Player> Players { get; set; }
+        public virtual List<Player> Players { get; set; }
         [ForeignKey("Owner")]
-        public int? Owner_Id { get; set; }
+        public virtual int? Owner_Id { get; set; }
         public Player Owner { get; set; }
         public GameMode GameMode { get; set; }
 
