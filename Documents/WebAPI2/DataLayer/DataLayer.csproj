@@ -70,6 +70,11 @@
     <Compile Include="DTOs\ClientContext.cs" />
     <Compile Include="DTOs\SetGameOwner.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
+    <Compile Include="Extensions\ListExtension.cs" />
+    <Compile Include="Migrations\201909161845520_migration.cs" />
+    <Compile Include="Migrations\201909161845520_migration.Designer.cs">
+      <DependentUpon>201909161845520_migration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -104,6 +109,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201909161845520_migration.resx">
+      <DependentUpon>201909161845520_migration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

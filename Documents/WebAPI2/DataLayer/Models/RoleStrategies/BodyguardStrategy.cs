@@ -16,7 +16,5 @@ namespace DataLayer.Models.Roles
         {
             throw new NotImplementedException();
         }
-
-
     }
 }
