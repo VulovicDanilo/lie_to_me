@@ -74,7 +74,7 @@ namespace ClientForm
                 }
                 else
                 {
-                    // kill player
+                    // kill player ; publish that the player died
                     Player.Alive = false;
                     PlayerService playerService = new PlayerService();
                     playerService.UpdatePlayer(Player, context.GameId);
