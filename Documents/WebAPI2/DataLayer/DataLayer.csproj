@@ -70,6 +70,7 @@
     <Compile Include="DTOs\ClientContext.cs" />
     <Compile Include="DTOs\SetGameOwner.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
+    <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="Migrations\201909161845520_migration.cs" />
     <Compile Include="Migrations\201909161845520_migration.Designer.cs">
       <DependentUpon>201909161845520_migration.cs</DependentUpon>

@@ -1,4 +1,5 @@
-﻿using DataLayer.Models.Roles;
+﻿using DataLayer.Extensions;
+using DataLayer.Models.Roles;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -147,7 +148,7 @@ namespace DataLayer.Models
             pool.AddRange(GetTownPool(townNumber));
             pool.AddRange(GetMafiaPool(mafiaNumber));
             pool.AddRange(GetNeutralPool(neutralNumber));
-            
+            pool.Shuffle();
             return pool;
         }
 
