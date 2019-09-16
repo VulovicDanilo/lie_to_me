@@ -35,7 +35,9 @@ namespace ClientForm
         private IConnection connection;
         private IModel channel;
         private EventingBasicConsumer ContextConsumer = null;
+        private string ContextConsumerTag = "";
         private EventingBasicConsumer LobbyInfoConsumer = null;
+        private string LobbyInfoConsumerTag = "";
         public GameWindow(Player player, string exchangeName)
         {
             InitializeComponent();
@@ -52,10 +54,11 @@ namespace ClientForm
 
         private void CloseStuff(object sender, CancelEventArgs args)
         {
-            if (channel.IsOpen)
-                channel.Close();
-            if (connection.IsOpen)
-                connection.Close();
+            if (channel != null)
+            {
+                channel.BasicCancel(ContextConsumerTag);
+                channel.BasicCancel(LobbyInfoConsumerTag);
+            }
 
             if (context != null)
             {
@@ -111,11 +114,11 @@ namespace ClientForm
             LobbyInfoConsumer = new EventingBasicConsumer(channel);
             LobbyInfoConsumer.Received += (model, ea) => LobbyInfoArrived(model, ea);
 
-            channel.BasicConsume(queue: QueueName, 
+            ContextConsumerTag = channel.BasicConsume(queue: QueueName, 
                 autoAck: true,
                 consumer: ContextConsumer);
 
-            channel.BasicConsume(queue: QueueName,
+            LobbyInfoConsumerTag = channel.BasicConsume(queue: QueueName,
                 autoAck: true,
                 consumer: LobbyInfoConsumer);
 
