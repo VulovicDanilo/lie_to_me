@@ -96,6 +96,7 @@ namespace WebAPI2.Controllers
                 GameDictionary.RemovePlayer(gameId, id);
                 var fullGame = GameDictionary.Get(gameId);
 
+
                 QueueService.BroadcastContext(game.Id.ToString(), fullGame);
                 QueueService.BroadcastLobbyInfo(gameId.ToString(), "player has left the lobby");
                 return Request.CreateResponse(HttpStatusCode.OK);

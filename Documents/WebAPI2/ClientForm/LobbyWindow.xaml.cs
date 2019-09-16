@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using BusinessLayer;
 using System.Threading;
 using DataLayer.DTOs;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace ClientForm
 {
@@ -24,7 +26,8 @@ namespace ClientForm
     public partial class LobbyWindow : Window
     {
         public User User { get; set; }
-        public List<GameListing> Games { get; set; }
+        public List<GameListing> GameListings { get; set; }
+        public ObservableCollection<GameListing> Games { get; set; }
         public LobbyWindow(User user)
         {
             InitializeComponent();
@@ -33,12 +36,22 @@ namespace ClientForm
             RefreshPanel();
         }
 
+        private void UpdateCollection(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            RefreshPanel();
+        }
+
         private void RefreshPanel()
         {
             GameService service = new GameService();
-            Games = service.GetGames();
-            listGames.ItemsSource = Games;
-            listGames.Items.Refresh();
+            GameListings = service.GetGames();
+            Games = new ObservableCollection<GameListing>(GameListings);
+            Games.CollectionChanged += UpdateCollection;
+            listGames.Items.Clear();
+            foreach(var g in GameListings)
+            {
+                listGames.Items.Add(g.ToString());
+            }
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
@@ -46,7 +59,7 @@ namespace ClientForm
             if (listGames.SelectedIndex != -1)
             {
                 int index = listGames.SelectedIndex;
-                int gameId = Games.ElementAt(index).Id;
+                int gameId = GameListings.ElementAt(index).Id;
 
                 PlayerService playerService = new PlayerService();
                 Player player = playerService.AddPlayer(null, User, gameId);
@@ -93,6 +106,7 @@ namespace ClientForm
                     GameWindow gameWindow = new GameWindow(player, queueName);
                     gameWindow.Closed += new EventHandler(this.Reveal);
                     gameWindow.ShowDialog();
+                    RefreshPanel();
                 }
             }
             else

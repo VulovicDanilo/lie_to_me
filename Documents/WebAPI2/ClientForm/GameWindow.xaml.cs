@@ -30,7 +30,8 @@ namespace ClientForm
         private ClientContext context { get; set; }
         private Player Player { get; set; }
         private string ExchangeName { get; set; }
-        private string QueueName { get; set; }
+        private string ContextQueue { get; set; }
+        private string LobbyQueue { get; set; }
         private ConnectionFactory connectionFactory;
         private IConnection connection;
         private IModel channel;
@@ -82,30 +83,32 @@ namespace ClientForm
             }
         }
 
-        private string InitConnection()
+        private string GetQueue()
         {
             connectionFactory = new ConnectionFactory() { HostName = "localhost" };
             connection = connectionFactory.CreateConnection();
             channel = connection.CreateModel();
             channel.ExchangeDeclare(exchange: ExchangeName, type: "topic");
-            return channel.QueueDeclare().QueueName;
+            return channel.QueueDeclare(exclusive: false).QueueName;
         }
 
         private void InitContextListener()
         {
             string contextKey = ((int)MessageQueueChannel.ContextBroadcast).ToString();
             string lobbyInfoKey = ((int)MessageQueueChannel.LobbyInfo).ToString();
-            QueueName = InitConnection();
+            ContextQueue = GetQueue();
+            LobbyQueue = GetQueue();
             if (channel != null)
             {
-                channel.QueueUnbind(QueueName, ExchangeName, contextKey, null);
-                channel.QueueUnbind(QueueName, ExchangeName, lobbyInfoKey, null);
+                channel.QueueUnbind(ContextQueue, ExchangeName, contextKey, null);
+                channel.QueueUnbind(LobbyQueue, ExchangeName, lobbyInfoKey, null);
             }
 
-            channel.QueueBind(queue: QueueName, 
+            channel.QueueBind(queue: ContextQueue, 
                 exchange: ExchangeName, 
                 routingKey: contextKey);
-            channel.QueueBind(queue: QueueName, 
+
+            channel.QueueBind(queue: LobbyQueue, 
                 exchange: ExchangeName, 
                 routingKey: lobbyInfoKey);
 
@@ -114,11 +117,11 @@ namespace ClientForm
             LobbyInfoConsumer = new EventingBasicConsumer(channel);
             LobbyInfoConsumer.Received += (model, ea) => LobbyInfoArrived(model, ea);
 
-            ContextConsumerTag = channel.BasicConsume(queue: QueueName, 
+            ContextConsumerTag = channel.BasicConsume(queue: ContextQueue, 
                 autoAck: true,
                 consumer: ContextConsumer);
 
-            LobbyInfoConsumerTag = channel.BasicConsume(queue: QueueName,
+            LobbyInfoConsumerTag = channel.BasicConsume(queue: LobbyQueue,
                 autoAck: true,
                 consumer: LobbyInfoConsumer);
 
