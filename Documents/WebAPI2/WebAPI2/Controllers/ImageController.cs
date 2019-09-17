@@ -100,6 +100,7 @@ namespace WebAPI2.Controllers
 
                 response.Content = imageContent;
 
+                response.StatusCode = HttpStatusCode.OK;
                 return response;
 
             }
