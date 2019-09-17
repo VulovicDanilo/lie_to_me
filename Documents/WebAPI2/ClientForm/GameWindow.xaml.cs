@@ -48,6 +48,8 @@ namespace ClientForm
             this.Closing += CloseStuff;
             InitContextListener();
 
+            
+
             this.Visibility = Visibility.Collapsed;
             GameService gameService = new GameService();
             gameService.RequestContextBroadcast(exchangeName);
@@ -157,7 +159,6 @@ namespace ClientForm
             Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 var date = DateTime.Now;
-                AddMessage("context updated");
                 if (Context == null)
                 {
                     Context = newContext;
@@ -177,6 +178,7 @@ namespace ClientForm
                 {
                     this.btnStart.Visibility = Visibility.Collapsed;
                 }
+                AddMessage("context updated");
                 Refresh();
             }));
         }
@@ -203,6 +205,12 @@ namespace ClientForm
             var date = DateTime.Now;
             Messages.Add(date.ToString("HH:mm:ss") + ": " + info);
             Refresh();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            channel.Close();
+            connection.Close();
         }
     }
 }

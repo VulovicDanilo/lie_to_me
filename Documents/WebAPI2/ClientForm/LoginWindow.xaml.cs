@@ -25,12 +25,6 @@ namespace ClientForm
         public LoginWindow()
         {
             InitializeComponent();
-            this.Closed += (s, e) => ShutDown();
-        }
-
-        private void ShutDown()
-        {
-            Application.Current.Shutdown(0);
         }
 
         private void LblRegister_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
