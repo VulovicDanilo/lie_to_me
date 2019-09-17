@@ -144,8 +144,7 @@ namespace ClientForm
             Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 var date = DateTime.Now;
-                Messages.Add(date.ToString("HH:mm:ss") + ": " + message);
-                Refresh();
+                AddMessage(message);
             }));
         }
 
@@ -158,14 +157,14 @@ namespace ClientForm
             Dispatcher.BeginInvoke(new Action(delegate ()
             {
                 var date = DateTime.Now;
-                Messages.Add(date.ToString("HH:mm:ss") + ": context updated");
+                AddMessage("context updated");
                 if (Context == null)
                 {
                     Context = newContext;
                     this.Visibility = Visibility.Visible;
                 }
                 else
-                {
+                { 
                     // TODO AF
                     // COMPARE THE DIFF AND PRINT THE DIFF TO lbxInfo
                     Context = newContext; // for now
@@ -190,8 +189,20 @@ namespace ClientForm
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Context.Players.Count == Context.MAX_PLAYERS)
+            {
+                // GAME ABOUT TO START
+            }
+            else
+            {
+                AddMessage("not enough players. " + (Context.MAX_PLAYERS - Context.Players.Count) + " more...");
+            }
         }
-
+        private void AddMessage(string info)
+        {
+            var date = DateTime.Now;
+            Messages.Add(date.ToString("HH:mm:ss") + ": " + info);
+            Refresh();
+        }
     }
 }
