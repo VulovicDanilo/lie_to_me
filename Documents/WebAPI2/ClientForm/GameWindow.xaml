@@ -7,11 +7,18 @@
         mc:Ignorable="d"
         Title="" Height="450" Width="800">
     <Grid Margin="0,0,2,0">
-        <Canvas HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="790">
+        <Canvas x:Name="lobbyCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="790" Panel.ZIndex="4">
             <ListBox x:Name="lbxInfo" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="264" Canvas.Left="518" Canvas.Top="43"/>
             <Label Content="Info" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Canvas.Left="518" Canvas.Top="10"/>
             <Button x:Name="btnStart" Content="start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnStart_Click" Canvas.Left="10" Canvas.Top="10"/>
             <Label x:Name="lblPlayerCount" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="383"/>
+        </Canvas>
+        <Canvas x:Name="nameCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="790" Panel.ZIndex="3">
+            <Label Content="choose your name" Canvas.Left="148" Canvas.Top="102" Height="73" Width="210" FontSize="22" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBlock Canvas.Left="148" TextWrapping="Wrap" Canvas.Top="180" Height="47" Width="210" FontSize="22"/>
+            <Button x:Name="btnNameSubmit" Content="submit" Canvas.Left="186" Canvas.Top="253" Width="128" Height="34" FontSize="16"/>
+            <Label Content="" Canvas.Left="148" Canvas.Top="305" Width="210" Height="37" Foreground="Red" HorizontalContentAlignment="Center"/>
+
         </Canvas>
     </Grid>
 </Window>
