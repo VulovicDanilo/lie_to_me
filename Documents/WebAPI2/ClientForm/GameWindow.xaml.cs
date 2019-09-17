@@ -48,7 +48,6 @@ namespace ClientForm
             this.Closing += CloseStuff;
             InitContextListener();
 
-            
 
             this.Visibility = Visibility.Collapsed;
             GameService gameService = new GameService();
