@@ -7,15 +7,22 @@
         mc:Ignorable="d"
         Title="TmpWindow" Height="450" Width="800">
     <Grid>
-        <Canvas x:Name="cnvMain" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="792">
-            <ListBox x:Name="lbxInfo" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="274" Canvas.Left="508" Canvas.Top="43"/>
-            <Label Content="Info" HorizontalAlignment="Left" VerticalAlignment="Top" Height="28" Canvas.Left="508" Canvas.Top="12" RenderTransformOrigin="0.613,-0.411"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="19*"/>
+            <ColumnDefinition Width="25*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lbxInfo" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="264" Margin="180,43,0,0" Grid.Column="1"/>
+        <Canvas x:Name="lobbyCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4" Visibility="Hidden" Grid.ColumnSpan="2">
             <Button x:Name="btnStart" Content="start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnStart_Click" Canvas.Left="10" Canvas.Top="10"/>
             <Label x:Name="lblPlayerCount" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="383"/>
         </Canvas>
-        <Canvas x:Name="cnvSecond" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="792">
-            <Button x:Name="btnBack" Content="back" Width="75" Canvas.Top="10" Click="BtnBack_Click" Canvas.Left="10"/>
-        </Canvas>
+        <Canvas x:Name="nameCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="3" Visibility="Hidden" Grid.ColumnSpan="2">
+            <Label Content="choose your name" Canvas.Left="148" Canvas.Top="102" Height="73" Width="210" FontSize="22" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            <TextBlock Canvas.Left="148" TextWrapping="Wrap" Canvas.Top="180" Height="47" Width="210" FontSize="22"/>
+            <Button x:Name="btnNameSubmit" Content="submit" Canvas.Left="186" Canvas.Top="253" Width="128" Height="34" FontSize="16"/>
+            <Label Content="" Canvas.Left="148" Canvas.Top="305" Width="210" Height="37" Foreground="Red" HorizontalContentAlignment="Center"/>
 
+        </Canvas>
+        <Label x:Name="lblTimer" Content="Timer" HorizontalAlignment="Left" Margin="180,1,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,0.577" Width="100" FontSize="18" Grid.Column="1"/>
     </Grid>
 </Window>

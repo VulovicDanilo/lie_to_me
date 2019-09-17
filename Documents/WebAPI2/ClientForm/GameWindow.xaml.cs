@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ClientForm
 {
@@ -47,12 +48,30 @@ namespace ClientForm
             lbxInfo.ItemsSource = Messages;
             this.Closing += CloseStuff;
             InitContextListener();
-
-            
+            timer = new DispatcherTimer
+            {
+                Interval = new TimeSpan(0, 0, 1)
+            };
+            timer.Tick += new EventHandler(TickHandler);
+            timer.Start();
 
             this.Visibility = Visibility.Collapsed;
             GameService gameService = new GameService();
             gameService.RequestContextBroadcast(exchangeName);
+        }
+
+        private int timerSeconds = 1;
+        private DispatcherTimer timer;
+        private void TickHandler(object sender, EventArgs e)
+        {
+            timer.Stop();
+            if(timerSeconds != 0)
+            {
+                timerSeconds--;
+                var timespan = TimeSpan.FromSeconds(timerSeconds);
+                this.lblTimer.Content = string.Format("{1:D2}m:{2:D2}s",timespan.Hours,timespan.Minutes,timespan.Seconds);
+            }
+            timer.Start();
         }
 
         private void CloseStuff(object sender, CancelEventArgs args)

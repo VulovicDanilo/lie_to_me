@@ -22,20 +22,16 @@ namespace ClientForm
         public TmpWindow()
         {
             InitializeComponent();
-            cnvSecond.Visibility = Visibility.Collapsed;
         }
 
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
-            cnvSecond.Visibility = Visibility.Collapsed;
-            cnvMain.Visibility = Visibility.Visible;
 
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            cnvMain.Visibility = Visibility.Collapsed;
-            cnvSecond.Visibility = Visibility.Visible;
+
         }
     }
 }
