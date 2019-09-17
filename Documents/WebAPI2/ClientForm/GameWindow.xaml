@@ -22,7 +22,7 @@
         </Canvas>
         <Canvas x:Name="lobbyDisplayRoleNameCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4">
             <Label x:Name="lblRoleName" Content="RoleName" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="196" Canvas.Top="171" FontSize="24" Height="50" Width="126"/>
-            <Label x:Name="lblRoleDescription" Content="RoleDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="226" FontSize="24" Height="139" Width="392"/>
+            <Label x:Name="lblRoleDescription" Content="RoleDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="226" FontSize="24" Height="183" Width="392"/>
 
         </Canvas>
     </Grid>
