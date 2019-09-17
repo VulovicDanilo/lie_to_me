@@ -26,32 +26,26 @@ namespace ClientForm
     public partial class LobbyWindow : Window
     {
         public User User { get; set; }
-        public List<GameListing> GameListings { get; set; }
-        public ObservableCollection<GameListing> Games { get; set; }
+        public ObservableCollection<GameListing> GameListings { get; set; } = new ObservableCollection<GameListing>();
         public LobbyWindow(User user)
         {
             InitializeComponent();
             User = user;
             this.Title += " - " + User.UserName;
-            RefreshPanel();
-        }
-
-        private void UpdateCollection(object sender, NotifyCollectionChangedEventArgs e)
-        {
+            this.listGames.ItemsSource = GameListings;
             RefreshPanel();
         }
 
         private void RefreshPanel()
         {
             GameService service = new GameService();
-            GameListings = service.GetGames();
-            Games = new ObservableCollection<GameListing>(GameListings);
-            Games.CollectionChanged += UpdateCollection;
-            listGames.Items.Clear();
-            foreach(var g in GameListings)
+            var games = service.GetGames();
+            GameListings.Clear();
+            foreach(var g in games)
             {
-                listGames.Items.Add(g.ToString());
+                GameListings.Add(g);
             }
+            listGames.Items.Refresh();
         }
 
         private void BtnJoin_Click(object sender, RoutedEventArgs e)
@@ -65,12 +59,11 @@ namespace ClientForm
                 Player player = playerService.AddPlayer(null, User, gameId);
                 if (player != null)
                 {
-                    string queueName = gameId.ToString();
-
+                    string exchangeName = gameId.ToString();
 
                     this.Hide();
                     this.lblInfo.Content = "";
-                    GameWindow gameWindow = new GameWindow(player, queueName);
+                    GameWindow gameWindow = new GameWindow(player, exchangeName);
                     gameWindow.Closed += new EventHandler(this.Reveal);
                     gameWindow.ShowDialog();
                 }
@@ -95,7 +88,7 @@ namespace ClientForm
                 PlayerService playerService = new PlayerService();
                 Player player = playerService.AddPlayer(null, User, gameId);
 
-                service.SetGameOwner(gameId, player);
+                service.SetGameOwner(gameId, player.Id);
 
                 if (player != null)
                 {

@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace DataLayer.DTOs
 {
     public class InGamePlayer
     {
-        public int Number { get; private set; }
-        public string FakeName { get; private set; }
-        public string ImagePath { get; private set; }
-        public bool Alive { get; private set; }
-        public int PlayerId { get; private set; }
+        public int Number { get; set; }
+        public string FakeName { get; set; }
+        public string ImagePath { get; set; }
+        public bool Alive { get; set; }
+        public int PlayerId { get; set; }
 
         public static InGamePlayer ToDTO(Player player)
         {

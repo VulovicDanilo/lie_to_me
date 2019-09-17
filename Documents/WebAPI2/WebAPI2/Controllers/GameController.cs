@@ -13,7 +13,7 @@ namespace WebAPI2.Controllers
     [RoutePrefix("api/games")]
     public class GameController : ApiController
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
+        private readonly UnitOfWork unitOfWork = new UnitOfWork();
 
         [Route("all")]
         [HttpGet]
@@ -89,6 +89,11 @@ namespace WebAPI2.Controllers
                 unitOfWork.Save();
 
                 GameDictionary.SetOwner(game);
+
+                var fullGame = GameDictionary.Get(obj.gameId);
+
+                QueueService.BroadcastContext(game.Id.ToString(), fullGame);
+                QueueService.BroadcastLobbyInfo(game.Id.ToString(), "there is a new game owner");
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }

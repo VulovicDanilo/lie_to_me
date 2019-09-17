@@ -27,7 +27,7 @@ namespace ClientForm
     public partial class GameWindow : Window
     {
         private List<string> Messages { get; set; } = new List<string>();
-        private ClientContext context { get; set; }
+        private ClientContext Context { get; set; }
         private Player Player { get; set; }
         private string ExchangeName { get; set; }
         private string ContextQueue { get; set; }
@@ -61,16 +61,25 @@ namespace ClientForm
                 channel.BasicCancel(LobbyInfoConsumerTag);
             }
 
-            if (context != null)
+            if (Context != null)
             {
-                if (context.GameState == GameState.Lobby)
+                if (Context.GameState == GameState.Lobby)
                 {
                     PlayerService playerService = new PlayerService();
-                    playerService.DeletePlayer(Player.Id, context.GameId);
-                    if (context.Players.Count == 1)
+                    GameService gameService = new GameService();
+                    if (Context.Players.Count > 1)
                     {
-                        GameService gameService = new GameService();
-                        gameService.DeleteGame(context.GameId);
+                        if (Context.OwnerId == this.Player.Id)
+                        {
+                            var newOwner = Context.Players.Where(x => x.PlayerId != Player.Id).FirstOrDefault();
+                            gameService.SetGameOwner(Context.GameId, newOwner.PlayerId);
+                        }
+                        playerService.DeletePlayer(Player.Id, Context.GameId);
+                    }
+                    else
+                    {
+                        playerService.DeletePlayer(Player.Id, Context.GameId);
+                        gameService.DeleteGame(Context.GameId);
                     }
                 }
                 else
@@ -78,7 +87,7 @@ namespace ClientForm
                     // kill player ; publish that the player died
                     Player.Alive = false;
                     PlayerService playerService = new PlayerService();
-                    playerService.UpdatePlayer(Player, context.GameId);
+                    playerService.UpdatePlayer(Player, Context.GameId);
                 }
             }
         }
@@ -136,6 +145,7 @@ namespace ClientForm
             {
                 var date = DateTime.Now;
                 Messages.Add(date.ToString("HH:mm:ss") + ": " + message);
+                Refresh();
             }));
         }
 
@@ -149,20 +159,18 @@ namespace ClientForm
             {
                 var date = DateTime.Now;
                 Messages.Add(date.ToString("HH:mm:ss") + ": context updated");
-                if (context == null)
+                if (Context == null)
                 {
-                    context = newContext;
-                    Refresh();
+                    Context = newContext;
                     this.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     // TODO AF
                     // COMPARE THE DIFF AND PRINT THE DIFF TO lbxInfo
-                    context = newContext; // for now
-                    Refresh();
+                    Context = newContext; // for now
                 }
-                if (context.OwnerId == this.Player.Id)
+                if (Context.OwnerId == this.Player.Id)
                 {
                     this.btnStart.Visibility = Visibility.Visible;
                 }
@@ -170,13 +178,15 @@ namespace ClientForm
                 {
                     this.btnStart.Visibility = Visibility.Collapsed;
                 }
+                Refresh();
             }));
         }
 
         private void Refresh()
         {
             lbxInfo.Items.Refresh();
-            lblPlayerCount.Content = "player count: " + context.Players.Count;
+            lblPlayerCount.Content = "player count: " + Context.Players.Count;
+            this.Title = Context.OwnerName + "'s game";
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {

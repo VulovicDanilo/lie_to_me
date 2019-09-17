@@ -101,7 +101,7 @@ namespace BusinessLayer
             }
         }
 
-        public bool SetGameOwner(int gameId, Player player)
+        public bool SetGameOwner(int gameId, int playerId)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -110,7 +110,7 @@ namespace BusinessLayer
                 var values = new Dictionary<string, string>()
                 {
                     {"gameId", gameId.ToString() },
-                    {"playerId", player.Id.ToString() },
+                    {"playerId", playerId.ToString() },
                 };
 
                 var content = new FormUrlEncodedContent(values);
