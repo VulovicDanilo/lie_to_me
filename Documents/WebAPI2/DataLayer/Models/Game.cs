@@ -54,6 +54,8 @@ namespace DataLayer.Models
         }
         [NotMapped]
         public int Day { get; set; }
+        [NotMapped]
+        public Player Accused { get; set; }
 
         public Game()
         {
