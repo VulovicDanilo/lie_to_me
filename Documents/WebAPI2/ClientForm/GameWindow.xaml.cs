@@ -1,4 +1,5 @@
 ﻿using BusinessLayer;
+using ClientForm.Controls;
 using DataLayer.DTOs;
 using DataLayer.Models;
 using Newtonsoft.Json;
@@ -42,6 +43,7 @@ namespace ClientForm
         private string LobbyInfoConsumerTag = "";
 
         private RoleStrategy Strategy { get; set; }
+        private List<PlayerControl> PlayerControls { get; set; }
 
         public GameWindow(Player player, string exchangeName)
         {
@@ -199,6 +201,9 @@ namespace ClientForm
                 {
                     Context = newContext;
                     this.Visibility = Visibility.Visible;
+
+                    PlayerControls = new List<PlayerControl>(Context.MaxPlayers);
+                    DrawPlayerControls();
                 }
                 else
                 {
@@ -236,6 +241,24 @@ namespace ClientForm
                 AddMessage("context updated");
                 Refresh();
             }));
+        }
+
+        private void DrawPlayerControls()
+        {
+            int i = 0;
+            foreach(var player in Context.Players)
+            {
+                var playerControl = new PlayerControl(player);
+                playerControl.Margin = new Thickness(0, i * 30, 0, 0);
+                PlayerControls.Add(playerControl);
+
+
+                i++;
+            }
+            foreach(var playerControl in PlayerControls)
+            {
+                canvasGame.Children.Add(playerControl)
+            }
         }
 
         private void Refresh()
