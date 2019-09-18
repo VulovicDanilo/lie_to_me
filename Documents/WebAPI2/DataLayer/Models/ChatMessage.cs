@@ -21,5 +21,9 @@ namespace DataLayer.Models
             GameId = gameId;
             GameState = GameState;
         }
+
+        public ChatMessage()
+        {
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace BusinessLayer
         private readonly string UpdatePlayerPath = "/api/players/update";
         private readonly string ChooseNamePath = "/api/players/name";
         private readonly string RequestRolePath = "/api/players/request_role";
-        private readonly string ChatMessage = "/api/players/send_message";
+        private readonly string ChatMessagePath = "/api/players/send_message";
         public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
@@ -154,7 +154,7 @@ namespace BusinessLayer
 
             }
         }
-        public void SendChatMessage(ChatMessage chatMessage)
+        public bool SendChatMessage(ChatMessage chatMessage)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -162,19 +162,19 @@ namespace BusinessLayer
 
                 var values = new Dictionary<string, string>()
                 {
-                    {"Name", chatMessage.Name },
+                    {"PlayerId", chatMessage.PlayerId.ToString() },
                     {"GameState", ((int)chatMessage.GameState).ToString() },
                     {"Content", chatMessage.Content },
-                    {"GameId", chatMessage.GameId },
+                    {"GameId", chatMessage.GameId.ToString() },
                     {"Time", chatMessage.Time.ToString() }
                 };
 
                 var content = new FormUrlEncodedContent(values);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-                HttpResponseMessage msg = client.PostAsync(ChooseNamePath, content).Result;
+                HttpResponseMessage msg = client.PostAsync(ChatMessagePath, content).Result;
 
-                return msg.StatusCode == HttpStatusCode.OK ? true : false;
+                return msg.StatusCode == HttpStatusCode.OK ? true : false; 
             }
         }
     }

@@ -336,5 +336,25 @@ namespace ClientForm
                 lblFakeNameStatus.Content = "name already taken";
             }
         }
+
+        private void BtnSend_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtChat.Text!= "" && Context.GameState != GameState.Lobby && 
+                Context.GameState == GameState.NameSelection)
+            {
+                string text = txtChat.Text;
+                txtChat.Clear();
+                PlayerService service = new PlayerService();
+                ChatMessage message = new ChatMessage()
+                {
+                    GameId = Context.GameId,
+                    Content = text,
+                    PlayerId = Player.Id,
+                    Time = DateTime.Now,
+                    GameState = Context.GameState,
+                };
+                service.SendChatMessage(message);
+            }
+        }
     }
 }
