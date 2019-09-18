@@ -81,6 +81,14 @@ namespace ClientForm
                 channel.BasicCancel(ContextConsumerTag);
                 channel.BasicCancel(LobbyInfoConsumerTag);
             }
+            if (channel.IsOpen)
+            {
+                channel.Close();
+            }
+            if (connection.IsOpen)
+            {
+                connection.Close();
+            }
 
             if (Context != null)
             {
@@ -224,12 +232,6 @@ namespace ClientForm
             var date = DateTime.Now;
             Messages.Add(date.ToString("HH:mm:ss") + ": " + info);
             Refresh();
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            channel.Close();
-            connection.Close();
         }
     }
 }
