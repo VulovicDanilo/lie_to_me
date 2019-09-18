@@ -20,6 +20,7 @@ namespace BusinessLayer
         private readonly string UpdatePlayerPath = "/api/players/update";
         private readonly string ChooseNamePath = "/api/players/name";
         private readonly string RequestRolePath = "/api/players/request_role";
+        private readonly string ChatMessage = "/api/players/send_message";
         public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
@@ -151,6 +152,29 @@ namespace BusinessLayer
                     return strategy;
                 }
 
+            }
+        }
+        public void SendChatMessage(ChatMessage chatMessage)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+
+                var values = new Dictionary<string, string>()
+                {
+                    {"Name", chatMessage.Name },
+                    {"GameState", ((int)chatMessage.GameState).ToString() },
+                    {"Content", chatMessage.Content },
+                    {"GameId", chatMessage.GameId },
+                    {"Time", chatMessage.Time.ToString() }
+                };
+
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(ChooseNamePath, content).Result;
+
+                return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }
         }
     }

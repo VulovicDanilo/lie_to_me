@@ -26,7 +26,7 @@ namespace WebAPI2.Controllers
                 foreach(var game in games)
                 {
                     var fullGame = GameDictionary.Get(game.Id);
-                    if (fullGame != null)
+                    if (fullGame != null && fullGame.GameState == GameState.Lobby)
                     {
                         int playerId = fullGame.Owner.Id;
                         var player = unitOfWork.PlayerRepository.Find(playerId);
