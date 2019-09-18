@@ -153,7 +153,9 @@ namespace WebAPI2.Controllers
         public HttpResponseMessage SendMessage([FromBody]ChatMessage message)
         {
             var game = GameDictionary.Get(message.GameId);
-
+            var name = game.Players.Where(player => player.Id == message.PlayerId).FirstOrDefault().FakeName;
+            var content = name + ": " + message.Content;
+            QueueService.BroadcastLobbyInfo(game.Id.ToString(), content);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
