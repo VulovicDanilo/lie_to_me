@@ -152,6 +152,7 @@ namespace WebAPI2.Controllers
         [HttpPost]
         public HttpResponseMessage SendMessage([FromBody]ChatMessage message)
         {
+            var game = GameDictionary.Get(message.GameId);
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }

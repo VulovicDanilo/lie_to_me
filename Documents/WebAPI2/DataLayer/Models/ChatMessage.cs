@@ -9,14 +9,14 @@ namespace DataLayer.Models
     {
         public string Content { get; set; }
         public DateTime Time { get; set; }
-        public string Name { get; set; }
+        public int PlayerId { get; set; }
         public int GameId { get; set; }
         public GameState GameState { get; set; }
 
-        public ChatMessage(string content, string name, int gameId, GameState gameState)
+        public ChatMessage(string content, int playerId, int gameId, GameState gameState)
         {
             Content = content;
-            Name = name;
+            PlayerId = playerId;
             Time = DateTime.Now;
             GameId = gameId;
             GameState = GameState;
