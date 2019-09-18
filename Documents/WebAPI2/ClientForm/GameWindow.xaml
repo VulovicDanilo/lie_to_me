@@ -9,7 +9,7 @@
     <Grid Margin="0,0,2,0">
         <ListBox x:Name="lbxInfo" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="264" Canvas.Left="518" Canvas.Top="43" Margin="522,43,0,0"/>
         <Label x:Name="lblTimer" Content="Timer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Canvas.Left="518" Canvas.Top="10" Margin="522,2,0,0" Width="100" FontSize="18"/>
-        <Canvas x:Name="lobbyCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4" Visibility="Hidden">
+        <Canvas x:Name="lobbyCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4">
             <Button x:Name="btnStart" Content="start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnStart_Click" Canvas.Left="10" Canvas.Top="10"/>
             <Label x:Name="lblPlayerCount" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="383"/>
         </Canvas>
@@ -20,10 +20,11 @@
             <Label Content="" Canvas.Left="148" Canvas.Top="305" Width="210" Height="37" Foreground="Red" HorizontalContentAlignment="Center"/>
 
         </Canvas>
-        <Canvas x:Name="lobbyDisplayRoleNameCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4">
+        <Canvas x:Name="lobbyDisplayRoleNameCanvas" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4" Visibility="Hidden">
             <Label x:Name="lblRoleName" Content="RoleName" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="196" Canvas.Top="171" FontSize="24" Height="50" Width="126"/>
             <Label x:Name="lblRoleDescription" Content="RoleDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="226" FontSize="24" Height="183" Width="392"/>
 
         </Canvas>
+        <GridSplitter x:Name="gridSplitter" HorizontalAlignment="Left" Height="100" Margin="-144,409,0,-90" VerticalAlignment="Top" Width="6"/>
     </Grid>
 </Window>
