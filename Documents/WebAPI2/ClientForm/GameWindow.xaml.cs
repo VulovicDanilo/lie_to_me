@@ -203,7 +203,6 @@ namespace ClientForm
                     this.Visibility = Visibility.Visible;
 
                     PlayerControls = new List<PlayerControl>(Context.MaxPlayers);
-                    DrawPlayerControls();
                 }
                 else
                 {
@@ -219,12 +218,14 @@ namespace ClientForm
                         {
                             PlayerService service = new PlayerService();
                             Strategy = service.RequestStrategy(Context.GameId, Player.Id);
-                            lblRoleName.Content = Strategy.RoleName.ToString();
-                            lblRoleDescription.Content = "Description";
+                            lblRoleName.Content = "you are " + Strategy.RoleName;
+                            lblRoleDescription.Content = Strategy.Description;
+                            lblRoleGoal.Content = "Goal: " + Strategy.Goal;
                             UpdateUiRoleDistribution();
                         }
                         else if (newContext.GameState == GameState.Discussion)
                         {
+                            DrawPlayerControls();
                             UpdateUiGame();
                         }
                     }
@@ -257,7 +258,7 @@ namespace ClientForm
             }
             foreach(var playerControl in PlayerControls)
             {
-                canvasGame.Children.Add(playerControl)
+                canvasGame.Children.Add(playerControl);
             }
         }
 
@@ -271,7 +272,7 @@ namespace ClientForm
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            if (Context.Players.Count == Context.MaxPlayers)
+            if (Context.Players.Count < Context.MaxPlayers)
             {
                 GameService service = new GameService();
                 service.StartNameSelectionPhase(Context.GameId);

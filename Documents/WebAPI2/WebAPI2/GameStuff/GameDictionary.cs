@@ -189,9 +189,10 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Day++;
+            game.GameState = GameState.Discussion;
 
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "day " + game.Day + " started...");
-
+            QueueService.BroadcastContext(game.Id.ToString(), game);
         }
     }
 }
