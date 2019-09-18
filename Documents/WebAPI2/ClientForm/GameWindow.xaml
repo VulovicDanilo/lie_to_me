@@ -33,6 +33,6 @@
         <Canvas x:Name="canvasGame" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="1"/>
         <Label x:Name="lblState" Content="State" HorizontalAlignment="Left" Margin="522,4,0,0" VerticalAlignment="Top" Width="153" Grid.ColumnSpan="2" FontSize="18"/>
         <TextBox x:Name="txtChat" HorizontalAlignment="Left" Height="39" Margin="522,419,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="242" Grid.ColumnSpan="2"/>
-        <Button x:Name="btnSend" Content="send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="73" Grid.Column="1" Margin="122,418,0,0" Height="40"/>
+        <Button x:Name="btnSend" Content="send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="79" Grid.Column="1" Margin="122,418,0,0" Height="40"/>
     </Grid>
 </Window>

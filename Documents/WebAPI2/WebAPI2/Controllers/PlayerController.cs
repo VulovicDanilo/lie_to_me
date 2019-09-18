@@ -148,6 +148,14 @@ namespace WebAPI2.Controllers
             }
         }
 
+        [Route("send_message")]
+        [HttpPost]
+        public HttpResponseMessage SendMessage([FromBody]ChatMessage message)
+        {
+
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
         protected override void Dispose(bool disposing)
         {
             unit.Dispose();
