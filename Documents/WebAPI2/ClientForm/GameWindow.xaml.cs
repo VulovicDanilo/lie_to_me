@@ -229,7 +229,7 @@ namespace ClientForm
                 this.Title = "";
 
                 GameService service = new GameService();
-                service.StartGame(Context.GameId);
+                service.StartNameSelectionPhase(Context.GameId);
             }
             else
             {

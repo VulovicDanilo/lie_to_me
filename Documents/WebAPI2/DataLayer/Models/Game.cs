@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Windows.Threading;
 
 namespace DataLayer.Models
 {
@@ -32,12 +33,42 @@ namespace DataLayer.Models
         public List<Player> Winners { get; set; }
         [NotMapped]
         public IModel Channel { get; set; }
-
+        [NotMapped]
+        public DispatcherTimer Timer { get; set; } = new DispatcherTimer();
+        [NotMapped]
+        public Dictionary<GameState, int> Durations { get; set; } = new Dictionary<GameState, int>();
+        [NotMapped]
+        public int Duration
+        {
+            get
+            {
+                int dur;
+                if (Durations.TryGetValue(GameState, out dur))
+                {
+                    return dur;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+        }
+        [NotMapped]
+        public int Day { get; set; }
 
         public Game()
         {
             Players = new List<Player>();
             Owner = null;
+            Day = 0;
+            Durations.Add(GameState.NameSelection, 15);
+            Durations.Add(GameState.RoleDistribution, 5);
+            Durations.Add(GameState.Discussion, 60);
+            Durations.Add(GameState.Voting, 30);
+            Durations.Add(GameState.Defence, 20);
+            Durations.Add(GameState.Judgement, 15);
+            Durations.Add(GameState.LastWord, 10);
+            Durations.Add(GameState.Night, 30);
         }
         public Game(Player owner)
             : base()

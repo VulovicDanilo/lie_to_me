@@ -115,10 +115,74 @@ namespace WebAPI2.GameStuff
             toUpdate.Owner = game.Owner;
         }
 
-        public static void StartGame(int gameId)
+        public static void NameSelectionStarted(int gameId)
         {
             var game = Get(gameId);
+            game.Timer.Stop();
             game.GameState = GameState.NameSelection;
+            game.Timer.Tick += (sender, e) => NameSelectionEnded(sender, e, gameId);
+            int dur = game.Duration;
+
+            QueueService.BroadcastLobbyInfo(gameId.ToString(), "choose your name, you have " + dur + " seconds");
+            game.Timer.Interval = new TimeSpan(0, 0, dur);
+            game.Timer.Start();
+        }
+
+        private static void NameSelectionEnded(object sender, EventArgs e,int gameId)
+        {
+            var game = Get(gameId);
+            game.Timer.Stop();
+
+            foreach(var player in game.Players)
+            {
+                if (player.FakeName == "")
+                {
+                    // TODO GIVE HIM NAME
+
+                    // TODO GIVE HIM ROLE
+                }
+            }
+
+            QueueService.BroadcastContext(game.Id.ToString(), game);
+
+            RoleDistributionStarted(game.Id);
+        }
+
+        private static void RoleDistributionStarted(int gameId)
+        {
+            var game = Get(gameId);
+            game.Timer.Stop();
+            game.GameState = GameState.RoleDistribution;
+            game.Timer.Tick += (sender, e) => RoleDistributionEnded(sender, e, gameId);
+            int dur = game.Duration;
+
+            QueueService.BroadcastLobbyInfo(gameId.ToString(), "roles have been distributed");
+            game.Timer.Interval = new TimeSpan(0, 0, dur);
+            game.Timer.Start();
+        }
+
+        private static void RoleDistributionEnded(object sender, EventArgs e, int gameId)
+        {
+            var game = Get(gameId);
+            game.Timer.Stop();
+
+            StartGame(gameId);
+        }
+
+        private static void StartGame(int gameId)
+        {
+            QueueService.BroadcastLobbyInfo(gameId.ToString(), "game started");
+
+            DayPhaseStarted(gameId);
+        }
+
+        private static void DayPhaseStarted(int gameId)
+        {
+            var game = Get(gameId);
+            game.Day++;
+
+            QueueService.BroadcastLobbyInfo(gameId.ToString(), "day " + game.Day + " started...");
+
         }
     }
 }

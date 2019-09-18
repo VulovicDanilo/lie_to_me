@@ -20,7 +20,7 @@ namespace BusinessLayer
         private readonly string DeleteGamePath = "api/games/delete";
         private readonly string RequestContext = "api/games/context";
         private readonly string SetOwnerPath = "api/games/owner";
-        private readonly string StartGamePath = "api/games/start";
+        private readonly string StartNameSelectionPath = "api/games/name_selection";
 
 
         public List<GameListing> GetGames()
@@ -135,13 +135,13 @@ namespace BusinessLayer
             }
         }
 
-        public bool StartGame(int gameId)
+        public bool StartNameSelectionPhase(int gameId)
         {
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(BaseAddress);
 
-                HttpResponseMessage msg = client.GetAsync(StartGamePath + "&gameId=" + gameId.ToString()).Result;
+                HttpResponseMessage msg = client.GetAsync(StartNameSelectionPath + "&gameId=" + gameId.ToString()).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }
