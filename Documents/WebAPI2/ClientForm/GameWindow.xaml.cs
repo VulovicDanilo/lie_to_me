@@ -55,7 +55,12 @@ namespace ClientForm
             timer.Tick += new EventHandler(TickHandler);
             timer.Start();
 
-            this.Visibility = Visibility.Collapsed;
+
+            canvasLobby.Visibility = Visibility.Visible;
+            canvasName.Visibility = Visibility.Collapsed;
+            canvasRoleNameDisplay.Visibility = Visibility.Collapsed;
+            canvasGame.Visibility = Visibility.Collapsed;
+
             GameService gameService = new GameService();
             gameService.RequestContextBroadcast(exchangeName);
         }
@@ -214,13 +219,17 @@ namespace ClientForm
         {
             lbxInfo.Items.Refresh();
             lblPlayerCount.Content = "player count: " + Context.Players.Count;
-            this.Title = Context.OwnerName + "'s game";
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
             if (Context.Players.Count == Context.MAX_PLAYERS)
             {
-                // GAME ABOUT TO START
+                canvasLobby.Visibility = Visibility.Collapsed;
+                canvasName.Visibility = Visibility.Visible;
+                this.Title = "";
+
+                GameService service = new GameService();
+                service.StartGame(Context.GameId);
             }
             else
             {

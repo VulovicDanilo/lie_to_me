@@ -79,6 +79,24 @@ namespace WebAPI2.GameStuff
             }
         }
 
+        public static bool SetName(int gameId,int playerId, string fakeName)
+        {
+            var game = Get(gameId);
+            var player = game.Players.Where(x => x.Id == playerId).FirstOrDefault();
+
+            var playersWithNames = game.Players.Where(x => x.FakeName == fakeName);
+
+            if (playersWithNames.Count() == 0)
+            {
+                player.FakeName = fakeName;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static void UpdatePlayer(int gameId, Player player)
         {
             var game = Get(gameId);
@@ -95,6 +113,12 @@ namespace WebAPI2.GameStuff
         {
             var toUpdate = Get(game.Id);
             toUpdate.Owner = game.Owner;
+        }
+
+        public static void StartGame(int gameId)
+        {
+            var game = Get(gameId);
+            game.GameState = GameState.NameSelection;
         }
     }
 }

@@ -69,6 +69,7 @@
     <Compile Include="DTOs\LoginModel.cs" />
     <Compile Include="DTOs\ClientContext.cs" />
     <Compile Include="DTOs\SetGameOwner.cs" />
+    <Compile Include="DTOs\SetNameModel.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
     <Compile Include="Extensions\ListExtension.cs" />
     <Compile Include="Migrations\Configuration.cs" />

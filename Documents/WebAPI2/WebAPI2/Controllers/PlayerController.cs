@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DataLayer.Models;
+using DataLayer.DTOs;
 using DataLayer.Repositories;
 using WebAPI2.GameStuff;
 
@@ -43,6 +44,30 @@ namespace WebAPI2.Controllers
                 QueueService.BroadcastLobbyInfo(game.Id.ToString(), "new player has joined the lobby");
 
                 return Request.CreateResponse(HttpStatusCode.OK, player);
+            }
+            catch (Exception ex)
+            {
+                string message = ex.Message;
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, message);
+            }
+        }
+        [Route("name")]
+        [HttpPost]
+        public HttpResponseMessage SetName([FromBody] SetNameModel model)
+        {
+            try
+            {                
+                if (GameDictionary.SetName(model.gameId, model.playerId, model.fakeName))
+                {
+                    QueueService.BroadcastLobbyInfo(model.gameId.ToString(), model.fakeName + " has joined...");
+                    var game = GameDictionary.Get(model.gameId);
+                    QueueService.BroadcastContext(game.Id.ToString(), game);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.Conflict);
+                }
             }
             catch (Exception ex)
             {

@@ -145,6 +145,30 @@ namespace WebAPI2.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to delete game. Message: " + ex.Message);
             }
         }
+        [Route("start")]
+        [HttpDelete]
+        public HttpResponseMessage StartGame([FromUri] int gameId)
+        {
+            try
+            {
+                var game = unitOfWork.GameRepository.Find(gameId);
+                game.StartTime = DateTime.Now;
+                unitOfWork.GameRepository.Update(game);
+                unitOfWork.Save();
+
+                GameDictionary.StartGame(gameId);
+
+                var fullGame = GameDictionary.Get(gameId);
+                QueueService.BroadcastContext(game.Id.ToString(), fullGame);
+                QueueService.BroadcastLobbyInfo(game.Id.ToString(), "name selection phase started");
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Failed to delete game. Message: " + ex.Message);
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             unitOfWork.Dispose();
