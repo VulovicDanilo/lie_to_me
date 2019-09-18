@@ -36,7 +36,6 @@ namespace ClientForm.Controls
             Number = player.Number;
             FakeName = player.FakeName;
             ImagePath = player.ImagePath;
-
             Fill();
         }
 

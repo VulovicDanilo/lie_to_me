@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:ClientForm.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="600">
-    <Grid>
-        <Label x:Name="labName" Content="Number Name" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="80" Width="281" VerticalContentAlignment="Center" FontSize="24"/>
-        <Image x:Name="imgAvatar" HorizontalAlignment="Left" Height="100" Margin="500,0,0,0" VerticalAlignment="Top" Width="100"/>
 
+    <Grid>
+        <Label x:Name="labName" Content="Number Name" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="36" Width="281" VerticalContentAlignment="Center" FontSize="18"/>
+        <Image x:Name="imgAvatar" HorizontalAlignment="Left" Height="100" Margin="500,0,0,0" VerticalAlignment="Top" Width="100"/>
     </Grid>
+
 </UserControl>

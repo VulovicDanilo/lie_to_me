@@ -60,14 +60,23 @@ namespace DataLayer.Models
             Players = new List<Player>();
             Owner = null;
             Day = 0;
-            Durations.Add(GameState.NameSelection, 15);
-            Durations.Add(GameState.RoleDistribution, 5);
-            Durations.Add(GameState.Discussion, 60);
-            Durations.Add(GameState.Voting, 30);
-            Durations.Add(GameState.Defence, 20);
-            Durations.Add(GameState.Judgement, 15);
-            Durations.Add(GameState.LastWord, 10);
-            Durations.Add(GameState.Night, 30);
+            //Durations.Add(GameState.NameSelection, 15);
+            //Durations.Add(GameState.RoleDistribution, 5);
+            //Durations.Add(GameState.Discussion, 60);
+            //Durations.Add(GameState.Voting, 30);
+            //Durations.Add(GameState.Defence, 20);
+            //Durations.Add(GameState.Judgement, 15);
+            //Durations.Add(GameState.LastWord, 10);
+            //Durations.Add(GameState.Night, 30);
+
+            Durations.Add(GameState.NameSelection, 3);
+            Durations.Add(GameState.RoleDistribution, 3);
+            Durations.Add(GameState.Discussion, 3);
+            Durations.Add(GameState.Voting, 3);
+            Durations.Add(GameState.Defence, 3);
+            Durations.Add(GameState.Judgement, 3);
+            Durations.Add(GameState.LastWord, 3);
+            Durations.Add(GameState.Night, 3);
 
             Timer = new Timer();
         }

@@ -201,7 +201,7 @@ namespace ClientForm
                     Context = newContext;
                     this.Visibility = Visibility.Visible;
 
-                    PlayerControls = new List<PlayerControl>(Context.MaxPlayers);
+                    PlayerControls = new List<PlayerControl>(10);
                 }
                 else
                 {
@@ -219,7 +219,7 @@ namespace ClientForm
                             Player.Role = service.RequestStrategy(Context.GameId, Player.Id);
                             lblRoleName.Content = "you are " + Player.Role.RoleName;
                             lblRoleDescription.Content = Player.Role.Description;
-                            lblRoleGoal.Content = "Goal: " + Player.Role.Goal;
+                            lblRoleGoal.Content = "goal: " + Player.Role.Goal;
                             UpdateUiRoleDistribution();
                         }
                         else if (newContext.GameState == GameState.Discussion)
@@ -245,14 +245,28 @@ namespace ClientForm
 
         private void DrawPlayerControls()
         {
-            int i = 0;
+            int i = 0; 
+            double controlWidth = canvasGame.Width - 50;
+            double controlHeight = canvasGame.Height / 10 - 1;
             foreach(var player in Context.Players)
             {
                 var playerControl = new PlayerControl(player);
-                playerControl.Margin = new Thickness(0, i * 30, 0, 0);
+                playerControl.Height = controlHeight;
+                playerControl.Width = controlWidth;
+                playerControl.Margin = new Thickness(10, i* controlHeight, 0, 0);
                 PlayerControls.Add(playerControl);
 
-
+                i++;
+            }
+            while(i < 10)
+            {
+                var playerControl = new PlayerControl
+                {
+                    Margin = new Thickness(10, i* controlHeight, 0, 0),
+                    Width = controlWidth,
+                    Height = controlHeight
+                };
+                PlayerControls.Add(playerControl);
                 i++;
             }
             foreach(var playerControl in PlayerControls)
