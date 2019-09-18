@@ -8,7 +8,7 @@ namespace DataLayer.Models.Roles
     public class MayorStrategy : RoleStrategy
     {
         public MayorStrategy()
-            : base(RoleName.Mayor, Alignment.Town, 10)
+            : base(RoleName.Mayor, Alignment.Town, 10, "gain 3 votes when you reveal yourself as mayor", "defeat all mafia")
         {
 
         }

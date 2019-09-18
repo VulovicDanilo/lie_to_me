@@ -7,7 +7,7 @@ namespace DataLayer.Models.Roles
 {
     public class VeteranStrategy : RoleStrategy
     {
-        public VeteranStrategy() : base(RoleName.Veteran, Alignment.Town, 1)
+        public VeteranStrategy() : base(RoleName.Veteran, Alignment.Town, 1, "decide if you will go on alert and kill anyone who visits you", "defeat all mafia")
         {
 
         }

@@ -8,7 +8,7 @@ namespace DataLayer.Models.Roles
     public class FramerStrategy : RoleStrategy
     {
         public FramerStrategy()
-            : base(RoleName.Framer, Alignment.Mafia, 2)
+            : base(RoleName.Framer, Alignment.Mafia, 2, "choose one person to frame each night", "defeat all town")
         {
             
         }

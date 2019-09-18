@@ -8,7 +8,7 @@ namespace DataLayer.Models.Roles
     public class InvestigatorStrategy :RoleStrategy
     {
         public InvestigatorStrategy()
-            :base(RoleName.Investigator, Alignment.Town, 4)
+            :base(RoleName.Investigator, Alignment.Town, 4, "investigate one person each night for a clue to their role", "defeat all mafia")
         {
 
         }
