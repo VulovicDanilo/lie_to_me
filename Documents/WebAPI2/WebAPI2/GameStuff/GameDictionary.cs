@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using DataLayer.Repositories;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Concurrent;
@@ -128,19 +129,21 @@ namespace WebAPI2.GameStuff
             game.Timer.Start();
         }
 
+        
         private static void NameSelectionEnded(object sender, EventArgs e,int gameId)
         {
             var game = Get(gameId);
             game.Timer.Stop();
 
-            foreach(var player in game.Players)
-            {
-                if (player.FakeName == "")
-                {
-                    // TODO GIVE HIM NAME
+            game.AssignNamesAndRoles();
 
-                    // TODO GIVE HIM ROLE
+            using (UnitOfWork unit = new UnitOfWork())
+            {
+                foreach(var player in game.Players)
+                {
+                    unit.PlayerRepository.Update(player);
                 }
+                unit.Save();
             }
 
             QueueService.BroadcastContext(game.Id.ToString(), game);

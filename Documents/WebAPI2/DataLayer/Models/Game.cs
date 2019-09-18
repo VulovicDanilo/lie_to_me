@@ -79,7 +79,7 @@ namespace DataLayer.Models
 
         public static RoleStrategy GetTownRoleFromNumber(int idx)
         {
-            switch(idx)
+            switch (idx)
             {
                 case 0:
                     return new BodyguardStrategy();
@@ -101,7 +101,7 @@ namespace DataLayer.Models
                     return new VigilanteStrategy();
                 default:
                     throw new Exception("index out of range");
-                
+
             }
         }
 
@@ -120,7 +120,7 @@ namespace DataLayer.Models
 
         public static RoleStrategy GetNeutralRoleFromNumber(int idx)
         {
-            switch(idx)
+            switch (idx)
             {
                 case 0:
                     return new JesterStrategy();
@@ -135,13 +135,40 @@ namespace DataLayer.Models
         {
             List<RoleStrategy> pool = new List<RoleStrategy>(poolSize);
             var rnd = new Random();
-            for(int i = 0; i < poolSize; i++)
+            for (int i = 0; i < poolSize; i++)
             {
                 int idx = rnd.Next(0, poolSize);
                 pool.Add(Game.GetTownRoleFromNumber(idx));
             }
             return pool;
         }
+
+        private bool FakeNameExists(string fakeName)
+        {
+            return Players.Exists(x => x.FakeName == fakeName);
+        }
+
+        public void AssignNamesAndRoles()
+        {
+            var names = GetNamePool();
+            Queue<string> queue = new Queue<string>(names);
+
+            Queue<RoleStrategy> strategies = new Queue<RoleStrategy>(GetStrategyPool(this.MAX_PLAYERS));
+
+            foreach (var player in Players)
+            {
+                while (player.FakeName == "")
+                {
+                    var name = queue.Dequeue();
+                    if (!FakeNameExists(name))
+                    {
+                        player.FakeName = name;
+                    }
+                }
+                player.SetRole(strategies.Dequeue());
+            }
+        }
+
         public static IList<RoleStrategy> GetMafiaPool(int poolSize)
         {
             List<RoleStrategy> pool = new List<RoleStrategy>(poolSize)
@@ -188,13 +215,13 @@ namespace DataLayer.Models
         public static IEnumerable<string> GetNamePool()
         {
             List<string> first = new List<string>();
-            List<string> last= new List<string>();
+            List<string> last = new List<string>();
             first.AddRange(first_names);
             last.AddRange(last_names);
             first.Shuffle();
             last.Shuffle();
             List<string> results = new List<string>();
-            for(int i = 0; i < first.Count; i++)
+            for (int i = 0; i < first.Count; i++)
             {
                 var result = first[i] + " " + last[i];
                 results.Add(result);

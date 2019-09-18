@@ -146,7 +146,7 @@ namespace WebAPI2.Controllers
             }
         }
         [Route("name_selection")]
-        [HttpDelete]
+        [HttpPost]
         public HttpResponseMessage StartNameSelectionPhase([FromUri] int gameId)
         {
             try
@@ -157,10 +157,6 @@ namespace WebAPI2.Controllers
                 unitOfWork.Save();
 
                 GameDictionary.NameSelectionStarted(gameId);
-
-                var fullGame = GameDictionary.Get(gameId);
-                QueueService.BroadcastContext(game.Id.ToString(), fullGame);
-                QueueService.BroadcastLobbyInfo(game.Id.ToString(), "name selection phase started");
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }

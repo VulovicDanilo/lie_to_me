@@ -12,5 +12,11 @@ namespace DataLayer.Repositories
         public GameRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public bool UpdatePlayers(IEnumerable<Player> players)
+        {
+            
+            return true;
+        }
     }
 }
