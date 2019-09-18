@@ -42,7 +42,6 @@ namespace ClientForm
         private EventingBasicConsumer LobbyInfoConsumer = null;
         private string LobbyInfoConsumerTag = "";
 
-        private RoleStrategy Strategy { get; set; }
         private List<PlayerControl> PlayerControls { get; set; }
 
         public GameWindow(Player player, string exchangeName)
@@ -217,10 +216,10 @@ namespace ClientForm
                         else if (newContext.GameState == GameState.RoleDistribution)
                         {
                             PlayerService service = new PlayerService();
-                            Strategy = service.RequestStrategy(Context.GameId, Player.Id);
-                            lblRoleName.Content = "you are " + Strategy.RoleName;
-                            lblRoleDescription.Content = Strategy.Description;
-                            lblRoleGoal.Content = "Goal: " + Strategy.Goal;
+                            Player.Role = service.RequestStrategy(Context.GameId, Player.Id);
+                            lblRoleName.Content = "you are " + Player.Role.RoleName;
+                            lblRoleDescription.Content = Player.Role.Description;
+                            lblRoleGoal.Content = "Goal: " + Player.Role.Goal;
                             UpdateUiRoleDistribution();
                         }
                         else if (newContext.GameState == GameState.Discussion)

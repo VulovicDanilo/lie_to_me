@@ -129,16 +129,18 @@ namespace WebAPI2.GameStuff
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "choose your name, you have " + dur + " seconds");
 
             game.Timer.Interval = dur * 1000;
-            game.Timer.Elapsed += (sender, e) => NameSelectionEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => NameSelectionEnded(sender, e, gameId));
             game.Timer.Start();
-
         }
+
+
 
         
         private static void NameSelectionEnded(object sender, EventArgs e,int gameId)
         {
             var game = Get(gameId);
             game.Timer.Stop();
+            game.resetTimerEvents();
 
             game.AssignNamesAndRoles();
 
@@ -159,9 +161,13 @@ namespace WebAPI2.GameStuff
         private static void RoleDistributionStarted(int gameId)
         {
             var game = Get(gameId);
+
             game.Timer.Stop();
+            game.resetTimerEvents();
+
             game.GameState = GameState.RoleDistribution;
-            game.Timer.Elapsed+= (sender, e) => RoleDistributionEnded(sender, e, gameId);
+
+            game.addElapsedEvent((sender, e) => RoleDistributionEnded(sender, e, gameId));
             int dur = game.Duration;
 
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "roles have been distributed");

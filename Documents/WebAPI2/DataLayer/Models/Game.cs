@@ -159,7 +159,7 @@ namespace DataLayer.Models
             int i = 0;
             foreach (var player in Players)
             {
-                while (player.FakeName == "")
+                while (player.FakeName == "" || player.FakeName is null)
                 {
                     var name = queue.Dequeue();
                     if (!FakeNameExists(name))
@@ -237,5 +237,25 @@ namespace DataLayer.Models
             return results;
         }
 
+
+        private List<ElapsedEventHandler> events = new List<ElapsedEventHandler>();
+        public void addElapsedEvent(ElapsedEventHandler ev)
+        {
+            this.events.Add(ev);
+            this.Timer.Elapsed += ev;
+        }
+
+        public void removeElapsedEvent(ElapsedEventHandler ev)
+        {
+            this.Timer.Elapsed -= ev;
+        }
+        public void resetTimerEvents()
+        {
+            foreach(ElapsedEventHandler ev in events)
+            {
+                removeElapsedEvent(ev);
+            }
+            events.RemoveAll(x => true);
+        }
     }
 }
