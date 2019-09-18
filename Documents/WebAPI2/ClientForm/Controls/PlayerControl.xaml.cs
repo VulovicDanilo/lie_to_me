@@ -31,7 +31,7 @@ namespace ClientForm.Controls
         }
 
         public PlayerControl(InGamePlayer player)
-            :base()
+            :this()
         {
             Number = player.Number;
             FakeName = player.FakeName;
@@ -43,7 +43,7 @@ namespace ClientForm.Controls
         public void Fill()
         {
             labName.Content = Number.ToString() + " " + FakeName;
-            ShowImage();
+            // ShowImage();
         }
 
         private void ShowImage()
