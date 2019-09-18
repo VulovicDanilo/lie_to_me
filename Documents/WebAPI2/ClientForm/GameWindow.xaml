@@ -25,6 +25,5 @@
             <Label x:Name="lblRoleDescription" Content="RoleDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="226" FontSize="24" Height="183" Width="392"/>
 
         </Canvas>
-        <GridSplitter x:Name="gridSplitter" HorizontalAlignment="Left" Height="100" Margin="-144,409,0,-90" VerticalAlignment="Top" Width="6"/>
     </Grid>
 </Window>

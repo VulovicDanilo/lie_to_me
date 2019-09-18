@@ -152,5 +152,24 @@ namespace DataLayer.Models
             return pool;
         }
 
+        private static readonly string[] first_names = { "John", "Johnny", "Mr.", "Louis", "Sergeant", "Dr.", "Person", "Jane", "Anne", "Maria" };
+        private static readonly string[] last_names = { "Doe", "Jimbo", "Mustafa", "Harambe", "Chance", "Chase", "Why", "Here", "Six", "Ok", "Bravo" };
+        public static IEnumerable<string> GetNamePool()
+        {
+            List<string> first = new List<string>();
+            List<string> last= new List<string>();
+            first.AddRange(first_names);
+            last.AddRange(last_names);
+            first.Shuffle();
+            last.Shuffle();
+            List<string> results = new List<string>();
+            for(int i = 0; i < first.Count; i++)
+            {
+                var result = first[i] + " " + last[i];
+                results.Add(result);
+            }
+            return results;
+        }
+
     }
 }
