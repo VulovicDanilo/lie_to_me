@@ -146,7 +146,7 @@ namespace WebAPI2.Controllers
             }
         }
         [Route("name_selection")]
-        [HttpPost]
+        [HttpGet]
         public HttpResponseMessage StartNameSelectionPhase([FromUri] int gameId)
         {
             try

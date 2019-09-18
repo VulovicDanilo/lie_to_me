@@ -40,6 +40,9 @@ namespace ClientForm
         private string ContextConsumerTag = "";
         private EventingBasicConsumer LobbyInfoConsumer = null;
         private string LobbyInfoConsumerTag = "";
+
+        private RoleStrategy Strategy { get; set; }
+
         public GameWindow(Player player, string exchangeName)
         {
             InitializeComponent();
@@ -55,6 +58,7 @@ namespace ClientForm
             timer.Tick += new EventHandler(TickHandler);
             timer.Start();
 
+            this.lblState.Content = GameState.Lobby.ToString();
 
             canvasLobby.Visibility = Visibility.Visible;
             canvasName.Visibility = Visibility.Collapsed;
@@ -197,9 +201,28 @@ namespace ClientForm
                     this.Visibility = Visibility.Visible;
                 }
                 else
-                { 
-                    // TODO AF
-                    // COMPARE THE DIFF AND PRINT THE DIFF TO lbxInfo
+                {
+                    if(Context.GameState != newContext.GameState)
+                    {
+                        this.lblState.Content = newContext.GameState.ToString();
+                        this.timerSeconds = newContext.Duration;
+                        if (newContext.GameState == GameState.NameSelection)
+                        {
+                            UpdateUiNameSelection();
+                        }
+                        else if (newContext.GameState == GameState.RoleDistribution)
+                        {
+                            PlayerService service = new PlayerService();
+                            Strategy = service.RequestStrategy(Context.GameId, Player.Id);
+                            lblRoleName.Content = Strategy.RoleName.ToString();
+                            lblRoleDescription.Content = "Description";
+                            UpdateUiRoleDistribution();
+                        }
+                        else if (newContext.GameState == GameState.Discussion)
+                        {
+                            UpdateUiGame();
+                        }
+                    }
                     Context = newContext; // for now
                 }
                 if (Context.OwnerId == this.Player.Id)
@@ -219,21 +242,20 @@ namespace ClientForm
         {
             lbxInfo.Items.Refresh();
             lblPlayerCount.Content = "player count: " + Context.Players.Count;
+            lbxInfo.SelectedIndex = lbxInfo.Items.Count - 1;
+            lbxInfo.ScrollIntoView(lbxInfo.SelectedItem);
+            lbxInfo.SelectedIndex = -1;
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            if (Context.Players.Count == Context.MAX_PLAYERS)
+            if (Context.Players.Count == Context.MaxPlayers)
             {
-                canvasLobby.Visibility = Visibility.Collapsed;
-                canvasName.Visibility = Visibility.Visible;
-                this.Title = "";
-
                 GameService service = new GameService();
                 service.StartNameSelectionPhase(Context.GameId);
             }
             else
             {
-                AddMessage("not enough players. " + (Context.MAX_PLAYERS - Context.Players.Count) + " more...");
+                AddMessage("not enough players. " + (Context.MaxPlayers - Context.Players.Count) + " more...");
             }
         }
         private void AddMessage(string info)
@@ -241,6 +263,41 @@ namespace ClientForm
             var date = DateTime.Now;
             Messages.Add(date.ToString("HH:mm:ss") + ": " + info);
             Refresh();
+        }
+
+        private void UpdateUiNameSelection()
+        {
+            canvasLobby.Visibility = Visibility.Collapsed;
+            canvasName.Visibility = Visibility.Visible;
+        }
+
+        private void UpdateUiRoleDistribution()
+        {
+            canvasName.Visibility = Visibility.Collapsed;
+            canvasRoleNameDisplay.Visibility = Visibility.Visible;
+        }
+
+        private void UpdateUiGame()
+        {
+            canvasRoleNameDisplay.Visibility = Visibility.Collapsed;
+            canvasGame.Visibility = Visibility.Visible;
+        }
+
+        private void BtnNameSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            string fakename = txtFakeName.Text;
+            PlayerService service = new PlayerService();
+            bool success = service.AddFakeName(this.Player.Id, fakename, Context.GameId);
+            if(success)
+            {
+                btnNameSubmit.IsEnabled = false;
+                lblFakeNameStatus.Content = "fake name added";
+                lblFakeNameStatus.Foreground = Brushes.LightGreen;
+            }
+            else
+            {
+                lblFakeNameStatus.Content = "name already taken";
+            }
         }
     }
 }

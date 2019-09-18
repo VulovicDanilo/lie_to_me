@@ -5,19 +5,23 @@ using System.Web;
 
 namespace DataLayer.Models
 {
-    public abstract class RoleStrategy
+    public class RoleStrategy
     {
-        public RoleName RoleName { get; private set; }
-        public Alignment Alignment { get; private set; }
-        public abstract void ExecuteAction(Game game);
+        public RoleName RoleName { get; set; }
+        public Alignment Alignment { get; set; }
+        public virtual void ExecuteAction(Game game) { }
         public Player SelectedPlayer { get; set; }
-        public int Priority { get; private set; }
+        public int Priority { get; set; }
 
         protected RoleStrategy(RoleName roleName, Alignment alignment, int priority)
         {
             RoleName = roleName;
             Alignment = alignment;
             Priority = priority;
+        }
+        public RoleStrategy()
+        {
+
         }
     }
 }

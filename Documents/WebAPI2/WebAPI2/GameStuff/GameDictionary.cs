@@ -120,13 +120,18 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Timer.Stop();
+
             game.GameState = GameState.NameSelection;
-            game.Timer.Tick += (sender, e) => NameSelectionEnded(sender, e, gameId);
             int dur = game.Duration;
 
+
+            QueueService.BroadcastContext(game.Id.ToString(), game);
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "choose your name, you have " + dur + " seconds");
-            game.Timer.Interval = new TimeSpan(0, 0, dur);
+
+            game.Timer.Interval = dur * 1000;
+            game.Timer.Elapsed += (sender, e) => NameSelectionEnded(sender, e, gameId);
             game.Timer.Start();
+
         }
 
         
@@ -156,11 +161,12 @@ namespace WebAPI2.GameStuff
             var game = Get(gameId);
             game.Timer.Stop();
             game.GameState = GameState.RoleDistribution;
-            game.Timer.Tick += (sender, e) => RoleDistributionEnded(sender, e, gameId);
+            game.Timer.Elapsed+= (sender, e) => RoleDistributionEnded(sender, e, gameId);
             int dur = game.Duration;
 
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "roles have been distributed");
-            game.Timer.Interval = new TimeSpan(0, 0, dur);
+            QueueService.BroadcastContext(game.Id.ToString(), game);
+            game.Timer.Interval = 1000 * dur;
             game.Timer.Start();
         }
 

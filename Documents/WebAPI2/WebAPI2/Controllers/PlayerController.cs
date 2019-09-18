@@ -132,6 +132,22 @@ namespace WebAPI2.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, message);
             }
         }
+
+        [Route("request_role")]
+        [HttpPost]
+        public HttpResponseMessage RequestRole([FromBody]RoleRequestModel roleRequestModel)
+        {
+            try
+            {
+                Game game = GameDictionary.Get(roleRequestModel.gameId);
+                var strategy = game.Players.Where(x => x.Id == roleRequestModel.playerId).FirstOrDefault().Role;
+                return Request.CreateResponse<RoleStrategy>(HttpStatusCode.OK, strategy);
+            } catch(Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             unit.Dispose();

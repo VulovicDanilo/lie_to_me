@@ -141,7 +141,7 @@ namespace BusinessLayer
             {
                 client.BaseAddress = new Uri(BaseAddress);
 
-                HttpResponseMessage msg = client.GetAsync(StartNameSelectionPath + "&gameId=" + gameId.ToString()).Result;
+                HttpResponseMessage msg = client.GetAsync(StartNameSelectionPath + "?gameId=" + gameId.ToString()).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }

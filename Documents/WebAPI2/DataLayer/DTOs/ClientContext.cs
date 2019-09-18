@@ -9,7 +9,7 @@ namespace DataLayer.DTOs
 {
     public class ClientContext
     {
-        public readonly int MAX_PLAYERS = 10;
+        public int MaxPlayers { get; set; }
         public GameState GameState { get; set; }
         public GameMode GameMode { get; set; }
         public List<InGamePlayer> Players { get; set; }
@@ -18,6 +18,7 @@ namespace DataLayer.DTOs
         public int OwnerId { get; set; }
         public string OwnerName { get; set; }
         public int GameId { get; set; }
+        public int Duration { get; set; }
 
         public ClientContext()
         {
@@ -33,6 +34,8 @@ namespace DataLayer.DTOs
             GameId = game.Id;
             OwnerId = game.Owner.Id;
             OwnerName = game.Owner.User.UserName;
+            Duration = game.Duration;
+            MaxPlayers = game.MAX_PLAYERS;
 
             Winners = new List<InGamePlayer>();
             Players = new List<InGamePlayer>();

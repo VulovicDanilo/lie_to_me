@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Windows.Threading;
+using System.Timers;
 
 namespace DataLayer.Models
 {
@@ -26,7 +26,7 @@ namespace DataLayer.Models
 
 
         [NotMapped]
-        public readonly int MAX_PLAYERS = 10;
+        public readonly int MAX_PLAYERS = 3;
         [NotMapped]
         public GameState GameState { get; set; }
         [NotMapped]
@@ -34,7 +34,7 @@ namespace DataLayer.Models
         [NotMapped]
         public IModel Channel { get; set; }
         [NotMapped]
-        public DispatcherTimer Timer { get; set; } = new DispatcherTimer();
+        public Timer Timer { get; set; }
         [NotMapped]
         public Dictionary<GameState, int> Durations { get; set; } = new Dictionary<GameState, int>();
         [NotMapped]
@@ -42,10 +42,9 @@ namespace DataLayer.Models
         {
             get
             {
-                int dur;
-                if (Durations.TryGetValue(GameState, out dur))
+                if (Durations.ContainsKey(this.GameState))
                 {
-                    return dur;
+                    return Durations[this.GameState];
                 }
                 else
                 {
@@ -69,6 +68,8 @@ namespace DataLayer.Models
             Durations.Add(GameState.Judgement, 15);
             Durations.Add(GameState.LastWord, 10);
             Durations.Add(GameState.Night, 30);
+
+            Timer = new Timer();
         }
         public Game(Player owner)
             : base()
@@ -155,6 +156,7 @@ namespace DataLayer.Models
 
             Queue<RoleStrategy> strategies = new Queue<RoleStrategy>(GetStrategyPool(this.MAX_PLAYERS));
 
+            int i = 0;
             foreach (var player in Players)
             {
                 while (player.FakeName == "")
@@ -166,7 +168,13 @@ namespace DataLayer.Models
                     }
                 }
                 player.SetRole(strategies.Dequeue());
+                player.Number = i++;
             }
+        }
+
+        public void StartNameSelection()
+        {
+
         }
 
         public static IList<RoleStrategy> GetMafiaPool(int poolSize)

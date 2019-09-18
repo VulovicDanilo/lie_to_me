@@ -69,6 +69,7 @@
     <Compile Include="DTOs\InGamePlayer.cs" />
     <Compile Include="DTOs\LoginModel.cs" />
     <Compile Include="DTOs\ClientContext.cs" />
+    <Compile Include="DTOs\RoleRequestModel.cs" />
     <Compile Include="DTOs\SetGameOwner.cs" />
     <Compile Include="DTOs\SetNameModel.cs" />
     <Compile Include="Extensions\EnumExtension.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\GameRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\PlayerRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\UnitOfWork.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

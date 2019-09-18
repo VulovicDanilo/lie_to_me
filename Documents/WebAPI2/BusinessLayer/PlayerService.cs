@@ -1,4 +1,5 @@
-﻿using DataLayer.Models;
+﻿using DataLayer.DTOs;
+using DataLayer.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace BusinessLayer
         private readonly string DeletePlayerPath = "/api/players/delete";
         private readonly string UpdatePlayerPath = "/api/players/update";
         private readonly string ChooseNamePath = "/api/players/name";
+        private readonly string RequestRolePath = "/api/players/request_role";
         public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
@@ -117,6 +119,38 @@ namespace BusinessLayer
                 HttpResponseMessage msg = client.PostAsync(ChooseNamePath, content).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false;
+            }
+        }
+
+        public RoleStrategy RequestStrategy(int gameId, int playerId)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+
+                var values = new Dictionary<string, string>()
+                {
+                    {"gameId", gameId.ToString() },
+                    {"playerId", playerId.ToString() }
+                };
+
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(RequestRolePath, content).Result;
+
+                if (msg.StatusCode != HttpStatusCode.OK)
+                {
+                    return null;
+                }
+                else
+                {
+                    string json = msg.Content.ReadAsStringAsync().Result;
+
+                    RoleStrategy strategy = JsonConvert.DeserializeObject<RoleStrategy>(json);
+                    return strategy;
+                }
+
             }
         }
     }

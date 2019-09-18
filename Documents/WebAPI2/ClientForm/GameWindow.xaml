@@ -5,19 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientForm"
         mc:Ignorable="d"
-        Title="" Height="450" Width="800" Closed="Window_Closed">
+        Title="" Height="450" Width="800">
     <Grid Margin="0,0,2,0">
-        <ListBox x:Name="lbxInfo" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="264" Canvas.Left="518" Canvas.Top="43" Margin="522,43,0,0"/>
-        <Label x:Name="lblTimer" Content="Timer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Canvas.Left="518" Canvas.Top="10" Margin="522,2,0,0" Width="100" FontSize="18"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="591*"/>
+            <ColumnDefinition Width="199*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lbxInfo" HorizontalAlignment="Left" Height="366" VerticalAlignment="Top" Width="264" Margin="522,43,0,0" Grid.ColumnSpan="2"/>
+        <Label x:Name="lblTimer" Content="Timer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="36" Margin="95,1,0,0" Width="100" FontSize="18" Grid.Column="1"/>
         <Canvas x:Name="canvasLobby" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="4">
             <Button x:Name="btnStart" Content="start" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="BtnStart_Click" Canvas.Left="10" Canvas.Top="10"/>
             <Label x:Name="lblPlayerCount" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="383"/>
         </Canvas>
-        <Canvas x:Name="canvasName" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="3" Visibility="Collapsed">
+        <Canvas x:Name="canvasName" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="3">
             <Label Content="choose your name" Canvas.Left="148" Canvas.Top="102" Height="73" Width="210" FontSize="22" HorizontalAlignment="Left" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-            <TextBlock Canvas.Left="148" TextWrapping="Wrap" Canvas.Top="180" Height="47" Width="210" FontSize="22"/>
-            <Button x:Name="btnNameSubmit" Content="submit" Canvas.Left="186" Canvas.Top="253" Width="128" Height="34" FontSize="16"/>
-            <Label Content="" Canvas.Left="148" Canvas.Top="305" Width="210" Height="37" Foreground="Red" HorizontalContentAlignment="Center"/>
+            <TextBox x:Name="txtFakeName" Canvas.Left="148" TextWrapping="Wrap" Canvas.Top="180" Height="47" Width="210" FontSize="22"/>
+            <Button x:Name="btnNameSubmit" Content="submit" Canvas.Left="186" Canvas.Top="253" Width="128" Height="34" FontSize="16" Click="BtnNameSubmit_Click"/>
+            <Label x:Name="lblFakeNameStatus" Content="" Canvas.Left="148" Canvas.Top="305" Width="210" Height="37" Foreground="Red" HorizontalContentAlignment="Center"/>
 
         </Canvas>
         <Canvas x:Name="canvasRoleNameDisplay" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="2" Visibility="Collapsed">
@@ -26,7 +30,8 @@
 
         </Canvas>
         <Canvas x:Name="canvasGame" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="1" Visibility="Collapsed">
-            
+
         </Canvas>
+        <Label x:Name="lblState" Content="State" HorizontalAlignment="Left" Margin="522,4,0,0" VerticalAlignment="Top" Width="153" Grid.ColumnSpan="2" FontSize="18"/>
     </Grid>
 </Window>
