@@ -8,7 +8,7 @@ namespace DataLayer.Models.Roles
     public class LookoutStrategy : RoleStrategy
     {
         public LookoutStrategy()
-            : base(RoleName.Lookout, Alignment.Town, 6)
+            : base(RoleName.Lookout, Alignment.Town, 6, "watch one person at night to see who visits them", "defeat all mafia")
         {
 
         }

@@ -8,7 +8,7 @@ namespace DataLayer.Models.Roles
     public class GodfatherStrategy : RoleStrategy
     {
         public GodfatherStrategy()
-            : base(RoleName.Godfather, Alignment.Mafia, 5)
+            : base(RoleName.Godfather, Alignment.Mafia, 5, "kill someone each night", "defeat all town")
         {
 
         }

@@ -12,12 +12,16 @@ namespace DataLayer.Models
         public virtual void ExecuteAction(Game game) { }
         public Player SelectedPlayer { get; set; }
         public int Priority { get; set; }
+        public string Description { get; set; }
+        public string Goal { get; set; }
 
-        protected RoleStrategy(RoleName roleName, Alignment alignment, int priority)
+        protected RoleStrategy(RoleName roleName, Alignment alignment, int priority, string description, string goal)
         {
             RoleName = roleName;
             Alignment = alignment;
             Priority = priority;
+            Description = description;
+            Goal = goal;
         }
         public RoleStrategy()
         {

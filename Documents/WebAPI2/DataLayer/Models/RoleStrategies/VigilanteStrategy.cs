@@ -7,7 +7,7 @@ namespace DataLayer.Models.Roles
 {
     public class VigilanteStrategy : RoleStrategy
     {
-        public VigilanteStrategy() : base(RoleName.Vigilante, Alignment.Town, 5)
+        public VigilanteStrategy() : base(RoleName.Vigilante, Alignment.Town, 5, "choose to take justice into your own hands and shoot someone", "defeat all mafia")
         {
         }
 
