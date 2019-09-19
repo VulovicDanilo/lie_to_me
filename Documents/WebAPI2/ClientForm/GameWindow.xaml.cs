@@ -280,6 +280,7 @@ namespace ClientForm
                             Player.Role = service.RequestStrategy(Context.GameId, Player.Id);
                             this.Title = Player.Role.RoleName.ToString();
                             Player.FakeName = Context.Players.Find(player => player.PlayerId == Player.Id).FakeName;
+                            this.Title += " - " + Player.FakeName;
                             Player.Number = Context.Players.Find(player => player.PlayerId == Player.Id).Number;
 
                             lblRoleName.Content = Player.FakeName + ": " + Player.Role.RoleName.ToString().ToLower();
@@ -299,7 +300,7 @@ namespace ClientForm
                         else if (newContext.GameState == GameState.Voting)
                         {
                             int i = 0;
-                            foreach (var playerControl in PlayerControls)
+                            foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                             {
                                 if (Player.Role.Alignment == Alignment.Mafia && newContext.Mafia.Exists(x => x.Number == i))
                                 {
@@ -318,7 +319,7 @@ namespace ClientForm
                         }
                         else if (newContext.GameState == GameState.Defence)
                         {
-                            foreach (var playerControl in PlayerControls)
+                            foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                             {
                                 playerControl.DisableButtons();
                             }
@@ -327,7 +328,7 @@ namespace ClientForm
                         {
                             if (!(Player.Number == newContext.Accused.Number))
                             {
-                                foreach (var playerControl in PlayerControls)
+                                foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                                 {
                                     if (playerControl.Number == newContext.Accused.Number)
                                     {
@@ -338,14 +339,14 @@ namespace ClientForm
                         }
                         else if (newContext.GameState == GameState.LastWord)
                         {
-                            foreach (var playerControl in PlayerControls)
+                            foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                             {
                                 playerControl.DisableButtons();
                             }
                         }
                         else if (newContext.GameState == GameState.Night)
                         {
-                            foreach (var playerControl in PlayerControls)
+                            foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                             {
                                 playerControl.DisableButtons();
                             }
@@ -363,7 +364,7 @@ namespace ClientForm
                                 {
                                     if (Player.Role.Alignment == Alignment.Mafia)
                                     {
-                                        foreach (var playerControl in PlayerControls)
+                                        foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                                         {
                                             if (newContext.Mafia.Exists(x => x.Number == playerControl.Number))
                                             {
@@ -377,7 +378,7 @@ namespace ClientForm
                                     }
                                     else
                                     {
-                                        foreach (var playerControl in PlayerControls)
+                                        foreach (var playerControl in PlayerControls.Where(x => x.Alive))
                                         {
                                             if (playerControl.Number != Player.Number)
                                             {

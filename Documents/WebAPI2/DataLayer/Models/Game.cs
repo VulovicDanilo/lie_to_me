@@ -66,7 +66,7 @@ namespace DataLayer.Models
             Day = 0;
             Durations.Add(GameState.NameSelection, 3);
             Durations.Add(GameState.RoleDistribution, 5);
-            Durations.Add(GameState.Discussion, 40);
+            Durations.Add(GameState.Discussion, 30);
             Durations.Add(GameState.Voting, 30);
             Durations.Add(GameState.Defence, 20);
             Durations.Add(GameState.Judgement, 15);
@@ -183,7 +183,7 @@ namespace DataLayer.Models
             var names = GetNamePool();
             Queue<string> queue = new Queue<string>(names);
 
-            Queue<RoleStrategy> strategies = new Queue<RoleStrategy>(GetStrategyPool(this.MAX_PLAYERS));
+            Queue<RoleStrategy> strategies = new Queue<RoleStrategy>(GetStrategyPool(this.Players.Count));
 
             int i = 0;
             foreach (var player in Players)
