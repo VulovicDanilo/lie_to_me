@@ -19,12 +19,14 @@ namespace DataLayer.DTOs
         public string OwnerName { get; set; }
         public int GameId { get; set; }
         public int Duration { get; set; }
+        public List<InGamePlayer> Mafia { get; set; }
 
         public ClientContext()
         {
             Players = new List<InGamePlayer>();
             DeadPlayers = new List<DeadPlayer>();
             Winners = new List<InGamePlayer>();
+            Mafia = new List<InGamePlayer>();
         }
 
         public ClientContext(Game game)
@@ -40,8 +42,9 @@ namespace DataLayer.DTOs
             Winners = new List<InGamePlayer>();
             Players = new List<InGamePlayer>();
             DeadPlayers = new List<DeadPlayer>();
+            Mafia = new List<InGamePlayer>();
 
-            foreach(var player in game.Players)
+            foreach (var player in game.Players)
             {
                 if (player.Alive == false)
                 {
@@ -50,6 +53,10 @@ namespace DataLayer.DTOs
                 else
                 {
                     Players.Add(InGamePlayer.ToDTO(player));
+                }
+                if(player.Role.Alignment == Alignment.Mafia)
+                {
+                    Mafia.Add(InGamePlayer.ToDTO(player));
                 }
             }
         }
