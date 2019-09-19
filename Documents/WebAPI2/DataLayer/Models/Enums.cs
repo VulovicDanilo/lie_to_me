@@ -82,8 +82,8 @@ namespace DataLayer.Models
 
     public enum JudgementVote
     {
-        For,
-        Against,
+        Guilty,
+        Innocent,
         Abstained
     }
 
