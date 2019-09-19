@@ -200,11 +200,11 @@ namespace ClientForm
 
             DeadMessageConsumer = new EventingBasicConsumer(channel);
             DeadMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
-            DeadMessageConsumerTag = Consume(MessageQueue, DeadMessageConsumer);
+            DeadMessageConsumerTag = Consume(DeadMessageQueue, DeadMessageConsumer);
 
             PrivateMessageConsumer = new EventingBasicConsumer(channel);
             PrivateMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
-            PrivateMessageConsumerTag = Consume(MessageQueue, PrivateMessageConsumer);
+            PrivateMessageConsumerTag = Consume(PrivateMessageQueue, PrivateMessageConsumer);
 
         }
 
@@ -233,7 +233,20 @@ namespace ClientForm
                 AddMessage(message);
             }));
         }
-
+        private void NightLog(object model, BasicDeliverEventArgs args)
+        {
+            var body = args.Body;
+            var message = Encoding.UTF8.GetString(body);
+            var routingKey = args.RoutingKey;
+            List<String> logs = JsonConvert.DeserializeObject<List<String>>(message);
+            Messages.Add("---------- logs ----------");
+            foreach(var log in logs)
+            {
+                Messages.Add(log);
+            }
+            Messages.Add("---------- logs ----------");
+            Refresh();
+        }
         private void ContextChange(object model, BasicDeliverEventArgs args)
         {
             var body = args.Body;
@@ -264,7 +277,10 @@ namespace ClientForm
                         {
                             PlayerService service = new PlayerService();
                             Player.Role = service.RequestStrategy(Context.GameId, Player.Id);
-                            lblRoleName.Content = "you are " + Player.Role.RoleName.ToString().ToLower();
+                            Player.FakeName = Context.Players.Find(player => player.PlayerId == Player.Id).FakeName;
+                            Player.Number = Context.Players.Find(player => player.PlayerId == Player.Id).Number;
+
+                            lblRoleName.Content = Player.FakeName + ": " + Player.Role.RoleName.ToString().ToLower();
                             txtRoleDescription.Text = "ability: " + Player.Role.Description.ToLower();
                             lblRoleGoal.Content = "goal: " + Player.Role.Goal;
                             UpdateUiRoleDistribution();
