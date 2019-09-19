@@ -12,6 +12,7 @@ namespace DataLayer.Models.Roles
         {
             this.Offence = Offence.None;
             this.Defence = Defence.None;
+            this.CanVisit = false;
         }
         public override void ExecuteAction(Game game, ExecuteActionModel model)
         {

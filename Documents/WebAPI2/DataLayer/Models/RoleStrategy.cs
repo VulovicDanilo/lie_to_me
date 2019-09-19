@@ -17,6 +17,7 @@ namespace DataLayer.Models
         public string Goal { get; set; }
         public Offence Offence { get; set; }
         public Defence Defence { get; set; }
+        public bool CanVisit { get; set; } = true;
 
         protected RoleStrategy(RoleName roleName, Alignment alignment, int priority, string description, string goal)
         {
