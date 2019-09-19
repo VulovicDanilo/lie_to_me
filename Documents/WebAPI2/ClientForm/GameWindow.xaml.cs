@@ -294,6 +294,26 @@ namespace ClientForm
                         {
                             UpdateUiGame();
                         }
+                        else if (newContext.GameState == GameState.Voting)
+                        {
+                            int i = 0;
+                            foreach(var playerControl in PlayerControls)
+                            {
+                                if (Player.Role.Alignment == Alignment.Mafia && newContext.Mafia.Contains(x => x.Number == i))
+                                {
+
+                                }
+                                else if (Player.Number == i)
+                                {
+
+                                }
+                                else
+                                {
+                                    playerControl.EnableVoting();
+                                }
+                                i++;
+                            }
+                        }
                     }
                     Context = newContext; // for now
                 }
