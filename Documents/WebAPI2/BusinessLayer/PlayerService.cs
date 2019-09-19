@@ -21,6 +21,8 @@ namespace BusinessLayer
         private readonly string ChooseNamePath = "/api/players/name";
         private readonly string RequestRolePath = "/api/players/request_role";
         private readonly string ChatMessagePath = "/api/players/send_message";
+        private readonly string VotingPath = "/api/players/voting_vote";
+        private readonly string JudgementPath = "api/players/judgement_vote";
         public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
@@ -175,6 +177,48 @@ namespace BusinessLayer
                 HttpResponseMessage msg = client.PostAsync(ChatMessagePath, content).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false; 
+            }
+        }
+        public bool Vote(int gameId, int voterNumber, int votedNumber)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+
+
+                var values = new Dictionary<string, string>()
+                {
+                    {"gameId", gameId.ToString()},
+                    {"voterNumber", voterNumber.ToString()},
+                    {"votedNumber", votedNumber.ToString() }
+                };
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(VotingPath, content).Result;
+
+                return msg.StatusCode == HttpStatusCode.OK ? true : false;
+            }
+        }
+        public bool JudgementVote(int gameId, int voterNumber, JudgementVote vote)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+
+
+                var values = new Dictionary<string, string>()
+                {
+                    {"gameId", gameId.ToString()},
+                    {"voterNumber", voterNumber.ToString()},
+                    {"vote", vote.ToString() }
+                };
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(JudgementPath, content).Result;
+
+                return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }
         }
     }
