@@ -28,6 +28,10 @@ namespace ClientForm.Controls
         public PlayerControl()
         {
             InitializeComponent();
+            btnAction.Visibility = Visibility.Collapsed;
+            btnGuilty.Visibility = Visibility.Collapsed;
+            btnInnocent.Visibility = Visibility.Collapsed;
+            btnVote.Visibility = Visibility.Collapsed;
         }
 
         public PlayerControl(InGamePlayer player)
@@ -59,6 +63,29 @@ namespace ClientForm.Controls
             bitmapImage.Freeze();
             imgAvatar.Source = bitmapImage;
             imgAvatar.Stretch = Stretch.Fill;
+        }
+
+        public void EnableVoting()
+        {
+            btnVote.Visibility = Visibility.Visible;
+            btnAction.Visibility = Visibility.Collapsed;
+            btnGuilty.Visibility = Visibility.Collapsed;
+            btnInnocent.Visibility = Visibility.Collapsed;
+        }
+
+        public void EnableAction()
+        {
+            btnAction.Visibility = Visibility.Visible;
+            btnVote.Visibility = Visibility.Collapsed;
+            btnGuilty.Visibility = Visibility.Collapsed;
+            btnInnocent.Visibility = Visibility.Collapsed;
+        }
+        public void EnableJudgement()
+        {
+            btnAction.Visibility = Visibility.Collapsed;
+            btnVote.Visibility = Visibility.Collapsed;
+            btnGuilty.Visibility = Visibility.Visible;
+            btnInnocent.Visibility = Visibility.Visible;
         }
     }
 }

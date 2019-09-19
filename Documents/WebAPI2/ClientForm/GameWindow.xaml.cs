@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -44,6 +45,9 @@ namespace ClientForm
         private EventingBasicConsumer PrivateMessageConsumer = null;
         private string PrivateMessageConsumerTag { get; set; }
 
+        private int VotingChoice { get; set; }
+        private JudgementVote JudgementChoice { get; set; } = JudgementVote.Abstained;
+        private ExecuteActionModel ActionChoice { get; set; }
 
         private List<PlayerControl> PlayerControls { get; set; }
 
@@ -333,6 +337,10 @@ namespace ClientForm
             }
             foreach (var playerControl in PlayerControls)
             {
+                playerControl.btnVote.Click += HandleVote;
+                playerControl.btnInnocent.Click += HandleInnocent;
+                playerControl.btnGuilty.Click += HandleGuilty;
+                playerControl.btnAction.Click += HandleAction;
                 canvasGame.Children.Add(playerControl);
             }
         }
@@ -417,6 +425,69 @@ namespace ClientForm
                 service.SendChatMessage(message);
             }
             txtChat.Clear();
+        }
+        private void HandleVote(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var grid = button.Parent as Grid;
+            var playerControl = grid.Parent as PlayerControl;
+
+            int newVotingChoice = playerControl.Number;
+            if (VotingChoice != newVotingChoice)
+            {
+                PlayerService service = new PlayerService();
+                service.Vote(Context.GameId, Player.Number, newVotingChoice);
+                VotingChoice = newVotingChoice;
+            }
+        }
+        private void HandleAction(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var grid = button.Parent as Grid;
+            var playerControl = grid.Parent as PlayerControl;
+
+            int doActionOn = playerControl.Number;
+            if (ActionChoice == null)
+            {
+                ActionChoice = new ExecuteActionModel(Player.Number, doActionOn, Context.GameId);
+                PlayerService service = new PlayerService();
+                service.DoAction(ActionChoice);
+            }
+            if (ActionChoice.To != doActionOn)
+            {
+                PlayerService service = new PlayerService();
+                service.UndoAction(ActionChoice);
+                ActionChoice = new ExecuteActionModel(Player.Number, doActionOn, Context.GameId);
+                service.DoAction(ActionChoice);
+            }
+        }
+
+        private void HandleGuilty(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var grid = button.Parent as Grid;
+            var playerControl = grid.Parent as PlayerControl;
+
+            if (JudgementVote.Guilty != JudgementChoice)
+            {
+                JudgementChoice = JudgementVote.Guilty;
+                PlayerService service = new PlayerService();
+                service.JudgementVote(Context.GameId, Player.Number, JudgementChoice);
+            }
+        }
+
+        private void HandleInnocent(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var grid = button.Parent as Grid;
+            var playerControl = grid.Parent as PlayerControl;
+
+            if (JudgementVote.Innocent != JudgementChoice)
+            {
+                JudgementChoice = JudgementVote.Innocent;
+                PlayerService service = new PlayerService();
+                service.JudgementVote(Context.GameId, Player.Number, JudgementChoice);
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ namespace DataLayer.DTOs
         public string OwnerName { get; set; }
         public int GameId { get; set; }
         public int Duration { get; set; }
+        public InGamePlayer Accused { get; set; }
 
         public ClientContext()
         {
@@ -36,6 +37,10 @@ namespace DataLayer.DTOs
             OwnerName = game.Owner.User.UserName;
             Duration = game.Duration;
             MaxPlayers = game.MAX_PLAYERS;
+            if (game.Accused!= null)
+            {
+                Accused = InGamePlayer.ToDTO(game.Accused);
+            }
 
             Winners = new List<InGamePlayer>();
             Players = new List<InGamePlayer>();

@@ -17,10 +17,11 @@ namespace DataLayer.DTOs
 
         }
 
-        public ExecuteActionModel(int who, int to)
+        public ExecuteActionModel(int who, int to,int gameId)
         {
             Who = who;
             To = to;
+            this.gameId = gameId;
         }
     }
 }

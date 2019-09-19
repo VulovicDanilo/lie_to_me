@@ -358,11 +358,11 @@ namespace DataLayer.Models
             int judgeAgainst = 0;
             foreach (var vote in judgementVotes)
             {
-                if (vote.Value == JudgementVote.For)
+                if (vote.Value == JudgementVote.Guilty)
                 {
                     judgeFor++;
                 }
-                else if (vote.Value == JudgementVote.Against)
+                else if (vote.Value == JudgementVote.Innocent)
                 {
                     judgeAgainst++;
                 }

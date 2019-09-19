@@ -5,11 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClientForm.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="600">
+             d:DesignHeight="40.9" d:DesignWidth="467">
 
     <Grid>
         <Label x:Name="labName" Content="Number Name" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="36" Width="281" VerticalContentAlignment="Center" FontSize="18"/>
         <Image x:Name="imgAvatar" HorizontalAlignment="Left" Height="100" Margin="500,0,0,0" VerticalAlignment="Top" Width="100"/>
+        <Button x:Name="btnVote" Content="Vote" HorizontalAlignment="Left" Margin="383,11,0,0" VerticalAlignment="Top" Width="74" Visibility="Collapsed"/>
+        <Button x:Name="btnGuilty" Content="Guilty" HorizontalAlignment="Left" Margin="301,10,0,0" VerticalAlignment="Top" Width="76" Visibility="Collapsed"/>
+        <Button x:Name="btnInnocent" Content="Innocent" HorizontalAlignment="Left" Margin="382,10,0,0" VerticalAlignment="Top" Width="75" Visibility="Collapsed"/>
+        <Button x:Name="btnAction" Content="Action" HorizontalAlignment="Left" Margin="382,10,0,0" VerticalAlignment="Top" Width="76" Visibility="Collapsed"/>
     </Grid>
 
 </UserControl>
