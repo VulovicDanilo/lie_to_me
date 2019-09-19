@@ -45,7 +45,7 @@ namespace ClientForm
         private EventingBasicConsumer PrivateMessageConsumer = null;
         private string PrivateMessageConsumerTag { get; set; }
 
-        private int VotingChoice { get; set; }
+        private int VotingChoice { get; set; } = -1;
         private JudgementVote JudgementChoice { get; set; } = JudgementVote.Abstained;
         private ExecuteActionModel ActionChoice { get; set; }
 
@@ -324,11 +324,14 @@ namespace ClientForm
                         }
                         else if (newContext.GameState == GameState.Judgement)
                         {
-                            foreach (var playerControl in PlayerControls)
+                            if (!(Player.Number == newContext.Accused.Number))
                             {
-                                if (playerControl.Number == newContext.Accused.Number)
+                                foreach (var playerControl in PlayerControls)
                                 {
-                                    playerControl.EnableJudgement();
+                                    if (playerControl.Number == newContext.Accused.Number)
+                                    {
+                                        playerControl.EnableJudgement();
+                                    }
                                 }
                             }
                         }
@@ -386,6 +389,12 @@ namespace ClientForm
                         }
                     }
                     Context = newContext; // for now
+
+                    foreach(var dead in Context.DeadPlayers)
+                    {
+                        PlayerControls[dead.Number].Die();
+                        PlayerControls[dead.Number].Background = Brushes.Red;
+                    }
                 }
                 if (Context.OwnerId == this.Player.Id)
                 {
@@ -413,18 +422,8 @@ namespace ClientForm
                 PlayerControls.Add(playerControl);
 
                 i++;
-            }
-            while (i < 10)
-            {
-                var playerControl = new PlayerControl
-                {
-                    Margin = new Thickness(10, i * controlHeight, 0, 0),
-                    Width = controlWidth,
-                    Height = controlHeight
-                };
-                PlayerControls.Add(playerControl);
-                i++;
-            }
+            };
+            
             foreach (var playerControl in PlayerControls)
             {
                 playerControl.btnVote.Click += HandleVote;
@@ -445,14 +444,14 @@ namespace ClientForm
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            if (Context.Players.Count <= Context.MaxPlayers)
+            if (Context.Players.Count >= 3)
             {
                 GameService service = new GameService();
                 service.StartNameSelectionPhase(Context.GameId);
             }
             else
             {
-                AddMessage("not enough players. " + (Context.MaxPlayers - Context.Players.Count) + " more...");
+                AddMessage("not enough players. " + (3 - Context.Players.Count) + " more...");
             }
         }
         private void AddMessage(string info)

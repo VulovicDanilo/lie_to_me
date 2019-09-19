@@ -199,7 +199,7 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
             game.ResetTimerEvents();
 
-            game.Timer.Elapsed += (sender, e) => DiscussionPhaseEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => DiscussionPhaseEnded(sender, e, gameId));
             game.Timer.Interval = game.Duration * 1000;
             game.Timer.Start();
 
@@ -225,7 +225,7 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
             game.ResetTimerEvents();
 
-            game.Timer.Elapsed += (sender, e) => VotingPhaseEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => VotingPhaseEnded(sender, e, gameId));
             game.Timer.Interval = game.Duration * 1000;
             game.Timer.Start();
 
@@ -237,6 +237,7 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Timer.Stop();
+            game.ResetTimerEvents();
 
             game.ResolveVoting();
 
@@ -258,11 +259,11 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
             game.ResetTimerEvents();
 
-            game.Timer.Elapsed += (sender, e) => DefensePhaseEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => DefensePhaseEnded(sender, e, gameId));
             game.Timer.Interval = game.Duration * 1000;
             game.Timer.Start();
 
-            QueueService.BroadcastLobbyInfo(gameId.ToString(), "defense phase started");
+            QueueService.BroadcastLobbyInfo(gameId.ToString(), "defense phase started, accused: " + game.Accused.FakeName);
 
         }
 
@@ -270,8 +271,11 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Timer.Stop();
+            game.ResetTimerEvents();
 
             game.ResolveDefence();
+
+            QueueService.BroadcastContext(gameId.ToString(), game);
 
             JudgementPhase(gameId);
         }
@@ -282,7 +286,7 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
             game.ResetTimerEvents();
 
-            game.Timer.Elapsed += (sender, e) => JudgementPhaseEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => JudgementPhaseEnded(sender, e, gameId));
             game.Timer.Interval = game.Duration * 1000;
             game.Timer.Start();
 
@@ -294,6 +298,7 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Timer.Stop();
+            game.ResetTimerEvents();
 
             game.ResolveJudgement();
 
@@ -315,7 +320,7 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
             game.ResetTimerEvents();
 
-            game.Timer.Elapsed += (sender, e) => LastWordPhaseEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => LastWordPhaseEnded(sender, e, gameId));
             game.Timer.Interval = game.Duration * 1000;
             game.Timer.Start();
 
@@ -327,8 +332,13 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Timer.Stop();
+            game.ResetTimerEvents();
 
+            game.Accused = null;
             game.ResolveLastWord();
+
+            QueueService.BroadcastContext(gameId.ToString(), game);
+
 
             if (game.GameState != GameState.GameEnd)
             { 
@@ -346,7 +356,7 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
             game.ResetTimerEvents();
 
-            game.Timer.Elapsed += (sender, e) => NightPhaseEnded(sender, e, gameId);
+            game.addElapsedEvent((sender, e) => NightPhaseEnded(sender, e, gameId));
             game.Timer.Interval = game.Duration * 1000;
             game.Timer.Start();
 
@@ -358,6 +368,7 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.Timer.Stop();
+            game.ResetTimerEvents();
 
             game.ResolveNight();
 
@@ -377,6 +388,7 @@ namespace WebAPI2.GameStuff
         private static void EndGamePhase(int gameId)
         {
             var game = Get(gameId);
+            game.ResetTimerEvents();
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "game ended");
             QueueService.BroadcastContext(gameId.ToString(), game);
         }

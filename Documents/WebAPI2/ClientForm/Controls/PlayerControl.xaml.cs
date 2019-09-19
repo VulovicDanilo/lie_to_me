@@ -25,6 +25,7 @@ namespace ClientForm.Controls
         public int Number { get; set; }
         public string FakeName { get; set; }
         public string ImagePath { get; set; }
+        public bool Alive { get; set; }
         public PlayerControl()
         {
             InitializeComponent();
@@ -40,6 +41,7 @@ namespace ClientForm.Controls
             Number = player.Number;
             FakeName = player.FakeName;
             ImagePath = player.ImagePath;
+            Alive = player.Alive;
             Fill();
         }
 
@@ -67,32 +69,50 @@ namespace ClientForm.Controls
 
         public void EnableVoting()
         {
-            btnVote.Visibility = Visibility.Visible;
-            btnAction.Visibility = Visibility.Collapsed;
-            btnGuilty.Visibility = Visibility.Collapsed;
-            btnInnocent.Visibility = Visibility.Collapsed;
+            if (Alive)
+            {
+                btnVote.Visibility = Visibility.Visible;
+                btnAction.Visibility = Visibility.Collapsed;
+                btnGuilty.Visibility = Visibility.Collapsed;
+                btnInnocent.Visibility = Visibility.Collapsed;
+            }
         }
 
         public void EnableAction()
         {
-            btnAction.Visibility = Visibility.Visible;
-            btnVote.Visibility = Visibility.Collapsed;
-            btnGuilty.Visibility = Visibility.Collapsed;
-            btnInnocent.Visibility = Visibility.Collapsed;
+            if (Alive)
+            {
+                btnAction.Visibility = Visibility.Visible;
+                btnVote.Visibility = Visibility.Collapsed;
+                btnGuilty.Visibility = Visibility.Collapsed;
+                btnInnocent.Visibility = Visibility.Collapsed;
+            }
         }
         public void EnableJudgement()
         {
-            btnAction.Visibility = Visibility.Collapsed;
-            btnVote.Visibility = Visibility.Collapsed;
-            btnGuilty.Visibility = Visibility.Visible;
-            btnInnocent.Visibility = Visibility.Visible;
+            if (Alive)
+            {
+                btnAction.Visibility = Visibility.Collapsed;
+                btnVote.Visibility = Visibility.Collapsed;
+                btnGuilty.Visibility = Visibility.Visible;
+                btnInnocent.Visibility = Visibility.Visible;
+            }
         }
         public void DisableButtons()
         {
-            btnAction.Visibility = Visibility.Collapsed;
-            btnVote.Visibility = Visibility.Collapsed;
-            btnGuilty.Visibility = Visibility.Collapsed;
-            btnInnocent.Visibility = Visibility.Collapsed;
+            if (Alive)
+            {
+                btnAction.Visibility = Visibility.Collapsed;
+                btnVote.Visibility = Visibility.Collapsed;
+                btnGuilty.Visibility = Visibility.Collapsed;
+                btnInnocent.Visibility = Visibility.Collapsed;
+            }
+        }
+        public void Die()
+        {
+            Alive = false;
+            Background = Brushes.Red;
+            labName.Content += " - dead...";
         }
     }
 }

@@ -59,9 +59,12 @@ namespace DataLayer.DTOs
                 {
                     Players.Add(InGamePlayer.ToDTO(player));
                 }
-                if(player.Role.Alignment == Alignment.Mafia)
+                if (player.Role != null)
                 {
-                    Mafia.Add(InGamePlayer.ToDTO(player));
+                    if (player.Role.Alignment == Alignment.Mafia)
+                    {
+                        Mafia.Add(InGamePlayer.ToDTO(player));
+                    }
                 }
             }
         }
