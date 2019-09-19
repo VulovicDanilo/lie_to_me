@@ -185,13 +185,16 @@ namespace WebAPI2.GameStuff
 
         private static void StartGame(int gameId)
         {
-
+            var game = Get(gameId);
+            game.GameState = GameState.Discussion;
             DiscussionPhase(gameId);
+
+            QueueService.BroadcastContext(gameId.ToString(), game);
+
         }
         private static void DiscussionPhase(int gameId)
         {
             var game = Get(gameId);
-            game.GameState = GameState.Discussion;
             game.Timer.Stop();
             game.ResetTimerEvents();
 
@@ -209,6 +212,9 @@ namespace WebAPI2.GameStuff
             game.Timer.Stop();
 
             game.ResolveDiscussion();
+
+            QueueService.BroadcastContext(gameId.ToString(), game);
+
 
             VotingPhase(gameId);
         }
