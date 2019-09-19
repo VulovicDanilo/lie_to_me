@@ -320,24 +320,31 @@ namespace DataLayer.Models
         {
             GameState = GameState.Voting;
         }
-        private List<int> votes = new List<int>();
+        private Dictionary<int,int> votes = new Dictionary<int, int>();
         public void ResolveVoting()
         {
-            var most = votes.GroupBy(i => i)
-                .OrderByDescending(grp => grp.Count())
-                .Select(grp => grp.Key).First();
-            var mostCount = votes.Count(x => x == most);
-            var aliveCount = Players.Count(x => x.Alive);
-            if (mostCount >= aliveCount / 2)
-            {
-                Accused = Players.Find(x => x.Id == most);
-                GameState = GameState.Defence;
-            }
-            else
+            if (votes.Count == 0)
             {
                 GameState = GameState.Night;
             }
-            votes.RemoveAll(x => true);
+            else
+            {
+                var most = votes.GroupBy(i => i.Value)
+                    .OrderByDescending(grp => grp.Count())
+                    .Select(grp => grp.Key).First();
+                var mostCount = votes.Count(x => x.Value == most);
+                var aliveCount = Players.Count(x => x.Alive);
+                if (mostCount >= aliveCount / 2)
+                {
+                    Accused = Players.Find(x => x.Id == most);
+                    GameState = GameState.Defence;
+                }
+                else
+                {
+                    GameState = GameState.Night;
+                }
+            }
+            votes.Clear();
         }
         public void ResolveDefence()
         {
@@ -456,11 +463,11 @@ namespace DataLayer.Models
             GameState = GameState.GameEnd;
         }
 
-        public void AddVote(int vote)
+        public void AddVote(int voter,int voted)
         {
             if (GameState == GameState.Voting)
             {
-                votes.Add(vote);
+                votes.Add(voter,voted);
             }
         }
         public void AddJudgementVote(JudgementVote vote)
