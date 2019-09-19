@@ -146,7 +146,6 @@ namespace ClientForm
             channel.ExchangeDeclare(exchange: ExchangeName, type: "topic");
             return channel.QueueDeclare(exclusive: false).QueueName;
         }
-
         private void InitContextListener()
         {
             string contextKey = ((int)MessageQueueChannel.ContextBroadcast).ToString();
@@ -204,12 +203,10 @@ namespace ClientForm
 
             DeadMessageConsumer = new EventingBasicConsumer(channel);
             DeadMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
-            DeadMessageConsumerTag = Consume(DeadMessageQueue, DeadMessageConsumer);
 
             PrivateMessageConsumer = new EventingBasicConsumer(channel);
             PrivateMessageConsumer.Received += (model, ea) => NightLog(model, ea);
             PrivateMessageConsumerTag = Consume(PrivateMessageQueue, PrivateMessageConsumer);
-
         }
 
         private string Consume(string queueName, EventingBasicConsumer consumer)
