@@ -10,15 +10,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace ClientForm
@@ -36,6 +29,7 @@ namespace ClientForm
         private string LobbyQueue { get; set; }
         private string MessageQueue { get; set; }
         private string DeadMessageQueue { get; set; }
+        private string PrivateMessageQueue { get; set; }
         private ConnectionFactory connectionFactory;
         private IConnection connection;
         private IModel channel;
@@ -47,6 +41,8 @@ namespace ClientForm
         private string MessageConsumerTag { get; set; }
         private EventingBasicConsumer DeadMessageConsumer = null;
         private string DeadMessageConsumerTag { get; set; }
+        private EventingBasicConsumer PrivateMessageConsumer = null;
+        private string PrivateMessageConsumerTag { get; set; }
 
 
         private List<PlayerControl> PlayerControls { get; set; }
@@ -82,11 +78,11 @@ namespace ClientForm
         private void TickHandler(object sender, EventArgs e)
         {
             timer.Stop();
-            if(timerSeconds != 0)
+            if (timerSeconds != 0)
             {
                 timerSeconds--;
                 var timespan = TimeSpan.FromSeconds(timerSeconds);
-                this.lblTimer.Content = string.Format("{1:D2}m:{2:D2}s",timespan.Hours,timespan.Minutes,timespan.Seconds);
+                this.lblTimer.Content = string.Format("{1:D2}m:{2:D2}s", timespan.Hours, timespan.Minutes, timespan.Seconds);
             }
             timer.Start();
         }
@@ -153,11 +149,13 @@ namespace ClientForm
             string lobbyInfoKey = ((int)MessageQueueChannel.LobbyInfo).ToString();
             string messageKey = ((int)MessageQueueChannel.ChatMessageAlive).ToString();
             string deadMessageKey = ((int)MessageQueueChannel.ChatMessageDead).ToString();
+            string privateMessageKey = (MessageQueueChannel.PrivateChannelOffset + Player.Id).ToString();
 
             ContextQueue = GetQueue();
             LobbyQueue = GetQueue();
             MessageQueue = GetQueue();
             DeadMessageQueue = GetQueue();
+            PrivateMessageQueue = GetQueue();
 
             if (channel != null)
             {
@@ -165,14 +163,15 @@ namespace ClientForm
                 channel.QueueUnbind(LobbyQueue, ExchangeName, lobbyInfoKey, null);
                 channel.QueueUnbind(MessageQueue, ExchangeName, messageKey, null);
                 channel.QueueUnbind(DeadMessageQueue, ExchangeName, deadMessageKey, null);
+                channel.QueueUnbind(PrivateMessageQueue, ExchangeName, privateMessageKey, null);
             }
 
-            channel.QueueBind(queue: ContextQueue, 
-                exchange: ExchangeName, 
+            channel.QueueBind(queue: ContextQueue,
+                exchange: ExchangeName,
                 routingKey: contextKey);
 
-            channel.QueueBind(queue: LobbyQueue, 
-                exchange: ExchangeName, 
+            channel.QueueBind(queue: LobbyQueue,
+                exchange: ExchangeName,
                 routingKey: lobbyInfoKey);
 
             channel.QueueBind(queue: MessageQueue,
@@ -183,19 +182,29 @@ namespace ClientForm
                 exchange: ExchangeName,
                 routingKey: deadMessageKey);
 
+            channel.QueueBind(queue: PrivateMessageQueue,
+                exchange: ExchangeName,
+                routingKey: privateMessageKey);
+
             ContextConsumer = new EventingBasicConsumer(channel);
             ContextConsumer.Received += (model, ea) => ContextChange(model, ea);
+            ContextConsumerTag = Consume(ContextQueue, ContextConsumer);
+
             LobbyInfoConsumer = new EventingBasicConsumer(channel);
             LobbyInfoConsumer.Received += (model, ea) => MessageArrive(model, ea);
-            MessageConsumer= new EventingBasicConsumer(channel);
+            LobbyInfoConsumerTag = Consume(LobbyQueue, LobbyInfoConsumer);
+
+            MessageConsumer = new EventingBasicConsumer(channel);
             MessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
+            MessageConsumerTag = Consume(MessageQueue, MessageConsumer);
+
             DeadMessageConsumer = new EventingBasicConsumer(channel);
             DeadMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
-
-            ContextConsumerTag = Consume(ContextQueue, ContextConsumer);
-            LobbyInfoConsumerTag = Consume(LobbyQueue, LobbyInfoConsumer);
-            MessageConsumerTag = Consume(MessageQueue, MessageConsumer);
             DeadMessageConsumerTag = Consume(MessageQueue, DeadMessageConsumer);
+
+            PrivateMessageConsumer = new EventingBasicConsumer(channel);
+            PrivateMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
+            PrivateMessageConsumerTag = Consume(MessageQueue, PrivateMessageConsumer);
 
         }
 
@@ -208,7 +217,7 @@ namespace ClientForm
 
         private void StopConsume(string tag)
         {
-            if(channel != null)
+            if (channel != null)
             {
                 channel.BasicCancel(tag);
             }
@@ -243,7 +252,7 @@ namespace ClientForm
                 }
                 else
                 {
-                    if(Context.GameState != newContext.GameState)
+                    if (Context.GameState != newContext.GameState)
                     {
                         this.lblState.Content = newContext.GameState.ToString();
                         this.timerSeconds = newContext.Duration;
@@ -282,31 +291,31 @@ namespace ClientForm
         }
         private void DrawPlayerControls()
         {
-            int i = 0; 
+            int i = 0;
             double controlWidth = canvasGame.Width - 50;
             double controlHeight = canvasGame.Height / 10 - 1;
-            foreach(var player in Context.Players)
+            foreach (var player in Context.Players)
             {
                 var playerControl = new PlayerControl(player);
                 playerControl.Height = controlHeight;
                 playerControl.Width = controlWidth;
-                playerControl.Margin = new Thickness(10, i* controlHeight, 0, 0);
+                playerControl.Margin = new Thickness(10, i * controlHeight, 0, 0);
                 PlayerControls.Add(playerControl);
 
                 i++;
             }
-            while(i < 10)
+            while (i < 10)
             {
                 var playerControl = new PlayerControl
                 {
-                    Margin = new Thickness(10, i* controlHeight, 0, 0),
+                    Margin = new Thickness(10, i * controlHeight, 0, 0),
                     Width = controlWidth,
                     Height = controlHeight
                 };
                 PlayerControls.Add(playerControl);
                 i++;
             }
-            foreach(var playerControl in PlayerControls)
+            foreach (var playerControl in PlayerControls)
             {
                 canvasGame.Children.Add(playerControl);
             }
@@ -362,7 +371,7 @@ namespace ClientForm
             string fakename = txtFakeName.Text;
             PlayerService service = new PlayerService();
             bool success = service.AddFakeName(this.Player.Id, fakename, Context.GameId);
-            if(success)
+            if (success)
             {
                 btnNameSubmit.IsEnabled = false;
                 lblFakeNameStatus.Content = "fake name added";
@@ -376,7 +385,7 @@ namespace ClientForm
 
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
-            if (txtChat.Text!= "" && Context.GameState != GameState.Lobby && 
+            if (txtChat.Text != "" && Context.GameState != GameState.Lobby &&
                 Context.GameState != GameState.NameSelection)
             {
                 string text = txtChat.Text;

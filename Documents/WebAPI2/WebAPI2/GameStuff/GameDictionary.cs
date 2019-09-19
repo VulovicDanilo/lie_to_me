@@ -1,5 +1,6 @@
 ﻿using DataLayer.Models;
 using DataLayer.Repositories;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Concurrent;
@@ -355,7 +356,7 @@ namespace WebAPI2.GameStuff
             game.ResolveNight();
 
             QueueService.BroadcastContext(gameId.ToString(), game);
-
+            SendPrivateMessages(game);
 
             if (game.GameState != GameState.GameEnd)
             {
@@ -366,12 +367,21 @@ namespace WebAPI2.GameStuff
                 EndGamePhase(gameId);
             }
         }
-
         private static void EndGamePhase(int gameId)
         {
             var game = Get(gameId);
             QueueService.BroadcastLobbyInfo(gameId.ToString(), "game ended");
             QueueService.BroadcastContext(gameId.ToString(), game);
         }
+        private static void SendPrivateMessages(Game game)
+        {
+            string exchangeName = game.Id.ToString();
+            foreach(var player in game.Players)
+            {
+                var logs = JsonConvert.SerializeObject(player.NightLog);
+                QueueService.SendPrivateMessage(exchangeName, logs, player.Id);
+            }
+        }
+
     }
 }
