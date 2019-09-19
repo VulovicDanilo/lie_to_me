@@ -155,7 +155,7 @@ namespace WebAPI2.Controllers
             var game = GameDictionary.Get(message.GameId);
             var name = game.Players.Where(player => player.Id == message.PlayerId).FirstOrDefault().FakeName;
             var content = name + ": " + message.Content;
-            QueueService.BroadcastMessage(game.Id.ToString(), content, message.PlayerId);
+            QueueService.BroadcastLobbyInfo(game.Id.ToString(), content);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

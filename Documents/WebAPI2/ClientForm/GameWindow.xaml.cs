@@ -422,7 +422,7 @@ namespace ClientForm
                     Time = DateTime.Now,
                     GameState = Context.GameState,
                 };
-                service.SendChatMessage(message);
+               service.SendChatMessage(message);
             }
             txtChat.Clear();
         }
