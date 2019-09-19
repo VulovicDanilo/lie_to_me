@@ -264,8 +264,8 @@ namespace ClientForm
                         {
                             PlayerService service = new PlayerService();
                             Player.Role = service.RequestStrategy(Context.GameId, Player.Id);
-                            lblRoleName.Content = "you are " + Player.Role.RoleName;
-                            lblRoleDescription.Content = Player.Role.Description;
+                            lblRoleName.Content = "you are " + Player.Role.RoleName.ToString().ToLower();
+                            txtRoleDescription.Text = "ability: " + Player.Role.Description.ToLower();
                             lblRoleGoal.Content = "goal: " + Player.Role.Goal;
                             UpdateUiRoleDistribution();
                         }

@@ -24,13 +24,15 @@
             <Label x:Name="lblFakeNameStatus" Content="" Canvas.Left="148" Canvas.Top="305" Width="210" Height="37" Foreground="Red" HorizontalContentAlignment="Center"/>
 
         </Canvas>
-        <Canvas x:Name="canvasRoleNameDisplay" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="2" Visibility="Hidden">
+        <Canvas x:Name="canvasRoleNameDisplay" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="2">
             <Label x:Name="lblRoleName" Content="RoleName" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="39" FontSize="24" Height="48" Width="323"/>
-            <Label x:Name="lblRoleDescription" Content="RoleDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="88" FontSize="24" Height="151" Width="323" MaxWidth="323"/>
+            <Label x:Name="lblRoleDescription" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="88" FontSize="24" Height="151" Width="323" MaxWidth="323">
+                <TextBlock x:Name="txtRoleDescription" TextWrapping="Wrap" />
+            </Label>
             <Label x:Name="lblRoleGoal" Content="RoleGoal" VerticalAlignment="Center" HorizontalAlignment="Center" Canvas.Left="66" Canvas.Top="244" FontSize="24" Height="152" Width="323" RenderTransformOrigin="0.5,0.5" MaxWidth="323"/>
 
         </Canvas>
-        <Canvas x:Name="canvasGame" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="1"/>
+        <Canvas x:Name="canvasGame" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="517" Panel.ZIndex="1" Visibility="Collapsed"/>
         <Label x:Name="lblState" Content="State" HorizontalAlignment="Left" Margin="522,4,0,0" VerticalAlignment="Top" Width="153" Grid.ColumnSpan="2" FontSize="18"/>
         <TextBox x:Name="txtChat" HorizontalAlignment="Left" Height="39" Margin="522,419,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="242" Grid.ColumnSpan="2"/>
         <Button x:Name="btnSend" Content="send" HorizontalAlignment="Left" VerticalAlignment="Top" Width="79" Grid.Column="1" Margin="122,418,0,0" Height="40" Click="BtnSend_Click"/>
