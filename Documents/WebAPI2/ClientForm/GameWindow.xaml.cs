@@ -34,6 +34,8 @@ namespace ClientForm
         private string ExchangeName { get; set; }
         private string ContextQueue { get; set; }
         private string LobbyQueue { get; set; }
+        private string MessageQueue { get; set; }
+        private string DeadMessageQueue { get; set; }
         private ConnectionFactory connectionFactory;
         private IConnection connection;
         private IModel channel;
@@ -41,6 +43,11 @@ namespace ClientForm
         private string ContextConsumerTag = "";
         private EventingBasicConsumer LobbyInfoConsumer = null;
         private string LobbyInfoConsumerTag = "";
+        private EventingBasicConsumer MessageConsumer = null;
+        private string MessageConsumerTag { get; set; }
+        private EventingBasicConsumer DeadMessageConsumer = null;
+        private string DeadMessageConsumerTag { get; set; }
+
 
         private List<PlayerControl> PlayerControls { get; set; }
 
@@ -144,12 +151,20 @@ namespace ClientForm
         {
             string contextKey = ((int)MessageQueueChannel.ContextBroadcast).ToString();
             string lobbyInfoKey = ((int)MessageQueueChannel.LobbyInfo).ToString();
+            string messageKey = ((int)MessageQueueChannel.ChatMessageAlive).ToString();
+            string deadMessageKey = ((int)MessageQueueChannel.ChatMessageDead).ToString();
+
             ContextQueue = GetQueue();
             LobbyQueue = GetQueue();
+            MessageQueue = GetQueue();
+            DeadMessageQueue = GetQueue();
+
             if (channel != null)
             {
                 channel.QueueUnbind(ContextQueue, ExchangeName, contextKey, null);
                 channel.QueueUnbind(LobbyQueue, ExchangeName, lobbyInfoKey, null);
+                channel.QueueUnbind(MessageQueue, ExchangeName, messageKey, null);
+                channel.QueueUnbind(DeadMessageQueue, ExchangeName, deadMessageKey, null);
             }
 
             channel.QueueBind(queue: ContextQueue, 
@@ -160,24 +175,47 @@ namespace ClientForm
                 exchange: ExchangeName, 
                 routingKey: lobbyInfoKey);
 
+            channel.QueueBind(queue: MessageQueue,
+                exchange: ExchangeName,
+                routingKey: messageKey);
+
+            channel.QueueBind(queue: DeadMessageQueue,
+                exchange: ExchangeName,
+                routingKey: deadMessageKey);
+
             ContextConsumer = new EventingBasicConsumer(channel);
             ContextConsumer.Received += (model, ea) => ContextChange(model, ea);
             LobbyInfoConsumer = new EventingBasicConsumer(channel);
-            LobbyInfoConsumer.Received += (model, ea) => LobbyInfoArrived(model, ea);
+            LobbyInfoConsumer.Received += (model, ea) => MessageArrive(model, ea);
+            MessageConsumer= new EventingBasicConsumer(channel);
+            MessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
+            DeadMessageConsumer = new EventingBasicConsumer(channel);
+            DeadMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
 
-            ContextConsumerTag = channel.BasicConsume(queue: ContextQueue, 
-                autoAck: true,
-                consumer: ContextConsumer);
-
-            LobbyInfoConsumerTag = channel.BasicConsume(queue: LobbyQueue,
-                autoAck: true,
-                consumer: LobbyInfoConsumer);
+            ContextConsumerTag = Consume(ContextQueue, ContextConsumer);
+            LobbyInfoConsumerTag = Consume(LobbyQueue, LobbyInfoConsumer);
+            MessageConsumerTag = Consume(MessageQueue, MessageConsumer);
+            DeadMessageConsumerTag = Consume(MessageQueue, DeadMessageConsumer);
 
         }
 
-        private void LobbyInfoArrived(object model, BasicDeliverEventArgs args)
+        private string Consume(string queueName, EventingBasicConsumer consumer)
         {
-            // TODO
+            return channel.BasicConsume(queue: queueName,
+                autoAck: true,
+                consumer: consumer);
+        }
+
+        private void StopConsume(string tag)
+        {
+            if(channel != null)
+            {
+                channel.BasicCancel(tag);
+            }
+        }
+
+        private void MessageArrive(object model, BasicDeliverEventArgs args)
+        {
             var body = args.Body;
             var message = Encoding.UTF8.GetString(body);
             Dispatcher.BeginInvoke(new Action(delegate ()
@@ -242,7 +280,6 @@ namespace ClientForm
                 Refresh();
             }));
         }
-
         private void DrawPlayerControls()
         {
             int i = 0; 
@@ -340,10 +377,9 @@ namespace ClientForm
         private void BtnSend_Click(object sender, RoutedEventArgs e)
         {
             if (txtChat.Text!= "" && Context.GameState != GameState.Lobby && 
-                Context.GameState == GameState.NameSelection)
+                Context.GameState != GameState.NameSelection)
             {
                 string text = txtChat.Text;
-                txtChat.Clear();
                 PlayerService service = new PlayerService();
                 ChatMessage message = new ChatMessage()
                 {
@@ -355,6 +391,7 @@ namespace ClientForm
                 };
                 service.SendChatMessage(message);
             }
+            txtChat.Clear();
         }
     }
 }

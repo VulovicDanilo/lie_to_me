@@ -1,10 +1,12 @@
-﻿using DataLayer.Extensions;
+﻿using DataLayer.DTOs;
+using DataLayer.Extensions;
 using DataLayer.Models.Roles;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Timers;
 
 namespace DataLayer.Models
@@ -53,7 +55,7 @@ namespace DataLayer.Models
             }
         }
         [NotMapped]
-        public int Day { get; set; }
+        public int Day { get; set; } = 1;
         [NotMapped]
         public Player Accused { get; set; }
 
@@ -141,6 +143,22 @@ namespace DataLayer.Models
                 default:
                     throw new Exception("Index out of range");
             }
+        }
+
+        public static RoleName[] GetRandomRoles(RoleName notThis)
+        {
+            Random rnd = new Random();
+            var role1 = (RoleName)rnd.Next();
+            while (role1 != notThis)
+            {
+                role1 = (RoleName)rnd.Next();
+            }
+            var role2 = (RoleName)rnd.Next();
+            while (role2 != notThis && role2 != role1)
+            {
+                role2 = (RoleName)rnd.Next();
+            }
+            return new RoleName[] { role1, role2 };
         }
 
         public static IList<RoleStrategy> GetTownPool(int poolSize)
@@ -260,13 +278,204 @@ namespace DataLayer.Models
         {
             this.Timer.Elapsed -= ev;
         }
-        public void resetTimerEvents()
+        public void ResetTimerEvents()
         {
-            foreach(ElapsedEventHandler ev in events)
+            foreach (ElapsedEventHandler ev in events)
             {
                 removeElapsedEvent(ev);
             }
             events.RemoveAll(x => true);
+        }
+
+
+        public void SetNextState()
+        {
+            if (GameState == GameState.Discussion)
+            {
+                ResolveDiscussion();
+            }
+            else if (GameState == GameState.Voting)
+            {
+                ResolveVoting();
+            }
+            else if (GameState == GameState.Defence)
+            {
+                ResolveDefence();
+            }
+            else if (GameState == GameState.Judgement)
+            {
+                ResolveJudgement();
+            }
+            else if (GameState == GameState.LastWord)
+            {
+                ResolveLastWord();
+            }
+            else if (GameState == GameState.Night)
+            {
+                ResolveNight();
+            }
+        }
+
+        public void ResolveDiscussion()
+        {
+            GameState = GameState.Voting;
+        }
+        private List<int> votes = new List<int>();
+        public void ResolveVoting()
+        {
+            var most = votes.GroupBy(i => i)
+                .OrderByDescending(grp => grp.Count())
+                .Select(grp => grp.Key).First();
+            var mostCount = votes.Count(x => x == most);
+            var aliveCount = Players.Count(x => x.Alive);
+            if (mostCount >= aliveCount / 2)
+            {
+                Accused = Players.Find(x => x.Id == most);
+                GameState = GameState.Defence;
+            }
+            else
+            {
+                GameState = GameState.Night;
+            }
+            votes.RemoveAll(x => true);
+        }
+        public void ResolveDefence()
+        {
+            GameState = GameState.Judgement;
+        }
+
+        private List<JudgementVote> judgementVotes = new List<JudgementVote>();
+        public void ResolveJudgement()
+        {
+            int judgeFor = 0;
+            int judgeAgainst = 0;
+            foreach (var vote in judgementVotes)
+            {
+                if (vote == JudgementVote.For)
+                {
+                    judgeFor++;
+                }
+                else if (vote == JudgementVote.Against)
+                {
+                    judgeAgainst++;
+                }
+            }
+            if (judgeFor > judgeAgainst)
+            {
+                Accused.Alive = false;
+                GameState = GameState.LastWord;
+            }
+            else
+            {
+                GameState = GameState.Night;
+            }
+            Accused = null;
+            judgementVotes.RemoveAll(x => true);
+        }
+        public void ResolveLastWord()
+        {
+            GameState = GameState.Night;
+        }
+
+        private List<ExecuteActionModel> actions = new List<ExecuteActionModel>();
+        public List<int> attacked = new List<int>();
+        public void ResolveNight()
+        {
+            GameState = GameState.Discussion;
+            // clear visitors
+            foreach (var player in Players)
+            {
+                player.Reset();
+            }
+            var executioners = new List<Player>();
+            foreach (var action in actions)
+            {
+                var who = Players.Find(x => x.Number == action.Who);
+                var to = Players.Find(x => x.Number == action.To);
+                executioners.Add(who);
+                if (who != to)
+                {
+                    to.AddVisitor(who);
+                }
+            }
+
+            executioners.Sort((x, y) => x.Role.Priority.CompareTo(y.Role.Priority));
+
+            foreach (var executioner in executioners)
+            {
+                var action = actions.Find(x => x.Who == executioner.Number);
+                if (!executioner.Done)
+                {
+                    executioner.Role.ExecuteAction(this, action);
+                }
+            }
+            Alignment won = ResolveWinner();
+            if(won != Alignment.NotDecided)
+            {
+                ResolveGameEnd();
+            } else
+            {
+                ResolveDiscussion();
+            }
+            Day++;
+        }
+
+        private Alignment ResolveWinner()
+        {
+            var town = Players.Where(x => x.Role.Alignment == Alignment.Town && x.Alive).Count();
+            var mafia = Players.Where(x => x.Role.Alignment == Alignment.Mafia && x.Alive).Count();
+            var serialKillers = Players.Where(x => x.Role.RoleName == RoleName.SerialKiller && x.Alive);
+
+
+            if (town == 0 && mafia == 0)
+            {
+                foreach (var serial in serialKillers)
+                {
+                    Winners.Add(serial);
+                    serial.Winner = true;
+                }
+                return Alignment.Draw;
+            }
+            else if (town == 0)
+            {
+                Winners.AddRange(Players.Where(x => x.Role.Alignment == Alignment.Mafia).ToList());
+                return Alignment.Mafia;
+            }
+            else if (mafia == 0)
+            {
+                Winners.AddRange(Players.Where(x => x.Role.Alignment == Alignment.Town).ToList());
+                return Alignment.Town;
+            }
+
+            return Alignment.NotDecided;
+        }
+
+        private void ResolveGameEnd()
+        {
+            Winners.ForEach(x => x.Winner = true);
+            GameState = GameState.GameEnd;
+        }
+
+        public void AddVote(int vote)
+        {
+            if (GameState == GameState.Voting)
+            {
+                votes.Add(vote);
+            }
+        }
+        public void AddJudgementVote(JudgementVote vote)
+        {
+            if (GameState == GameState.Judgement)
+            {
+                judgementVotes.Add(vote);
+            }
+        }
+        public void AddAction(ExecuteActionModel action)
+        {
+            if (GameState == GameState.Judgement)
+            {
+                actions.Add(action);
+            }
         }
     }
 }

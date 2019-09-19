@@ -40,7 +40,8 @@ namespace DataLayer.Models
         NotDecided = 0,
         Town,
         Mafia,
-        Neutral
+        Neutral,
+        Draw
     }
     public enum GameMode
     {
@@ -76,6 +77,13 @@ namespace DataLayer.Models
         ChatMessageAlive = 1,
         ContextBroadcast = 99,
         LobbyInfo = 100,
+    }
+
+    public enum JudgementVote
+    {
+        For,
+        Against,
+        Abstained
     }
 
 

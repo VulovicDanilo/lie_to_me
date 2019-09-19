@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataLayer.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,12 +11,13 @@ namespace DataLayer.Models.Roles
         public JesterStrategy()
             : base(RoleName.Jester, Alignment.Neutral, 10, "trick the town into voting against you", "be hanged")
         {
-
+            this.Offence = Offence.None;
+            this.Defence = Defence.None;
         }
 
-        public override void ExecuteAction(Game game)
+        public override void ExecuteAction(Game game, ExecuteActionModel model)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
