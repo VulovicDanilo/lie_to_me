@@ -389,7 +389,7 @@ namespace WebAPI2.GameStuff
         {
             var game = Get(gameId);
             game.ResetTimerEvents();
-            QueueService.BroadcastLobbyInfo(gameId.ToString(), "game ended");
+            QueueService.BroadcastLobbyInfo(gameId.ToString(), "game ended...");
             QueueService.BroadcastContext(gameId.ToString(), game);
         }
         private static void SendPrivateMessages(Game game)

@@ -1,5 +1,6 @@
 ﻿using BusinessLayer;
 using DataLayer.DTOs;
+using DataLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace ClientForm.Controls
         public string FakeName { get; set; }
         public string ImagePath { get; set; }
         public bool Alive { get; set; }
+        public RoleName RoleName { get; set; }
         public PlayerControl()
         {
             InitializeComponent();
@@ -108,11 +110,12 @@ namespace ClientForm.Controls
                 btnInnocent.Visibility = Visibility.Collapsed;
             }
         }
-        public void Die()
+        public void Die(RoleName rolename)
         {
+            RoleName = rolename;
             Alive = false;
             Background = Brushes.Red;
-            labName.Content += " - dead...";
+            labName.Content += " - dead, Role: " + RoleName.ToString();
         }
     }
 }

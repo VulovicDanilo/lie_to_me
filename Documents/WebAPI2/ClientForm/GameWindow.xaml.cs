@@ -278,6 +278,7 @@ namespace ClientForm
                         {
                             PlayerService service = new PlayerService();
                             Player.Role = service.RequestStrategy(Context.GameId, Player.Id);
+                            this.Title = Player.Role.RoleName.ToString();
                             Player.FakeName = Context.Players.Find(player => player.PlayerId == Player.Id).FakeName;
                             Player.Number = Context.Players.Find(player => player.PlayerId == Player.Id).Number;
 
@@ -392,8 +393,11 @@ namespace ClientForm
 
                     foreach(var dead in Context.DeadPlayers)
                     {
-                        PlayerControls[dead.Number].Die();
-                        PlayerControls[dead.Number].Background = Brushes.Red;
+                        if (PlayerControls[dead.Number].Alive)
+                        {
+                            PlayerControls[dead.Number].Die(dead.RoleName);
+                            PlayerControls[dead.Number].Background = Brushes.Red;
+                        }
                     }
                 }
                 if (Context.OwnerId == this.Player.Id)

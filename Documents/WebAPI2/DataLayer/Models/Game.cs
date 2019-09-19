@@ -28,7 +28,7 @@ namespace DataLayer.Models
 
 
         [NotMapped]
-        public readonly int MAX_PLAYERS = 10;
+        public readonly int MAX_PLAYERS = 3;
         [NotMapped]
         public GameState GameState { get; set; }
         [NotMapped]
@@ -66,7 +66,7 @@ namespace DataLayer.Models
             Day = 0;
             Durations.Add(GameState.NameSelection, 3);
             Durations.Add(GameState.RoleDistribution, 5);
-            Durations.Add(GameState.Discussion, 3);
+            Durations.Add(GameState.Discussion, 40);
             Durations.Add(GameState.Voting, 30);
             Durations.Add(GameState.Defence, 20);
             Durations.Add(GameState.Judgement, 15);
@@ -216,7 +216,7 @@ namespace DataLayer.Models
             var rnd = new Random();
             for (int i = 0; i < poolSize - 1; i++)
             {
-                int idx = rnd.Next(0, poolSize);
+                int idx = rnd.Next(0, 2);
                 pool.Add(Game.GetMafiaRoleFromNumber(idx));
             }
             return pool;
@@ -227,7 +227,7 @@ namespace DataLayer.Models
             var rnd = new Random();
             for (int i = 0; i < poolSize; i++)
             {
-                int idx = rnd.Next(0, poolSize);
+                int idx = rnd.Next(0, 2);
                 pool.Add(Game.GetNeutralRoleFromNumber(idx));
             }
             return pool;
