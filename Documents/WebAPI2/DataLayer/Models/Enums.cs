@@ -77,6 +77,7 @@ namespace DataLayer.Models
         ChatMessageAlive = 1,
         ContextBroadcast = 99,
         LobbyInfo = 100,
+        PrivateChannelOffset = 1000
     }
 
     public enum JudgementVote

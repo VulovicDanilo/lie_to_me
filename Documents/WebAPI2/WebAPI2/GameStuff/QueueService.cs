@@ -65,37 +65,34 @@ namespace WebAPI2.GameStuff
                 )
             {
                 MessageQueueChannel routingKey = MessageQueueChannel.ChatMessageAlive;
-                var factory = new ConnectionFactory() { HostName = "localhost" };
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel())
-                {
-                    channel.ExchangeDeclare(exchange: exchangeName,
-                                            type: "topic");
-                    var body = Encoding.UTF8.GetBytes(content);
-                    channel.BasicPublish(exchange: exchangeName,
-                                         routingKey: ((int)routingKey).ToString(),
-                                         basicProperties: null,
-                                         body: body);
-                }
+                var body = Encoding.UTF8.GetBytes(content);
+                SendMessage(exchangeName, routingKey.ToString(), body);
             }
         }
-
-        public static void BroadcastMessageDead(string exchangeName, string info)
+        public static void BroadcastMessageDead(string exchangeName, string content)
         {
             MessageQueueChannel routingKey = MessageQueueChannel.ChatMessageDead;
+            var body = Encoding.UTF8.GetBytes(content);
+            SendMessage(exchangeName, routingKey.ToString(), body);
+        }
+
+        public static void SendPrivateMessage(string exchangeName, string content, int playerId)
+        {
+            int routingKey = (int)MessageQueueChannel.PrivateChannelOffset + playerId;
+            var body = Encoding.UTF8.GetBytes(content);
+            SendMessage(exchangeName, routingKey.ToString(), body);
+        }
+
+        public static void SendMessage(string exchangeName, string routingKey, byte[] body)
+        {
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
                 channel.ExchangeDeclare(exchange: exchangeName,
                                         type: "topic");
-
-
-
-                string sendString = info;
-                var body = Encoding.UTF8.GetBytes(sendString);
                 channel.BasicPublish(exchange: exchangeName,
-                                     routingKey: ((int)routingKey).ToString(),
+                                     routingKey: routingKey,
                                      basicProperties: null,
                                      body: body);
             }
