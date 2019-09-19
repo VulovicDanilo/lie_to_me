@@ -366,6 +366,7 @@ namespace WebAPI2.GameStuff
 
             if (game.GameState != GameState.GameEnd)
             {
+                
                 DiscussionPhase(gameId);
             }
             else

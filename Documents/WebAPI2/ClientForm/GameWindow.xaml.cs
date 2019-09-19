@@ -203,7 +203,7 @@ namespace ClientForm
             DeadMessageConsumerTag = Consume(DeadMessageQueue, DeadMessageConsumer);
 
             PrivateMessageConsumer = new EventingBasicConsumer(channel);
-            PrivateMessageConsumer.Received += (model, ea) => MessageArrive(model, ea);
+            PrivateMessageConsumer.Received += (model, ea) => NightLog(model, ea);
             PrivateMessageConsumerTag = Consume(PrivateMessageQueue, PrivateMessageConsumer);
 
         }
@@ -238,7 +238,7 @@ namespace ClientForm
             var body = args.Body;
             var message = Encoding.UTF8.GetString(body);
             var routingKey = args.RoutingKey;
-            List<String> logs = JsonConvert.DeserializeObject<List<String>>(message);
+            List<String> logs = (List<String>)JsonConvert.DeserializeObject<List<String>>(message);
             Messages.Add("---------- logs ----------");
             foreach(var log in logs)
             {
@@ -284,10 +284,10 @@ namespace ClientForm
                             txtRoleDescription.Text = "ability: " + Player.Role.Description.ToLower();
                             lblRoleGoal.Content = "goal: " + Player.Role.Goal;
                             UpdateUiRoleDistribution();
+                            DrawPlayerControls();
                         }
                         else if (newContext.GameState == GameState.Discussion)
                         {
-                            DrawPlayerControls();
                             UpdateUiGame();
                         }
                     }
@@ -347,7 +347,7 @@ namespace ClientForm
         }
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            if (Context.Players.Count < Context.MaxPlayers)
+            if (Context.Players.Count <= Context.MaxPlayers)
             {
                 GameService service = new GameService();
                 service.StartNameSelectionPhase(Context.GameId);

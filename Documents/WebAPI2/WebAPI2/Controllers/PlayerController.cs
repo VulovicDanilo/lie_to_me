@@ -159,32 +159,32 @@ namespace WebAPI2.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [Route("send_message")]
-        [HttpPost]
-        public HttpResponseMessage SendMessage([FromBody]ChatMessage message)
-        {
-            var game = GameDictionary.Get(message.GameId);
-            var name = game.Players.Where(player => player.Id == message.PlayerId).FirstOrDefault().FakeName;
-            var content = name + ": " + message.Content;
-            QueueService.BroadcastMessage(game.Id.ToString(), content, message.PlayerId);
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
+        //[Route("send_message")]
+        //[HttpPost]
+        //public HttpResponseMessage SendMessage([FromBody]ChatMessage message)
+        //{
+        //    var game = GameDictionary.Get(message.GameId);
+        //    var name = game.Players.Where(player => player.Id == message.PlayerId).FirstOrDefault().FakeName;
+        //    var content = name + ": " + message.Content;
+        //    QueueService.BroadcastMessage(game.Id.ToString(), content, message.PlayerId);
+        //    return Request.CreateResponse(HttpStatusCode.OK);
+        //}
 
-        [Route("voting_vote")]
-        [HttpPost]
-        public HttpResponseMessage VotingVote([FromBody]VotingVoteModel vote)
-        {
-            try
-            {
-                var game = GameDictionary.Get(vote.gameId);
-                game.AddVote(vote.voterNumber, vote.votedNumber);
+        //[Route("voting_vote")]
+        //[HttpPost]
+        //public HttpResponseMessage VotingVote([FromBody]VotingVoteModel vote)
+        //{
+        //    try
+        //    {
+        //        var game = GameDictionary.Get(vote.gameId);
+        //        game.AddVote(vote.voterNumber, vote.votedNumber);
 
-            }
-            catch(Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
-            }
-        }
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+        //    }
+        //}
 
         protected override void Dispose(bool disposing)
         {
