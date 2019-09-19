@@ -159,17 +159,6 @@ namespace WebAPI2.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [Route("send_message")]
-        [HttpPost]
-        public HttpResponseMessage SendMessage([FromBody]ChatMessage message)
-        {
-            var game = GameDictionary.Get(message.GameId);
-            var name = game.Players.Where(player => player.Id == message.PlayerId).FirstOrDefault().FakeName;
-            var content = name + ": " + message.Content;
-            QueueService.BroadcastMessage(game.Id.ToString(), content, message.PlayerId);
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
-
         [Route("voting_vote")]
         [HttpPost]
         public HttpResponseMessage VotingVote([FromBody]VotingVoteModel vote)
@@ -179,8 +168,42 @@ namespace WebAPI2.Controllers
                 var game = GameDictionary.Get(vote.gameId);
                 game.AddVote(vote.voterNumber, vote.votedNumber);
 
+                string Voter = game.Players.Find(x => x.Number == vote.voterNumber).FakeName;
+                string Voted = game.Players.Find(x => x.Number == vote.votedNumber).FakeName;
+
+                if (game.GameState == GameState.Voting)
+                {
+                    QueueService.BroadcastLobbyInfo(game.Id.ToString(), Voter + " voted for " + Voted);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch(Exception e)
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
+        [Route("judgement_vote")]
+        [HttpPost]
+        public HttpResponseMessage JudgementVote([FromBody]JudgementVoteModel vote)
+        {
+            try
+            {
+                var game = GameDictionary.Get(vote.gameId);
+                game.AddJudgementVote(vote.voterNumber, vote.vote);
+
+                string Voter = game.Players.Find(x => x.Number == vote.voterNumber).FakeName;
+                string Voted = game.Players.Find(x => x.Number == vote.votedNumber).FakeName;
+
+                if (game.GameState == GameState.Voting)
+                {
+                    QueueService.BroadcastLobbyInfo(game.Id.ToString(), Voter + " voted for " + Voted);
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
             }
