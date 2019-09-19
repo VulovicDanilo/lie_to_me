@@ -87,5 +87,12 @@ namespace ClientForm.Controls
             btnGuilty.Visibility = Visibility.Visible;
             btnInnocent.Visibility = Visibility.Visible;
         }
+        public void DisableButtons()
+        {
+            btnAction.Visibility = Visibility.Collapsed;
+            btnVote.Visibility = Visibility.Collapsed;
+            btnGuilty.Visibility = Visibility.Collapsed;
+            btnInnocent.Visibility = Visibility.Collapsed;
+        }
     }
 }
