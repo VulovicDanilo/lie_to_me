@@ -23,6 +23,8 @@ namespace BusinessLayer
         private readonly string ChatMessagePath = "/api/players/send_message";
         private readonly string VotingPath = "/api/players/voting_vote";
         private readonly string JudgementPath = "api/players/judgement_vote";
+        private readonly string AddAction = "api/players/add_action";
+        private readonly string RemoveActionPath = "api/players/remove_action";
         public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
@@ -217,6 +219,48 @@ namespace BusinessLayer
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
                 HttpResponseMessage msg = client.PostAsync(JudgementPath, content).Result;
+
+                return msg.StatusCode == HttpStatusCode.OK ? true : false;
+            }
+        }
+        public bool DoAction(ExecuteActionModel model)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+
+
+                var values = new Dictionary<string, string>()
+                {
+                    {"Who", model.Who.ToString()},
+                    {"To", model.To.ToString()},
+                    {"gameId", model.gameId.ToString() }
+                };
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(AddAction, content).Result;
+
+                return msg.StatusCode == HttpStatusCode.OK ? true : false;
+            }
+        }
+        public bool UndoAction(ExecuteActionModel model)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+
+
+                var values = new Dictionary<string, string>()
+                {
+                    {"Who", model.Who.ToString()},
+                    {"To", model.To.ToString()},
+                    {"gameId", model.gameId.ToString() }
+                };
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(RemoveActionPath, content).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }

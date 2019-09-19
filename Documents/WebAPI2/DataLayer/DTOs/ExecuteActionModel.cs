@@ -10,6 +10,7 @@ namespace DataLayer.DTOs
     {
         public int Who { get; set; }
         public int To { get; set; }
+        public int gameId { get; set; }
 
         public ExecuteActionModel()
         {

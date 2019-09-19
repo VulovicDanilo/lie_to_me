@@ -209,6 +209,42 @@ namespace WebAPI2.Controllers
             }
         }
 
+        [Route("add_action")]
+        [HttpPost]
+        public HttpResponseMessage AddAction([FromBody] ExecuteActionModel model)
+        {
+            try
+            {
+                var game = GameDictionary.Get(model.gameId);
+
+                game.AddAction(model);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
+        [Route("remove_action")]
+        [HttpPost]
+        public HttpResponseMessage RemoveAction([FromBody]ExecuteActionModel model)
+        {
+            try
+            {
+                var game = GameDictionary.Get(model.gameId);
+
+                game.RemoveAction(model.Who);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             unit.Dispose();

@@ -384,7 +384,7 @@ namespace DataLayer.Models
             GameState = GameState.Night;
         }
 
-        private List<ExecuteActionModel> actions = new List<ExecuteActionModel>();
+        private Dictionary<int, ExecuteActionModel> actions = new Dictionary<int, ExecuteActionModel>();
         public List<int> attacked = new List<int>();
         public void ResolveNight()
         {
@@ -397,8 +397,8 @@ namespace DataLayer.Models
             var executioners = new List<Player>();
             foreach (var action in actions)
             {
-                var who = Players.Find(x => x.Number == action.Who);
-                var to = Players.Find(x => x.Number == action.To);
+                var who = Players.Find(x => x.Number == action.Value.Who);
+                var to = Players.Find(x => x.Number == action.Value.To);
                 executioners.Add(who);
                 if (who != to)
                 {
@@ -410,7 +410,7 @@ namespace DataLayer.Models
 
             foreach (var executioner in executioners)
             {
-                var action = actions.Find(x => x.Who == executioner.Number);
+                var action = actions[executioner.Number];
                 if (!executioner.Done)
                 {
                     executioner.Role.ExecuteAction(this, action);
@@ -479,9 +479,16 @@ namespace DataLayer.Models
         }
         public void AddAction(ExecuteActionModel action)
         {
-            if (GameState == GameState.Judgement)
+            if (GameState == GameState.Night)
             {
-                actions.Add(action);
+                actions.Add(action.Who, action);
+            }
+        }
+        public void RemoveAction(int number)
+        {
+            if (GameState == GameState.Night)
+            {
+                actions.Remove(number);
             }
         }
     }
