@@ -351,18 +351,18 @@ namespace DataLayer.Models
             GameState = GameState.Judgement;
         }
 
-        private List<JudgementVote> judgementVotes = new List<JudgementVote>();
+        private Dictionary<int, JudgementVote> judgementVotes = new Dictionary<int, JudgementVote>();
         public void ResolveJudgement()
         {
             int judgeFor = 0;
             int judgeAgainst = 0;
             foreach (var vote in judgementVotes)
             {
-                if (vote == JudgementVote.For)
+                if (vote.Value == JudgementVote.For)
                 {
                     judgeFor++;
                 }
-                else if (vote == JudgementVote.Against)
+                else if (vote.Value == JudgementVote.Against)
                 {
                     judgeAgainst++;
                 }
@@ -377,14 +377,14 @@ namespace DataLayer.Models
                 GameState = GameState.Night;
             }
             Accused = null;
-            judgementVotes.RemoveAll(x => true);
+            judgementVotes.Clear();
         }
         public void ResolveLastWord()
         {
             GameState = GameState.Night;
         }
 
-        private List<ExecuteActionModel> actions = new List<ExecuteActionModel>();
+        private Dictionary<int, ExecuteActionModel> actions = new Dictionary<int, ExecuteActionModel>();
         public List<int> attacked = new List<int>();
         public void ResolveNight()
         {
@@ -397,8 +397,8 @@ namespace DataLayer.Models
             var executioners = new List<Player>();
             foreach (var action in actions)
             {
-                var who = Players.Find(x => x.Number == action.Who);
-                var to = Players.Find(x => x.Number == action.To);
+                var who = Players.Find(x => x.Number == action.Value.Who);
+                var to = Players.Find(x => x.Number == action.Value.To);
                 executioners.Add(who);
                 if (who != to)
                 {
@@ -410,7 +410,7 @@ namespace DataLayer.Models
 
             foreach (var executioner in executioners)
             {
-                var action = actions.Find(x => x.Who == executioner.Number);
+                var action = actions[executioner.Number];
                 if (!executioner.Done)
                 {
                     executioner.Role.ExecuteAction(this, action);
@@ -470,18 +470,25 @@ namespace DataLayer.Models
                 votes.Add(voter,voted);
             }
         }
-        public void AddJudgementVote(JudgementVote vote)
+        public void AddJudgementVote(int voterNumber, JudgementVote vote)
         {
             if (GameState == GameState.Judgement)
             {
-                judgementVotes.Add(vote);
+                judgementVotes.Add(voterNumber, vote);
             }
         }
         public void AddAction(ExecuteActionModel action)
         {
-            if (GameState == GameState.Judgement)
+            if (GameState == GameState.Night)
             {
-                actions.Add(action);
+                actions.Add(action.Who, action);
+            }
+        }
+        public void RemoveAction(int number)
+        {
+            if (GameState == GameState.Night)
+            {
+                actions.Remove(number);
             }
         }
     }
