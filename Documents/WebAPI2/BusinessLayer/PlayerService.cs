@@ -23,8 +23,9 @@ namespace BusinessLayer
         private readonly string ChatMessagePath = "/api/players/send_message";
         private readonly string VotingPath = "/api/players/voting_vote";
         private readonly string JudgementPath = "api/players/judgement_vote";
-        private readonly string AddAction = "api/players/add_action";
+        private readonly string AddActionPath = "api/players/add_action";
         private readonly string RemoveActionPath = "api/players/remove_action";
+        private readonly string LastWillPath = "api/players/lastwill";
         public Player AddPlayer(RoleName? role, User user, int gameId)
         {
             HttpClient client = new HttpClient();
@@ -239,7 +240,7 @@ namespace BusinessLayer
                 var content = new FormUrlEncodedContent(values);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-                HttpResponseMessage msg = client.PostAsync(AddAction, content).Result;
+                HttpResponseMessage msg = client.PostAsync(AddActionPath, content).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }
@@ -261,6 +262,25 @@ namespace BusinessLayer
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
                 HttpResponseMessage msg = client.PostAsync(RemoveActionPath, content).Result;
+
+                return msg.StatusCode == HttpStatusCode.OK ? true : false;
+            }
+        }
+        public bool SetLastWill(LastWillModel model)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(BaseAddress);
+                var values = new Dictionary<string, string>()
+                {
+                    {"GameId", model.GameId.ToString()},
+                    {"Number", model.Number.ToString()},
+                    {"LastWill", model.LastWill.ToString() }
+                };
+                var content = new FormUrlEncodedContent(values);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+
+                HttpResponseMessage msg = client.PostAsync(LastWillPath, content).Result;
 
                 return msg.StatusCode == HttpStatusCode.OK ? true : false;
             }
