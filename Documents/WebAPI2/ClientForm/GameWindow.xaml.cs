@@ -292,12 +292,16 @@ namespace ClientForm
                         }
                         else if (newContext.GameState == GameState.Discussion)
                         {
+                            if (Player.RoleName == RoleName.Medium)
+                            {
+                                StopConsume(DeadMessageConsumerTag);
+                            }
                             UpdateUiGame();
                         }
                         else if (newContext.GameState == GameState.Voting)
                         {
                             int i = 0;
-                            foreach(var playerControl in PlayerControls)
+                            foreach (var playerControl in PlayerControls)
                             {
                                 if (Player.Role.Alignment == Alignment.Mafia && newContext.Mafia.Exists(x => x.Number == i))
                                 {
@@ -340,13 +344,47 @@ namespace ClientForm
                         }
                         else if (newContext.GameState == GameState.Night)
                         {
+                            foreach (var playerControl in PlayerControls)
+                            {
+                                playerControl.DisableButtons();
+                            }
                             if (Player.RoleName == RoleName.Medium)
                             {
                                 Consume(DeadMessageQueue, DeadMessageConsumer);
                             }
-                            foreach (var playerControl in PlayerControls)
+                            if (Player.RoleName == RoleName.Veteran)
                             {
+                                PlayerControls[Player.Number].EnableAction();
+                            }
+                            else
+                            {
+                                if (Player.Role.CanVisit)
+                                {
+                                    if (Player.Role.Alignment == Alignment.Mafia)
+                                    {
+                                        foreach (var playerControl in PlayerControls)
+                                        {
+                                            if (newContext.Mafia.Exists(x => x.Number == playerControl.Number))
+                                            {
 
+                                            }
+                                            else
+                                            {
+                                                playerControl.EnableAction();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        foreach (var playerControl in PlayerControls)
+                                        {
+                                            if (playerControl.Number != Player.Number)
+                                            {
+                                                playerControl.EnableAction();
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
