@@ -193,14 +193,6 @@ namespace WebAPI2.Controllers
                 var game = GameDictionary.Get(vote.gameId);
                 game.AddJudgementVote(vote.voterNumber, vote.vote);
 
-                string Voter = game.Players.Find(x => x.Number == vote.voterNumber).FakeName;
-                string Voted = game.Players.Find(x => x.Number == vote.votedNumber).FakeName;
-
-                if (game.GameState == GameState.Voting)
-                {
-                    QueueService.BroadcastLobbyInfo(game.Id.ToString(), Voter + " voted for " + Voted);
-                }
-
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception e)
@@ -235,7 +227,7 @@ namespace WebAPI2.Controllers
             {
                 var game = GameDictionary.Get(model.gameId);
 
-                game.RemoveAction(model.Who);
+                game.RemoveAction(model.Who)
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
