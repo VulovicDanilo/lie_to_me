@@ -237,6 +237,24 @@ namespace WebAPI2.Controllers
             }
         }
 
+        [Route("lastwill")]
+        [HttpPost]
+        public HttpResponseMessage SetLastWill([FromBody]LastWillModel model)
+        {
+            try
+            {
+                var game = GameDictionary.Get(model.GameId);
+                var player = game.Players.Find(x => x.Number == model.Number);
+                player.LastWill = model.LastWill;
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             unit.Dispose();

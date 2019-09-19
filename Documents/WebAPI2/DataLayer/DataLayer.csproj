@@ -69,6 +69,7 @@
     <Compile Include="DTOs\GameListing.cs" />
     <Compile Include="DTOs\InGamePlayer.cs" />
     <Compile Include="DTOs\JudgementVoteModel.cs" />
+    <Compile Include="DTOs\LastWillModel.cs" />
     <Compile Include="DTOs\LoginModel.cs" />
     <Compile Include="DTOs\ClientContext.cs" />
     <Compile Include="DTOs\RoleRequestModel.cs" />
