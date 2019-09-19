@@ -227,7 +227,7 @@ namespace WebAPI2.Controllers
             {
                 var game = GameDictionary.Get(model.gameId);
 
-                game.RemoveAction(model.Who)
+                game.RemoveAction(model.Who);
 
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
